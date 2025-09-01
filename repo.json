@@ -19,9 +19,6 @@
     "LoadPriority": 0,
     "IconUrl": "https://raw.githubusercontent.com/NjalTheKnut/Dalamud.TravelTriggers/main/.assets/icon.png",
     "IsHide": "False",
-    "IsTestingExclusive": "True",
-    "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3.1.1/latest.zip",
-    "DownloadLinkTesting": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3.1.1/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3.1.1/latest.zip"
+    "IsTestingExclusive": "True"
   }
 ]
