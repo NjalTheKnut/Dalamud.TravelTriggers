@@ -25,5 +25,5 @@ Travelcase derivative that runs commands rather than changing gearset or appeara
 This plugin can be installed as a 3rd-party plugin via the Dalamud Plugin Installer. To do so, add the following URL to `Settings > Experimental > Custom Plugin Repositories`:
 
 ```
-https://raw.githubusercontent.com/NjalTheKnut/Dalamud.TravelTrigger/main/repo.json
+https://raw.githubusercontent.com/NjalTheKnut/Dalamud.TravelTriggers/main/repo.json
 ```
