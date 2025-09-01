@@ -7,7 +7,7 @@
     "ApplicableVersion": "any",
     "Punchline": "Automatically execute commands when entering specified zones.",
     "Description": "Allows for automatic execution of commands upon entering new zones, with a 'Roleplay Only' mode for those who want to only use it for RP purposes.",
-    "RepoUrl": "https://github.com/NjalTheKnut/TravelTriggers",
+    "RepoUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers",
     "Tags": [
       "utility"
     ],
@@ -17,7 +17,7 @@
     ],
     "DalamudApiLevel": 13,
     "LoadPriority": 0,
-    "IconUrl": "https://raw.githubusercontent.com/NjalTheKnut/TravelTriggers/main/.assets/icon.png",
+    "IconUrl": "https://raw.githubusercontent.com/NjalTheKnut/Dalamud.TravelTriggers/main/.assets/icon.png",
     "IsHide": "False",
     "IsTestingExclusive": "True",
     "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3.1.1/latest.zip",
