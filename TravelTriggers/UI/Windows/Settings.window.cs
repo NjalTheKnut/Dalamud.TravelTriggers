@@ -68,6 +68,8 @@ namespace TravelTriggers.UI.Windows
                 TravelTriggers.PluginConfiguration.Save();
             }
             ImGui.EndDisabled();
+
+            ImGui.SetNextItemWidth(-1);
             ImGui.BeginDisabled(!config.PluginEnabled && !config.SelectAll);
             var mcmd = config.MasterCommand.Content.IsNullOrEmpty() ? "" : config.MasterCommand.Content;
             if (ImGui.InputTextWithHint($"##MasterCommand", "/<command>", ref mcmd, 1000))
