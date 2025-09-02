@@ -44,7 +44,7 @@ namespace TravelTriggers.UI.Windows
             var mcmd = config.MasterCommand.Content;
             if (mcmd != null)
             {
-                if (ImGui.InputTextWithHint($"##MasterCommand", "/command", ref mcmd, 1000, ImGuiInputTextFlags.None))
+                if (ImGui.InputTextWithHint($"MasterCommand", "/command", ref mcmd, 1000, ImGuiInputTextFlags.None))
                 {
                     config.MasterCommand.Content = mcmd;
                     config.MasterCommand.Enabled = config.PluginEnabled;
