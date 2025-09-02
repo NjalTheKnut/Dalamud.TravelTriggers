@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Travelcase/
+        working-directory: TravelTriggers/
         shell: bash
     steps:
       - name: Checkout Repository
@@ -31,7 +31,7 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Setup Dalamud
-        uses: Blooym/setup-dalamud@v1
+        uses: NjalTheKnut/setup-dalamud@v1
 
       - name: Restore Dependencies
         run: dotnet restore
@@ -40,7 +40,7 @@ jobs:
         run: dotnet build -c Release --no-restore --nologo -o ./bin/Release
 
       - name: Generate Checksums
-        working-directory: Travelcase/bin/Release/Travelcase
+        working-directory: TravelTriggers/bin/Release/TravelTriggers
         run: |
           sha512sum latest.zip >> checksums.sha512
 
@@ -48,8 +48,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            Travelcase/bin/Release/Travelcase/latest.zip
-            Travelcase/bin/Release/Travelcase/checksums.sha512
+            TravelTriggers/bin/Release/TravelTriggers/latest.zip
+            TravelTriggers/bin/Release/TravelTriggers/checksums.sha512
           prerelease: false
           append_body: true
           body_path: .github/release-notices.md
