@@ -82,7 +82,8 @@ namespace TravelTriggers
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
-                characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)
+                characterConfig.MasterCommand.Enabled)
+                //characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)
             {
                 PluginLog.Information("trigger");
 
@@ -104,10 +105,16 @@ namespace TravelTriggers
                             PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
                             Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
-                        var cmd = characterConfig.SelectAll ? characterConfig.MasterCommand.Content : characterConfig.ZoneCommands[territory].Content;
+                        //var cmd = characterConfig.SelectAll ? characterConfig.MasterCommand.Content : characterConfig.ZoneCommands[territory].Content;
+                        //if (!cmd.IsNullOrEmpty())
+                        //{
+                        //    Commands.ProcessCommand(cmd);
+                        //}
+
+                        var cmd = characterConfig.MasterCommand.Content;
                         if (!cmd.IsNullOrEmpty())
                         {
-                            Commands.ProcessCommand(cmd);
+
                         }
                     }
                     catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
