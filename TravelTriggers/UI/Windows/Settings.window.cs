@@ -33,7 +33,7 @@ namespace TravelTriggers.UI.Windows
             this.TitleBarButtons = [
                  new() {
                     Icon = FontAwesomeIcon.Comment,
-                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/TravelTriggers"),
+                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.TravelTriggers"),
                     ShowTooltip = () => ImGui.SetTooltip("Repository"),
                 },
             ];
@@ -61,6 +61,20 @@ namespace TravelTriggers.UI.Windows
                 TravelTriggers.PluginConfiguration.Save();
             }
             ImGui.EndDisabled();
+            ImGui.SameLine();
+            ImGui.BeginDisabled(!config.PluginEnabled);
+            if (ImGui.Checkbox("Enable for all zones", ref config.SelectAll))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            ImGui.EndDisabled();
+            ImGui.SameLine();
+            ImGui.BeginDisabled(!config.PluginEnabled);
+            if (ImGui.Checkbox("Disable for all zones", ref config.SelectNone))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            ImGui.EndDisabled();
 
             // Zone list.
             ImGui.SetNextItemWidth(-1);
@@ -74,7 +88,7 @@ namespace TravelTriggers.UI.Windows
                     ImGui.TableSetupScrollFreeze(0, 1);
                     ImGui.TableSetupColumn("Zone");
                     ImGui.TableSetupColumn("Enabled", ImGuiTableColumnFlags.WidthFixed, 100);
-                    ImGui.TableSetupColumn("Command Slot");
+                    ImGui.TableSetupColumn("Command");
                     ImGui.TableHeadersRow();
                     foreach (var t in filteredTerritories)
                     {
@@ -92,12 +106,14 @@ namespace TravelTriggers.UI.Windows
                         ImGui.TableSetColumnIndex(2);
                         ImGui.BeginDisabled(!customCommand.Enabled);
 
-                        var slot = customCommand.Content;
-                        if (ImGui.InputTextWithHint($"##{t.Key}CommandSlot", "Enter a one line slash command here...", ref slot))
+                        var cmd = customCommand.Content;
+                        var enabled = customCommand.Enabled;
+                        if (ImGui.InputTextWithHint($"##{t.Key}CommandCmd", "/<command>", ref cmd, 512))
                         {
                             unsafe
                             {
-                                customCommand.Content = slot;
+                                customCommand.Content = cmd;
+                                customCommand.Enabled = (config.SelectAll || enabled) && !config.SelectNone;
                                 config.ZoneCommands[t.Key] = customCommand;
                                 TravelTriggers.PluginConfiguration.Save();
                             }
