@@ -62,22 +62,17 @@ namespace TravelTriggers.UI.Windows
             }
             ImGui.EndDisabled();
             ImGui.SameLine();
-            ImGui.BeginDisabled(!config.PluginEnabled && !config.SelectNone);
+            ImGui.BeginDisabled(!config.PluginEnabled);
             if (ImGui.Checkbox("Enable for all zones", ref config.SelectAll))
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            ImGui.EndDisabled();
+            ImGui.BeginDisabled(!config.PluginEnabled && !config.SelectAll);
             var mcmd = config.MasterCommand.Content.IsNullOrEmpty() ? "" : config.MasterCommand.Content;
             if (ImGui.InputTextWithHint($"##MasterCommand", "/<command>", ref mcmd, 1000))
             {
                 config.MasterCommand.Content = mcmd;
-            }
-            ImGui.EndDisabled();
-            ImGui.SameLine();
-            ImGui.BeginDisabled(!config.PluginEnabled && !config.SelectAll);
-            if (ImGui.Checkbox("Disable for all zones", ref config.SelectNone))
-            {
-                TravelTriggers.PluginConfiguration.Save();
             }
             ImGui.EndDisabled();
 
@@ -87,7 +82,7 @@ namespace TravelTriggers.UI.Windows
             var filteredTerritories = TerritoryList.Where(x => x.Value.Contains(this.searchQuery, StringComparison.InvariantCultureIgnoreCase));
             if (filteredTerritories.Any())
             {
-                ImGui.BeginDisabled(!config.PluginEnabled);
+                ImGui.BeginDisabled(!config.PluginEnabled && !config.SelectAll);
                 if (ImGui.BeginTable("##SettingsTable", 4, ImGuiTableFlags.ScrollY))
                 {
                     ImGui.TableSetupScrollFreeze(0, 1);
@@ -118,7 +113,7 @@ namespace TravelTriggers.UI.Windows
                             unsafe
                             {
                                 customCommand.Content = cmd;
-                                customCommand.Enabled = (config.SelectAll || enabled) && !config.SelectNone;
+                                customCommand.Enabled = config.SelectAll || enabled;
                                 config.ZoneCommands[t.Key] = customCommand;
                                 TravelTriggers.PluginConfiguration.Save();
                             }

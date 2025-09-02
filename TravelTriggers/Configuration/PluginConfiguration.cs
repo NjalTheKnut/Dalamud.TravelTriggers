@@ -19,7 +19,6 @@ namespace TravelTriggers.Configuration
         public bool PluginEnabled = true;
         public bool RoleplayOnly;
         public bool SelectAll;
-        public bool SelectNone;
         public Dictionary<uint, CustomCommand> ZoneCommands = [];
         public CustomCommand? MasterCommand;
     }
