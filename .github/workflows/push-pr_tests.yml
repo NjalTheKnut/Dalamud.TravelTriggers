@@ -37,7 +37,7 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Setup Dalamud
-        uses: Blooym/setup-dalamud@v1
+        uses: NjalTheKnut/setup-dalamud@v1
         with:
           branch: ${{ matrix.dalamud-branch }}
 
