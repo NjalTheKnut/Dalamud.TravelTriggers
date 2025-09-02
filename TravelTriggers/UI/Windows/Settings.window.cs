@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -11,16 +8,6 @@ namespace TravelTriggers.UI.Windows
 {
     public sealed class SettingsWindow : Window
     {
-        //private static readonly Dictionary<uint, string> TerritoryList = TravelTriggers.AllowedTerritories
-        //    .Where(t => !string.IsNullOrEmpty(t.PlaceName.Value.Name.ExtractText())
-        //        )
-        //    .OrderBy(x => x.PlaceName.Value.Name.ExtractText())
-        //    .ToDictionary(
-        //        t => t.RowId,
-        //        t => t.PlaceName.Value.Name.ExtractText()
-        //    );
-        //private string searchQuery = string.Empty;
-
         public SettingsWindow() : base(TravelTriggers.PluginInterface.Manifest.Name)
         {
             this.SizeConstraints = new WindowSizeConstraints
@@ -38,7 +25,7 @@ namespace TravelTriggers.UI.Windows
                 },
             ];
         }
-            
+
         public override bool DrawConditions() => TravelTriggers.ClientState.IsLoggedIn;
 
         public override void Draw()
@@ -54,20 +41,15 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
-            ImGui.SameLine();
-            ImGui.BeginDisabled(!config.PluginEnabled);
-            if (ImGui.Checkbox("Only enable when roleplaying", ref config.RoleplayOnly))
+            var mcmd = config.MasterCommand.Content;
+            if (mcmd != null)
             {
-                TravelTriggers.PluginConfiguration.Save();
-            }
-            ImGui.EndDisabled();
-            ImGui.SetNextItemWidth(-1);
-            var mcmd = "";
-            if (ImGui.InputTextWithHint($"##MasterCommand", "/<command>", ref mcmd, 1000))
-            {
-                config.MasterCommand.Content = mcmd;
-                config.MasterCommand.Enabled = true;
-                TravelTriggers.PluginConfiguration.Save();
+                if (ImGui.InputTextWithHint($"##MasterCommand", "/command", ref mcmd, 1000, ImGuiInputTextFlags.None))
+                {
+                    config.MasterCommand.Content = mcmd;
+                    config.MasterCommand.Enabled = config.PluginEnabled;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
             }
         }
     }

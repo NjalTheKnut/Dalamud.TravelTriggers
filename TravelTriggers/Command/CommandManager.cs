@@ -44,10 +44,6 @@ namespace TravelTriggers.Command
                     if (config != null)
                     { config.PluginEnabled = !config.PluginEnabled; TravelTriggers.PluginConfiguration.Save(); }
                     break;
-                case SettingsCommand when args == "rp":
-                    if (config != null)
-                    { config.RoleplayOnly = !config.RoleplayOnly; TravelTriggers.PluginConfiguration.Save(); }
-                    break;
                 case SettingsCommand when args?.Length == 0:
                     TravelTriggers.WindowManager.ToggleConfigWindow();
                     break;
