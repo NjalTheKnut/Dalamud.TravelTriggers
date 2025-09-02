@@ -62,14 +62,19 @@ namespace TravelTriggers.UI.Windows
             }
             ImGui.EndDisabled();
             ImGui.SameLine();
-            ImGui.BeginDisabled(!config.PluginEnabled);
+            ImGui.BeginDisabled(!config.PluginEnabled && !config.SelectNone);
             if (ImGui.Checkbox("Enable for all zones", ref config.SelectAll))
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            var mcmd = config.MasterCommand.Content.IsNullOrEmpty() ? "" : config.MasterCommand.Content;
+            if (ImGui.InputTextWithHint($"##MasterCommand", "/<command>", ref mcmd, 1000))
+            {
+                config.MasterCommand.Content = mcmd;
+            }
             ImGui.EndDisabled();
             ImGui.SameLine();
-            ImGui.BeginDisabled(!config.PluginEnabled);
+            ImGui.BeginDisabled(!config.PluginEnabled && !config.SelectAll);
             if (ImGui.Checkbox("Disable for all zones", ref config.SelectNone))
             {
                 TravelTriggers.PluginConfiguration.Save();
@@ -108,7 +113,7 @@ namespace TravelTriggers.UI.Windows
 
                         var cmd = customCommand.Content;
                         var enabled = customCommand.Enabled;
-                        if (ImGui.InputTextWithHint($"##{t.Key}CommandCmd", "/<command>", ref cmd, 512))
+                        if (ImGui.InputTextWithHint($"##{t.Key}CommandCmd", "/<command>", ref cmd, 1000))
                         {
                             unsafe
                             {

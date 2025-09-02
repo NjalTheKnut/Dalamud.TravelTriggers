@@ -15,11 +15,13 @@ namespace TravelTriggers.Configuration
     internal sealed class CharacterConfiguration
     {
         public int Version { get; set; }
+
         public bool PluginEnabled = true;
         public bool RoleplayOnly;
         public bool SelectAll;
         public bool SelectNone;
         public Dictionary<uint, CustomCommand> ZoneCommands = [];
+        public CustomCommand? MasterCommand;
     }
 
     internal sealed class CustomCommand
