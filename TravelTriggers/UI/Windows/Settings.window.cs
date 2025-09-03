@@ -12,10 +12,10 @@ namespace TravelTriggers.UI.Windows
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(850, 300),
+                MinimumSize = new Vector2(850, 150),
                 MaximumSize = new Vector2(1200, 1000)
             };
-            this.Size = new Vector2(850, 450);
+            this.Size = new Vector2(850, 150);
             this.SizeCondition = ImGuiCond.FirstUseEver;
             this.TitleBarButtons = [
                  new() {
@@ -44,10 +44,17 @@ namespace TravelTriggers.UI.Windows
             var mcmd = config.MasterCommand.Content;
             if (mcmd != null)
             {
+                ImGui.Text($"Current Command: {mcmd}");
+            }
+            else
+            {
+                ImGui.Text($"Current Command: Not Set");
+            }
+            if (mcmd != null)
+            {
                 if (ImGui.InputTextWithHint($"MasterCommand", "/command", ref mcmd, 1000, ImGuiInputTextFlags.None))
                 {
                     config.MasterCommand.Content = mcmd;
-                    config.MasterCommand.Enabled = config.PluginEnabled;
                     TravelTriggers.PluginConfiguration.Save();
                 }
             }
