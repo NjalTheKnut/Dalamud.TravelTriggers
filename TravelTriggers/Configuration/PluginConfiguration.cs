@@ -21,13 +21,6 @@ namespace TravelTriggers.Configuration
 
     internal sealed class CustomCommand
     {
-        private const string V = $"/echo [TravelTriggers] Command Not Set.  Use /TravelTriggers to configure.";
-
         public string? Content { get; set; }
-
-        private CustomCommand() => this.Content = V;
-
-        // ToDo: Add feature to support more than one command per config?
-        //private CustomCommand(string? content) => this.Content = content;
     }
 }

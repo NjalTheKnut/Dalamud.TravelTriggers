@@ -48,6 +48,7 @@ namespace TravelTriggers.UI.Windows
             }
             else
             {
+                mcmd = $"/echo [TravelTriggers] Command Not Set.  Use /TravelTriggers to configure.";
                 ImGui.Text($"Current Command: Not Set");
             }
             if (mcmd != null)
