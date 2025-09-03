@@ -15,7 +15,7 @@ namespace TravelTriggers.Command
         /// </summary>
         public CommandManager() => TravelTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
         {
-            HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. '/TravelTriggers toggle' to toggle the plugin, '/TravelTriggers rp' to toggle roleplay mode.",
+            HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. '/TravelTriggers toggle' to toggle the plugin.",
             ShowInHelp = true
         });
 
