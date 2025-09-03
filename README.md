@@ -1,6 +1,4 @@
 <div align="center">
-
-<img src="./.assets/icon.png" alt="Travelcase Logo" width="15%">
   
 ### TravelTriggers
 Automatically execute commands when entering specified zones.
@@ -12,9 +10,7 @@ Automatically execute commands when entering specified zones.
 Travelcase derivative that runs commands rather than changing gearset or appearance.
 
 ## Features
-- Set per-character per-zone commands
-- "Roleplay Only" mode to only execute commands when you have the RP status enabled
-- Supports a large number of zones, and will automatically add new zones when they are added to the game
+- Set a per-character command for all zone changes
 
 ## Installation
 > **Warning**  
