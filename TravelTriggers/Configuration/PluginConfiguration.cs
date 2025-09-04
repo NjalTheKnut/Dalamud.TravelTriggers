@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Dalamud.Configuration;
+using FFXIVClientStructs;
+using InteropGenerator.Runtime;
 
 namespace TravelTriggers.Configuration
 {
@@ -21,6 +23,14 @@ namespace TravelTriggers.Configuration
 
     internal sealed class CustomCommand
     {
-        public string? Content { get; set; }
+        public string Content { get; set; }
+
+        public CustomCommand()
+        {
+            if (this.Content == null || this.Content.Length == 0)
+            {
+                this.Content = "/echo [TravelTriggers] Command Not Set.  Use /TravelTriggers to configure.";
+            }
+        }
     }
 }
