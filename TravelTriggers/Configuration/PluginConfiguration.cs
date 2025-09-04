@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using Dalamud.Configuration;
-using FFXIVClientStructs;
-using InteropGenerator.Runtime;
 
 namespace TravelTriggers.Configuration
 {

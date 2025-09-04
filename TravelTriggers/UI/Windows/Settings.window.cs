@@ -3,7 +3,6 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using Dalamud.Utility;
-using TravelTriggers.Configuration;
 
 namespace TravelTriggers.UI.Windows
 {
