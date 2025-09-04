@@ -42,12 +42,12 @@ namespace TravelTriggers.UI.Windows
                 TravelTriggers.PluginConfiguration.Save();
             }
 
-            var slot = config.MasterCommand;
-            if (ImGui.InputTextWithHint($"Master Command", "/command here...", ref slot, 100, 0))
+            var slot = config.MasterCommand.Content;
+            if (ImGui.InputTextWithHint($"MasterCommandS", "/command here...", ref slot, 100, 0))
             {
                 unsafe
                 {
-                    config.MasterCommand = slot;
+                    config.MasterCommand.Content = slot;
                     TravelTriggers.PluginConfiguration.Save();
                 }
 

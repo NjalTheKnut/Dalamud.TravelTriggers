@@ -104,9 +104,9 @@ namespace TravelTriggers
                             Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
                         var cmd = characterConfig.MasterCommand;
-                        if (!cmd.IsNullOrEmpty())
+                        if (!cmd.Content.IsNullOrEmpty())
                         {
-                            Commands.ProcessCommand(cmd);
+                            Commands.ProcessCommand(cmd.Content);
                         }
                     }
                     catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }

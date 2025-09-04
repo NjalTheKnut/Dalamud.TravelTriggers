@@ -16,7 +16,12 @@ namespace TravelTriggers.Configuration
     {
         public int Version { get; set; }
         public bool PluginEnabled = true;
-        public string MasterCommand = "/echo [TravelTriggers] Command not set.";
+        public CustomCommand MasterCommand = new();
     }
 
+    internal sealed class CustomCommand
+    {
+        public string? Content { get; set; }
+        public CustomCommand() { if (this.Content != null) { return; } this.Content = "/echo [TravelTriggers] Command not set."; }
+    }
 }
