@@ -16,11 +16,7 @@ namespace TravelTriggers.Configuration
     {
         public int Version { get; set; }
         public bool PluginEnabled = true;
-        public CustomCommand MasterCommand;
+        public string MasterCommand = "/echo [TravelTriggers] Command not set.";
     }
 
-    internal sealed class CustomCommand
-    {
-        public string? Content { get; set; }
-    }
 }

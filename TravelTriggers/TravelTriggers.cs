@@ -103,7 +103,7 @@ namespace TravelTriggers
                             PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
                             Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
-                        var cmd = characterConfig.MasterCommand.Content;
+                        var cmd = characterConfig.MasterCommand;
                         if (!cmd.IsNullOrEmpty())
                         {
                             Commands.ProcessCommand(cmd);
