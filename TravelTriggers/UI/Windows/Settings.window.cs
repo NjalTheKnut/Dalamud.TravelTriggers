@@ -43,14 +43,26 @@ namespace TravelTriggers.UI.Windows
             }
 
             var slot = config.MasterCommand.Content;
-            if (ImGui.InputTextWithHint($"MasterCommandS", "/command here...", ref slot, 100, 0))
+            if (slot != null)
             {
+                if (ImGui.InputTextWithHint($"MasterCommand", "/command here...", ref slot, 100, 0))
+                {
+                    unsafe
+                    {
+                        config.MasterCommand.Content = slot;
+                        TravelTriggers.PluginConfiguration.Save();
+                    }
+
+                }
+            }
+            else
+            {
+                slot = "/echo [TravelTriggers] Command not set.";
                 unsafe
                 {
                     config.MasterCommand.Content = slot;
                     TravelTriggers.PluginConfiguration.Save();
                 }
-
             }
         }
     }
