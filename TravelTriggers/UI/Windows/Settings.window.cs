@@ -3,6 +3,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using Dalamud.Utility;
+using TravelTriggers.Configuration;
 
 namespace TravelTriggers.UI.Windows
 {
@@ -42,22 +43,15 @@ namespace TravelTriggers.UI.Windows
                 TravelTriggers.PluginConfiguration.Save();
             }
 
-            var mcmd = config.MasterCommand.Content;
-            if (ImGui.InputTextWithHint($"MasterCommand", "/command", ref mcmd, 1000, ImGuiInputTextFlags.None))
+            var slot = config.MasterCommand.Content;
+            if (ImGui.InputTextWithHint($"MasterCommandSlot", "/command here...", ref slot, 100, 0))
             {
-                ImGui.Text($"Current Command: {mcmd}");
-                config.MasterCommand.Content = mcmd;
-                TravelTriggers.PluginConfiguration.Save();
+                unsafe
+                {
+                    config.MasterCommand.Content = slot;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
             }
-            else
-            {
-                ImGui.Text($"Current Command: Not Set");
-                mcmd = "/echo [TravelTriggers] Command Not Set.  Use /TravelTriggers to configure.";
-                config.MasterCommand.Content = mcmd;
-                TravelTriggers.PluginConfiguration.Save();
-
-            }
-
 
         }
     }

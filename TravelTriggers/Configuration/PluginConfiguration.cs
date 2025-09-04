@@ -23,14 +23,6 @@ namespace TravelTriggers.Configuration
 
     internal sealed class CustomCommand
     {
-        public string Content { get; set; }
-
-        public CustomCommand()
-        {
-            if (this.Content == null || this.Content.Length == 0)
-            {
-                this.Content = "/echo [TravelTriggers] Command Not Set.  Use /TravelTriggers to configure.";
-            }
-        }
+        public string? Content { get; set; }
     }
 }
