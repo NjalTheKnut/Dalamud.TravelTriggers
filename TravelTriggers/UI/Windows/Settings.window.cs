@@ -41,23 +41,23 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+
             var mcmd = config.MasterCommand.Content;
-            if (mcmd != null)
-            {
-                ImGui.Text($"Current Command: {mcmd}");
-            }
-            else
-            {
-                mcmd = $"/echo [TravelTriggers] Command Not Set.  Use /TravelTriggers to configure.";
-                ImGui.Text($"Current Command: Not Set");
-            }
             if (mcmd != null)
             {
                 if (ImGui.InputTextWithHint($"MasterCommand", "/command", ref mcmd, 1000, ImGuiInputTextFlags.None))
                 {
+                    ImGui.Text($"Current Command: {mcmd}");
                     config.MasterCommand.Content = mcmd;
                     TravelTriggers.PluginConfiguration.Save();
                 }
+            }
+            else
+            {
+                ImGui.Text($"Current Command: Not Set");
+                mcmd = $"/echo [TravelTriggers] Command Not Set.  Use /TravelTriggers to configure.";
+                config.MasterCommand.Content = mcmd;
+                TravelTriggers.PluginConfiguration.Save();
             }
         }
     }

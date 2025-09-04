@@ -1,7 +1,15 @@
 <div align="center">
+
+<img src="https://static.vecteezy.com/system/resources/thumbnails/055/180/310/small_2x/mystic-spiral-portal-3d-render-free-png.png" alt="Rendering of a Fantasy stone arch, bedecked with crystals, and filled with a swirling, arcane portal." width="15%">
+
   
 ### TravelTriggers
 Automatically execute commands when entering specified zones.
+
+[![Latest Stable](https://img.shields.io/github/v/release/NjalTheKnut/Dalamud.TravelTriggers?color=blue&label=Stable)](https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/latest)
+
+**[Issues](https://github.com/NjalTheKnut/Dalamud.TravelTriggers/issues) · [Pull Requests](https://github.com/NjalTheKnut/Dalamud.TravelTriggers/pulls) · [Releases](https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/latest)**
+
 </div>
 
 ---
