@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -81,7 +82,8 @@ namespace TravelTriggers
 
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
-                (ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID))
+                (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
+                characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)
             {
                 PluginLog.Information("trigger");
 
@@ -103,10 +105,10 @@ namespace TravelTriggers
                             PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
                             Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
-                        var cmd = characterConfig.MasterCommand;
-                        if (!cmd.Content.IsNullOrEmpty())
+                        var cmd = characterConfig.ZoneCommands[territory].Content;
+                        if (!cmd.IsNullOrEmpty())
                         {
-                            Commands.ProcessCommand(cmd.Content);
+                            Commands.ProcessCommand(cmd);
                         }
                     }
                     catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }

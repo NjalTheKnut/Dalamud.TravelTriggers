@@ -8,14 +8,14 @@ namespace TravelTriggers.Command
     /// </summary>
     public sealed class CommandManager : IDisposable
     {
-        private const string SettingsCommand = "/TravelTriggers";
+        private const string SettingsCommand = "/ttrig";
 
         /// <summary>
         ///     Initializes the CommandManager and its resources.
         /// </summary>
         public CommandManager() => TravelTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
         {
-            HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. '/TravelTriggers toggle' to toggle the plugin.",
+            HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. '/ttrig toggle' to toggle the plugin, '/ttrig rp' to toggle roleplay mode.",
             ShowInHelp = true
         });
 
@@ -43,6 +43,10 @@ namespace TravelTriggers.Command
                 case SettingsCommand when args == "toggle":
                     if (config != null)
                     { config.PluginEnabled = !config.PluginEnabled; TravelTriggers.PluginConfiguration.Save(); }
+                    break;
+                case SettingsCommand when args == "rp":
+                    if (config != null)
+                    { config.RoleplayOnly = !config.RoleplayOnly; TravelTriggers.PluginConfiguration.Save(); }
                     break;
                 case SettingsCommand when args?.Length == 0:
                     TravelTriggers.WindowManager.ToggleConfigWindow();

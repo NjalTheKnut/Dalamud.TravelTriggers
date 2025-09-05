@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -8,19 +11,29 @@ namespace TravelTriggers.UI.Windows
 {
     public sealed class SettingsWindow : Window
     {
+        private static readonly Dictionary<uint, string> TerritoryList = TravelTriggers.AllowedTerritories
+            .Where(t => !string.IsNullOrEmpty(t.PlaceName.Value.Name.ExtractText())
+                )
+            .OrderBy(x => x.PlaceName.Value.Name.ExtractText())
+            .ToDictionary(
+                t => t.RowId,
+                t => t.PlaceName.Value.Name.ExtractText()
+            );
+        private string searchQuery = string.Empty;
+
         public SettingsWindow() : base(TravelTriggers.PluginInterface.Manifest.Name)
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(850, 150),
+                MinimumSize = new Vector2(850, 300),
                 MaximumSize = new Vector2(1200, 1000)
             };
-            this.Size = new Vector2(850, 150);
+            this.Size = new Vector2(850, 450);
             this.SizeCondition = ImGuiCond.FirstUseEver;
             this.TitleBarButtons = [
                  new() {
                     Icon = FontAwesomeIcon.Comment,
-                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.TravelTriggers"),
+                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/TravelTriggers"),
                     ShowTooltip = () => ImGui.SetTooltip("Repository"),
                 },
             ];
@@ -41,28 +54,64 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
-
-            var slot = config.MasterCommand.Content;
-            if (slot != null)
+            ImGui.SameLine();
+            ImGui.BeginDisabled(!config.PluginEnabled);
+            if (ImGui.Checkbox("Only enable when roleplaying", ref config.RoleplayOnly))
             {
-                if (ImGui.InputTextWithHint($"MasterCommand", "/command here...", ref slot, 100, 0))
-                {
-                    unsafe
-                    {
-                        config.MasterCommand.Content = slot;
-                        TravelTriggers.PluginConfiguration.Save();
-                    }
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            ImGui.EndDisabled();
 
+            // Zone list.
+            ImGui.SetNextItemWidth(-1);
+            ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
+            var filteredTerritories = TerritoryList.Where(x => x.Value.Contains(this.searchQuery, StringComparison.InvariantCultureIgnoreCase));
+            if (filteredTerritories.Any())
+            {
+                ImGui.BeginDisabled(!config.PluginEnabled);
+                if (ImGui.BeginTable("##SettingsTable", 4, ImGuiTableFlags.ScrollY))
+                {
+                    ImGui.TableSetupScrollFreeze(0, 1);
+                    ImGui.TableSetupColumn("Zone");
+                    ImGui.TableSetupColumn("Enabled", ImGuiTableColumnFlags.WidthFixed, 100);
+                    ImGui.TableSetupColumn("Command");
+                    ImGui.TableHeadersRow();
+                    foreach (var t in filteredTerritories)
+                    {
+                        var customCommand = config.ZoneCommands.GetValueOrDefault(t.Key, new());
+
+                        ImGui.TableNextRow();
+                        ImGui.TableNextColumn();
+                        ImGui.Text(t.Value);
+                        ImGui.TableNextColumn();
+                        if (ImGui.Checkbox($"##{t.Key}", ref customCommand.Enabled))
+                        {
+                            config.ZoneCommands[t.Key] = customCommand;
+                            TravelTriggers.PluginConfiguration.Save();
+                        }
+                        ImGui.TableSetColumnIndex(2);
+                        ImGui.BeginDisabled(!customCommand.Enabled);
+
+                        var slot = customCommand.Content;
+                        if (ImGui.InputTextWithHint($"##{t.Key} Command", "/command here...", ref slot, 100))
+                        {
+                            unsafe
+                            {
+                                customCommand.Content = slot;
+                                config.ZoneCommands[t.Key] = customCommand;
+                                TravelTriggers.PluginConfiguration.Save();
+                            }
+                        }
+
+                        ImGui.EndDisabled();
+                    }
+                    ImGui.EndTable();
+                    ImGui.EndDisabled();
                 }
             }
             else
             {
-                slot = "/echo [TravelTriggers] Command not set.";
-                unsafe
-                {
-                    config.MasterCommand.Content = slot;
-                    TravelTriggers.PluginConfiguration.Save();
-                }
+                ImGui.TextDisabled("No zones matching your search query");
             }
         }
     }

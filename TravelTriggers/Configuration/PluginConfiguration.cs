@@ -16,12 +16,13 @@ namespace TravelTriggers.Configuration
     {
         public int Version { get; set; }
         public bool PluginEnabled = true;
-        public CustomCommand MasterCommand = new();
+        public bool RoleplayOnly;
+        public Dictionary<uint, CustomCommand> ZoneCommands = [];
     }
 
     internal sealed class CustomCommand
     {
-        public string? Content { get; set; }
-        public CustomCommand() { if (this.Content != null) { return; } this.Content = "/echo [TravelTriggers] Command not set."; }
+        public string? Content;
+        public bool Enabled = true;
     }
 }
