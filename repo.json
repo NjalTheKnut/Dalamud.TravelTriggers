@@ -3,14 +3,14 @@
     "Author": "NjalTheKnut",
     "Name": "TravelTriggers",
     "InternalName": "TravelTriggers",
-    "AssemblyVersion": "0.3",
+    "AssemblyVersion": "0.1",
     "ApplicableVersion": "any",
     "Punchline": "Automatically execute commands when entering specified zones.",
     "Description": "Allows for automatic execution of commands upon entering new zones.",
     "RepoUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers",
     "Tags": [
       "utility",
-      "Other"
+      "other"
     ],
     "CategoryTags": [
       "Utility",
@@ -21,8 +21,8 @@
     "IconUrl": "https://static.vecteezy.com/system/resources/thumbnails/055/180/310/small_2x/mystic-spiral-portal-3d-render-free-png.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3/latest.zip",
-    "DownloadLinkTesting": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3/latest.zip"
+    "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.1/latest.zip",
+    "DownloadLinkTesting": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.1/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.1/latest.zip"
   }
 ]
