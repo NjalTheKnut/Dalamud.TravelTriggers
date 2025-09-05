@@ -3,9 +3,9 @@
   <PropertyGroup>
     <Title>TravelTriggers</Title>
     <Authors>NjalTheKnut</Authors>
-    <Version>0.3</Version>
-    <RepositoryUrl>https://github.com/NjalTheKnut/TravelTriggers</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/NjalTheKnut/TravelTriggers</PackageProjectUrl>
+    <Version>0.1</Version>
+    <RepositoryUrl>https://github.com/NjalTheKnut/Dalamud.TravelTriggers</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/NjalTheKnut/Dalamud.TravelTriggers</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
   </PropertyGroup>
   <PropertyGroup>
