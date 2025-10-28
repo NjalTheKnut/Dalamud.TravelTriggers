@@ -18,7 +18,7 @@
     ],
     "DalamudApiLevel": 13,
     "LoadPriority": 0,
-    "IconUrl": "https://static.vecteezy.com/system/resources/thumbnails/055/180/310/small_2x/mystic-spiral-portal-3d-render-free-png.png",
+    "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/blob/main/.assets/1600.png?raw=true",
     "IsHide": "False",
     "IsTestingExclusive": "False",
     "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.1/latest.zip",
