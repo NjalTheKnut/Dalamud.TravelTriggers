@@ -64,6 +64,7 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            ImGui.SameLine();
             if (ImGui.Checkbox("Enable Gearset Swap feature", ref config.EnableGearsetSwap))
             {
                 TravelTriggers.PluginConfiguration.Save();
