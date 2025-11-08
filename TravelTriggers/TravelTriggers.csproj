@@ -17,12 +17,15 @@
     <ApplicationIcon>ttrig.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="ttrig.ico" />
+    <Content Include="ttrig.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.assets\ttrig.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
