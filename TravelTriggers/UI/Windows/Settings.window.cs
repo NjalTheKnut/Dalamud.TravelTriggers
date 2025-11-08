@@ -74,7 +74,7 @@ namespace TravelTriggers.UI.Windows
             var defaultCmd = config.DefaultCommand;
             var cmdslot = config.DefaultCommand.Content;
 #pragma warning disable CS8601 // Possible null reference assignment.
-            if (ImGui.InputTextWithHint($"##OverrideCommand", "/command here...", ref cmdslot, 100))
+            if (ImGui.InputTextWithHint("Default/Override Command", "/command here...", ref cmdslot, 100))
             {
                 unsafe
                 {
