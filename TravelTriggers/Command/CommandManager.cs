@@ -72,7 +72,7 @@ namespace TravelTriggers.Command
                 case SettingsCommand when args == "gs":
                     if (config != null)
                     {
-                        config.EnableRNG = !config.EnableGearsetSwap;
+                        config.EnableGearsetSwap = !config.EnableGearsetSwap;
                         TravelTriggers.PluginConfiguration.Save();
                         TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.EnableGearsetSwap == {config.EnableGearsetSwap}");
                     }
