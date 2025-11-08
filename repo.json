@@ -18,11 +18,11 @@
     ],
     "DalamudApiLevel": 13,
     "LoadPriority": 0,
-    "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/blob/main/.assets/1600.png?raw=true",
+    "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/blob/d789b3f5d3188e3162e68ca07de2e4b25582bf28/.assets/ttrig.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.1/latest.zip",
-    "DownloadLinkTesting": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.1/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.1/latest.zip"
+    "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v$(AssemblyVersion)/latest.zip",
+    "DownloadLinkTesting": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v$(AssemblyVersion)/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v$(AssemblyVersion)/latest.zip"
   }
 ]
