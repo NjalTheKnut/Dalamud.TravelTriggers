@@ -68,6 +68,8 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            ImGui.EndDisabled();
+
             var defaultCmd = config.DefaultCommand;
             var cmdslot = config.DefaultCommand.Content;
 #pragma warning disable CS8601 // Possible null reference assignment.
@@ -81,8 +83,6 @@ namespace TravelTriggers.UI.Windows
                 }
             }
 #pragma warning restore CS8601 // Possible null reference assignment.
-            ImGui.EndDisabled();
-
             // Zone list.
             ImGui.SetNextItemWidth(-1);
             ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
