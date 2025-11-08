@@ -143,33 +143,33 @@ namespace TravelTriggers
 
         }
 
-        private void OnCastTeleport(object sender, EventArgs e)
-        {
-            if (!ClientState.IsLoggedIn)
-            {
-                return;
-            }
+        //private void OnCastTeleport(object sender, EventArgs e)
+        //{
+        //    if (!ClientState.IsLoggedIn)
+        //    {
+        //        return;
+        //    }
 
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
-                sender.Equals(ClientState.LocalPlayer?.GameObjectId))
-            {
-                if (Condition[ConditionFlag.Casting] && (ClientState.LocalPlayer?.CastActionId == 5 || ClientState.LocalPlayer?.CastActionId == 6))
-                {
+        //    if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
+        //        characterConfig.PluginEnabled &&
+        //        (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
+        //        sender.Equals(ClientState.LocalPlayer?.GameObjectId))
+        //    {
+        //        if (Condition[ConditionFlag.Casting] && (ClientState.LocalPlayer?.CastActionId == 5 || ClientState.LocalPlayer?.CastActionId == 6))
+        //        {
 
-                    if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
-                    {
-                        try
-                        {
-                            Commands.ProcessCommand("/porch play Damnation");
-                            Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
-                        }
-                        catch (Exception err) { PluginLog.Error(err, "An error occured whilst attempting to execute custom commands."); }
-                    }
-                }
-            }
-        }
+        //            if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+        //            {
+        //                try
+        //                {
+        //                    Commands.ProcessCommand("/porch play Damnation");
+        //                    Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+        //                }
+        //                catch (Exception err) { PluginLog.Error(err, "An error occured whilst attempting to execute custom commands."); }
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         ///     Handles territory changes and custom command execution.
@@ -196,9 +196,9 @@ namespace TravelTriggers
                 }
                 new Task(() =>
                 {
-                    //if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
-                    //{
-                    try
+                    if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                    {
+                        try
                     {
                         Commands.ProcessCommand("/porch play Damnation");
                         Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
@@ -219,7 +219,7 @@ namespace TravelTriggers
                         }
                     }
                     catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
-                    //}
+                    }
                 }).Start();
             }
         }
