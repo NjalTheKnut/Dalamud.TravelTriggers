@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="..\.assets\ttrig.png" alt="Rendering of a Fantasy stone arch, bedecked with crystals, and filled with a swirling, arcane portal." width="15%">
+<img src=".assets/ttrig.png" alt="Rendering of a Fantasy stone arch, bedecked with crystals, and filled with a swirling, arcane portal." width="15%">
 
   
 ### TravelTriggers
