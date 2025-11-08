@@ -87,27 +87,17 @@ namespace TravelTriggers
                 switch (ClientState.LocalPlayer?.ClassJob.Value.Abbreviation.ToString())
                 {
                     case "MIN":
-                        return;
                     case "BTN":
-                        return;
                     case "FSH":
-                        return;
                     case "CRP":
-                        return;
                     case "BSM":
-                        return;
                     case "ARM":
-                        return;
                     case "GSM":
-                        return;
                     case "LTW":
-                        return;
                     case "WVR":
-                        return;
                     case "ALC":
-                        return;
                     case "CUL":
-                        return;
+                        break;
                     default:
                         PluginLog.Information("ClientState_ClassJobChanged trigger");
                         new Task(() =>
