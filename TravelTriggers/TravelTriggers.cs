@@ -199,26 +199,26 @@ namespace TravelTriggers
                     if (((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
                     {
                         try
-                    {
-                        Commands.ProcessCommand("/porch play Damnation");
-                        Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
-                        while (Condition[ConditionFlag.BetweenAreas]
-                            || Condition[ConditionFlag.BetweenAreas51]
-                            || Condition[ConditionFlag.Occupied]
-                            || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                            || Condition[ConditionFlag.Unconscious])
                         {
-                            PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
+                            Commands.ProcessCommand("/porch play Damnation");
+                            Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                            while (Condition[ConditionFlag.BetweenAreas]
+                                || Condition[ConditionFlag.BetweenAreas51]
+                                || Condition[ConditionFlag.Occupied]
+                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                || Condition[ConditionFlag.Unconscious])
+                            {
+                                PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
 
-                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                            }
+                            var cmd = characterConfig.DefaultCommand.Content.IsNullOrEmpty() ? characterConfig.ZoneCommands[territory].Content : characterConfig.DefaultCommand.Content;
+                            if (!cmd.IsNullOrEmpty())
+                            {
+                                Commands.ProcessCommand(cmd);
+                            }
                         }
-                        var cmd = characterConfig.DefaultCommand.Content.IsNullOrEmpty() ? characterConfig.ZoneCommands[territory].Content : characterConfig.DefaultCommand.Content;
-                        if (!cmd.IsNullOrEmpty())
-                        {
-                            Commands.ProcessCommand(cmd);
-                        }
-                    }
-                    catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                        catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
                     }
                 }).Start();
             }
