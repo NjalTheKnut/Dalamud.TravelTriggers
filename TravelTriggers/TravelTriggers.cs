@@ -112,7 +112,7 @@ namespace TravelTriggers
                         PluginLog.Information("ClientState_ClassJobChanged trigger");
                         new Task(() =>
                         {
-                            if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                            if (characterConfig.EnableGearsetSwap && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty] || !(characterConfig.EnableRNG && Random.Shared.Next(100) <= 25)))
                             {
                                 try
                                 {
