@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
-using Lumina.Excel.Sheets;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
 using TravelTriggers.UI;
+using TerritoryType = Lumina.Excel.Sheets.TerritoryType;
 
 namespace TravelTriggers
 {
@@ -58,15 +57,118 @@ namespace TravelTriggers
             WindowManager = new();
             CommandManager = new();
             ClientState.TerritoryChanged += this.OnTerritoryChanged;
+            ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
         }
+
         /// <summary>
         ///     Disposes of the plugin's resources.
         /// </summary>
         public void Dispose()
         {
             ClientState.TerritoryChanged -= this.OnTerritoryChanged;
+            ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
             CommandManager.Dispose();
             WindowManager.Dispose();
+        }
+
+        private void ClientState_ClassJobChanged(uint classJobId)
+        {
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
+
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled &&
+                (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
+                characterConfig.EnableGearsetSwap && ClientState.LocalPlayer?.ClassJob.Value.ClassJobCategory.IsValid == true &&
+                !characterConfig.DefaultCommand.Content.IsNullOrEmpty())
+            {
+                switch (ClientState.LocalPlayer?.ClassJob.Value.Abbreviation.ToString())
+                {
+                    case "MIN":
+                        break;
+                    case "BTN":
+                        break;
+                    case "FSH":
+                        break;
+                    case "CRP":
+                        break;
+                    case "BSM":
+                        break;
+                    case "ARM":
+                        break;
+                    case "GSM":
+                        break;
+                    case "LTW":
+                        break;
+                    case "WVR":
+                        break;
+                    case "ALC":
+                        break;
+                    case "CUL":
+                        break;
+                    default:
+                        PluginLog.Information("ClientState_ClassJobChanged trigger");
+                        new Task(() =>
+                        {
+                            if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                            {
+                                try
+                                {
+                                    Commands.ProcessCommand("/porch play Damnation");
+                                    Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                                    while (Condition[ConditionFlag.BetweenAreas]
+                                        || Condition[ConditionFlag.BetweenAreas51]
+                                        || Condition[ConditionFlag.Occupied]
+                                        || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                        || Condition[ConditionFlag.Unconscious])
+                                    {
+                                        PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
+
+                                        Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                                    }
+                                    var cmd = characterConfig.DefaultCommand.Content;
+                                    if (!cmd.IsNullOrEmpty())
+                                    {
+                                        Commands.ProcessCommand(cmd);
+                                    }
+                                }
+                                catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                            }
+                        }).Start();
+                        break;
+                }
+            }
+
+        }
+
+        private void OnCastTeleport(object sender, EventArgs e)
+        {
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
+
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled &&
+                (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
+                sender.Equals(ClientState.LocalPlayer?.GameObjectId))
+            {
+                if (Condition[ConditionFlag.Casting] && (ClientState.LocalPlayer?.CastActionId == 5 || ClientState.LocalPlayer?.CastActionId == 6))
+                {
+
+                    if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                    {
+                        try
+                        {
+                            Commands.ProcessCommand("/porch play Damnation");
+                            Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                        }
+                        catch (Exception err) { PluginLog.Error(err, "An error occured whilst attempting to execute custom commands."); }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -83,9 +185,9 @@ namespace TravelTriggers
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
-                characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)
+                ((!characterConfig.DefaultCommand.Content.IsNullOrEmpty()) || (characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)))
             {
-                PluginLog.Information("trigger");
+                PluginLog.Information("OnTerritoryChanged trigger");
 
                 if (!AllowedTerritories.Any(t => t.RowId == territory))
                 {
@@ -94,8 +196,12 @@ namespace TravelTriggers
                 }
                 new Task(() =>
                 {
+                    //if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                    //{
                     try
                     {
+                        Commands.ProcessCommand("/porch play Damnation");
+                        Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
                         while (Condition[ConditionFlag.BetweenAreas]
                             || Condition[ConditionFlag.BetweenAreas51]
                             || Condition[ConditionFlag.Occupied]
@@ -103,15 +209,17 @@ namespace TravelTriggers
                             || Condition[ConditionFlag.Unconscious])
                         {
                             PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
+
                             Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
-                        var cmd = characterConfig.ZoneCommands[territory].Content;
+                        var cmd = characterConfig.DefaultCommand.Content.IsNullOrEmpty() ? characterConfig.ZoneCommands[territory].Content : characterConfig.DefaultCommand.Content;
                         if (!cmd.IsNullOrEmpty())
                         {
                             Commands.ProcessCommand(cmd);
                         }
                     }
                     catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                    //}
                 }).Start();
             }
         }

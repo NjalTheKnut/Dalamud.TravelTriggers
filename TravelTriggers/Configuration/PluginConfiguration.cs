@@ -17,7 +17,10 @@ namespace TravelTriggers.Configuration
         public int Version { get; set; }
         public bool PluginEnabled = true;
         public bool RoleplayOnly;
+        public bool EnableRNG;
+        public bool EnableGearsetSwap;
         public Dictionary<uint, CustomCommand> ZoneCommands = [];
+        public CustomCommand DefaultCommand = new();
     }
 
     internal sealed class CustomCommand

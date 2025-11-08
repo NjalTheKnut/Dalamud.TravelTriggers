@@ -60,6 +60,27 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            if (ImGui.Checkbox("Enable RNG feature", ref config.EnableRNG))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            if (ImGui.Checkbox("Enable Gearset Swap feature", ref config.EnableGearsetSwap))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            var defaultCmd = config.DefaultCommand;
+            var cmdslot = config.DefaultCommand.Content;
+#pragma warning disable CS8601 // Possible null reference assignment.
+            if (ImGui.InputTextWithHint($"##OverrideCommand", "/command here...", ref cmdslot, 100))
+            {
+                unsafe
+                {
+                    defaultCmd.Content = cmdslot;
+                    config.DefaultCommand = defaultCmd;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+            }
+#pragma warning restore CS8601 // Possible null reference assignment.
             ImGui.EndDisabled();
 
             // Zone list.
@@ -78,7 +99,7 @@ namespace TravelTriggers.UI.Windows
                     ImGui.TableHeadersRow();
                     foreach (var t in filteredTerritories)
                     {
-                        var customCommand = config.ZoneCommands.GetValueOrDefault(t.Key, new());
+                        var customCommand = config.DefaultCommand.Content.IsNullOrEmpty() ? config.ZoneCommands.GetValueOrDefault(t.Key, new()) : config.DefaultCommand;
 
                         ImGui.TableNextRow();
                         ImGui.TableNextColumn();
@@ -93,6 +114,7 @@ namespace TravelTriggers.UI.Windows
                         ImGui.BeginDisabled(!customCommand.Enabled);
 
                         var slot = customCommand.Content;
+#pragma warning disable CS8601 // Possible null reference assignment.
                         if (ImGui.InputTextWithHint($"##{t.Key} Command", "/command here...", ref slot, 100))
                         {
                             unsafe
@@ -102,6 +124,7 @@ namespace TravelTriggers.UI.Windows
                                 TravelTriggers.PluginConfiguration.Save();
                             }
                         }
+#pragma warning restore CS8601 // Possible null reference assignment.
 
                         ImGui.EndDisabled();
                     }

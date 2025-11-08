@@ -15,7 +15,11 @@ namespace TravelTriggers.Command
         /// </summary>
         public CommandManager() => TravelTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
         {
-            HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. '/ttrig toggle' to toggle the plugin, '/ttrig rp' to toggle roleplay mode.",
+            HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. " +
+            "\n'/ttrig toggle' to toggle the plugin. " +
+            "\n'/ttrig rp' to toggle roleplay mode. " +
+            "\n'/ttrig rng' to toggle RNG mode. " +
+            "\n'/ttrig gs' to toggle Gearset mode. ",
             ShowInHelp = true
         });
 
@@ -42,11 +46,36 @@ namespace TravelTriggers.Command
             {
                 case SettingsCommand when args == "toggle":
                     if (config != null)
-                    { config.PluginEnabled = !config.PluginEnabled; TravelTriggers.PluginConfiguration.Save(); }
+                    {
+                        config.PluginEnabled = !config.PluginEnabled;
+                        TravelTriggers.PluginConfiguration.Save();
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.PluginEnabled == {config.PluginEnabled}");
+                    }
                     break;
                 case SettingsCommand when args == "rp":
                     if (config != null)
-                    { config.RoleplayOnly = !config.RoleplayOnly; TravelTriggers.PluginConfiguration.Save(); }
+                    {
+                        config.RoleplayOnly = !config.RoleplayOnly;
+                        TravelTriggers.PluginConfiguration.Save();
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.RoleplayOnly == {config.RoleplayOnly}");
+                    }
+                    break;
+
+                case SettingsCommand when args == "rng":
+                    if (config != null)
+                    {
+                        config.EnableRNG = !config.EnableRNG;
+                        TravelTriggers.PluginConfiguration.Save();
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.EnableRNG == {config.EnableRNG}");
+                    }
+                    break;
+                case SettingsCommand when args == "gs":
+                    if (config != null)
+                    {
+                        config.EnableRNG = !config.EnableRNG;
+                        TravelTriggers.PluginConfiguration.Save();
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.EnableGearsetSwap == {config.EnableGearsetSwap}");
+                    }
                     break;
                 case SettingsCommand when args?.Length == 0:
                     TravelTriggers.WindowManager.ToggleConfigWindow();
