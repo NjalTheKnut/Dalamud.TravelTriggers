@@ -84,54 +84,56 @@ namespace TravelTriggers
                 characterConfig.EnableGearsetSwap && ClientState.LocalPlayer?.ClassJob.Value.ClassJobCategory.IsValid == true &&
                 !characterConfig.DefaultCommand.Content.IsNullOrEmpty())
             {
-                switch (ClientState.LocalPlayer?.ClassJob.Value.Abbreviation.ToString())
+                if (ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.MIN ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.BTN ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.FSH ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.CRP ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.BSM ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.ARM ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.GSM ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.LTW ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.WVR ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.ALC ||
+                    ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.CUL)
                 {
-                    case "MIN":
-                    case "BTN":
-                    case "FSH":
-                    case "CRP":
-                    case "BSM":
-                    case "ARM":
-                    case "GSM":
-                    case "LTW":
-                    case "WVR":
-                    case "ALC":
-                    case "CUL":
-                        break;
-                    default:
-                        PluginLog.Information("ClientState_ClassJobChanged trigger");
-                        new Task(() =>
-                        {
-                            if (((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
-                            {
-                                try
-                                {
-                                    Commands.ProcessCommand("/porch play Damnation");
-                                    Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
-                                    while (Condition[ConditionFlag.BetweenAreas]
-                                        || Condition[ConditionFlag.BetweenAreas51]
-                                        || Condition[ConditionFlag.Occupied]
-                                        || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                        || Condition[ConditionFlag.Unconscious])
-                                    {
-                                        PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
-
-                                        Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                                    }
-                                    var cmd = characterConfig.DefaultCommand.Content;
-                                    if (!cmd.IsNullOrEmpty())
-                                    {
-                                        Commands.ProcessCommand(cmd);
-                                    }
-                                }
-                                catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
-                            }
-                        }).Start();
-                        break;
+                    return;
                 }
-            }
+                else
+                {
+                    PluginLog.Information("ClientState_ClassJobChanged trigger");
+                    new Task(() =>
+                    {
+                        if (((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                        {
+                            try
+                            {
+                                Commands.ProcessCommand("/porch play Damnation");
+                                Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                                while (Condition[ConditionFlag.BetweenAreas]
+                                    || Condition[ConditionFlag.BetweenAreas51]
+                                    || Condition[ConditionFlag.Occupied]
+                                    || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                    || Condition[ConditionFlag.Unconscious])
+                                {
+                                    PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
 
+                                    Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                                }
+                                var cmd = characterConfig.DefaultCommand.Content;
+                                if (!cmd.IsNullOrEmpty())
+                                {
+                                    Commands.ProcessCommand(cmd);
+                                }
+                            }
+                            catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                        }
+                    }).Start();
+                }
+
+            }
         }
+
+
 
         //private void OnCastTeleport(object sender, EventArgs e)
         //{
