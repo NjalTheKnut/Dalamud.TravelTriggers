@@ -92,8 +92,8 @@ namespace TravelTriggers
                     {
                         try
                         {
-                            Commands.ProcessCommand("/porch play Damnation");
-                            Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                            Commands.ProcessCommand("/ifjob -n BTN,MIN,FSH,CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL /porch play Damnation");
+                            Commands.ProcessCommand("/ifjob -n BTN,MIN,FSH,CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL /popup -n -s You have an unsettled feeling of vulnerability...");
                             while (Condition[ConditionFlag.BetweenAreas]
                                 || Condition[ConditionFlag.BetweenAreas51]
                                 || Condition[ConditionFlag.Occupied]
@@ -118,35 +118,6 @@ namespace TravelTriggers
             }
         }
 
-
-
-        //private void OnCastTeleport(object sender, EventArgs e)
-        //{
-        //    if (!ClientState.IsLoggedIn)
-        //    {
-        //        return;
-        //    }
-
-        //    if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
-        //        characterConfig.PluginEnabled &&
-        //        (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
-        //        sender.Equals(ClientState.LocalPlayer?.GameObjectId))
-        //    {
-        //        if (Condition[ConditionFlag.Casting] && (ClientState.LocalPlayer?.CastActionId == 5 || ClientState.LocalPlayer?.CastActionId == 6))
-        //        {
-
-        //            if (characterConfig.EnableRNG && Random.Shared.Next(100) <= 25 && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
-        //            {
-        //                try
-        //                {
-        //                    Commands.ProcessCommand("/porch play Damnation");
-        //                    Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
-        //                }
-        //                catch (Exception err) { PluginLog.Error(err, "An error occured whilst attempting to execute custom commands."); }
-        //            }
-        //        }
-        //    }
-        //}
 
         /// <summary>
         ///     Handles territory changes and custom command execution.
@@ -177,8 +148,8 @@ namespace TravelTriggers
                     {
                         try
                         {
-                            Commands.ProcessCommand("/porch play Damnation");
-                            Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                            Commands.ProcessCommand("/ifjob -n BTN,MIN,FSH,CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL /porch play Damnation");
+                            Commands.ProcessCommand("/ifjob -n BTN,MIN,FSH,CRP,BSM,ARM,GSM,LTW,WVR,ALC,CUL /popup -n -s You have an unsettled feeling of vulnerability...");
                             while (Condition[ConditionFlag.BetweenAreas]
                                 || Condition[ConditionFlag.BetweenAreas51]
                                 || Condition[ConditionFlag.Occupied]

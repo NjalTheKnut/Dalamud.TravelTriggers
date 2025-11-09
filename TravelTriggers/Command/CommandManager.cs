@@ -49,7 +49,7 @@ namespace TravelTriggers.Command
                     {
                         config.PluginEnabled = !config.PluginEnabled;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.PluginEnabled == {config.PluginEnabled}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Plugin Enabled == {config.PluginEnabled}");
                     }
                     break;
                 case SettingsCommand when args == "rp":
@@ -57,7 +57,7 @@ namespace TravelTriggers.Command
                     {
                         config.RoleplayOnly = !config.RoleplayOnly;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.RoleplayOnly == {config.RoleplayOnly}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Roleplay Only Module Enabled == {config.RoleplayOnly}");
                     }
                     break;
 
@@ -66,7 +66,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRNG = !config.EnableRNG;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.EnableRNG == {config.EnableRNG}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers RNG Module Enabled == {config.EnableRNG}");
                     }
                     break;
                 case SettingsCommand when args == "gs":
@@ -74,7 +74,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableGearsetSwap = !config.EnableGearsetSwap;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers.EnableGearsetSwap == {config.EnableGearsetSwap}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Gearset Module Enabled == {config.EnableGearsetSwap}");
                     }
                     break;
                 case SettingsCommand when args?.Length == 0:
