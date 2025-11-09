@@ -92,8 +92,8 @@ namespace TravelTriggers
                     {
                         try
                         {
-                            Commands.ProcessCommand("/porch play Damnation");
-                            Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                            //Commands.ProcessCommand("/porch play Damnation");
+                            //Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
                             while (Condition[ConditionFlag.BetweenAreas]
                                 || Condition[ConditionFlag.BetweenAreas51]
                                 || Condition[ConditionFlag.Occupied]
@@ -148,8 +148,8 @@ namespace TravelTriggers
                     {
                         try
                         {
-                            Commands.ProcessCommand("/porch play Damnation");
-                            Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
+                            //Commands.ProcessCommand("/porch play Damnation");
+                            //Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
                             while (Condition[ConditionFlag.BetweenAreas]
                                 || Condition[ConditionFlag.BetweenAreas51]
                                 || Condition[ConditionFlag.Occupied]
