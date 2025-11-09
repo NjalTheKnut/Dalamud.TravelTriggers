@@ -73,19 +73,7 @@ namespace TravelTriggers
 
         private void ClientState_ClassJobChanged(uint classJobId)
         {
-            if (!ClientState.IsLoggedIn ||
-                (ClientState.LocalPlayer != null &&
-                (ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.MIN ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.BTN ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.FSH ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.CRP ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.BSM ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.ARM ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.GSM ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.LTW ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.WVR ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.ALC ||
-                ClientState.LocalPlayer.ClassJob.Value.ClassJobCategory.Value.CUL)))
+            if (!ClientState.IsLoggedIn)
             {
                 return;
             }
