@@ -106,7 +106,11 @@ namespace TravelTriggers
                 {
                     try
                     {
-                        while (IsPlayerTeleporting())
+                        while (Condition[ConditionFlag.BetweenAreas]
+                                || Condition[ConditionFlag.BetweenAreas51]
+                                || Condition[ConditionFlag.Occupied]
+                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                || Condition[ConditionFlag.Unconscious])
                         {
                             Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
