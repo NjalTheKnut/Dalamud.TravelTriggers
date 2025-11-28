@@ -103,29 +103,29 @@ namespace TravelTriggers
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
             {
                 PluginLog.Information("ClientState_ClassJobChanged trigger");
-                new Task(() =>
+                //new Task(() =>
+                //{
+                if (IsPlayerTeleporting() && ShouldDoENF())
                 {
-                    if (IsPlayerTeleporting() && ShouldDoENF())
+                    try
                     {
-                        try
+                        while (Condition[ConditionFlag.BetweenAreas]
+                                || Condition[ConditionFlag.BetweenAreas51]
+                                || Condition[ConditionFlag.Occupied]
+                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                || Condition[ConditionFlag.Unconscious])
                         {
-                            while (Condition[ConditionFlag.BetweenAreas]
-                                    || Condition[ConditionFlag.BetweenAreas51]
-                                    || Condition[ConditionFlag.Occupied]
-                                    || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                    || Condition[ConditionFlag.Unconscious])
-                            {
-                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                            }
-                            var cmd = characterConfig.DefaultCommand.Content;
-                            if (!GenericHelpers.IsNullOrEmpty(cmd))
-                            {
-                                Commands.ProcessCommand(cmd);
-                            }
+                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
-                        catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
+                        var cmd = characterConfig.DefaultCommand.Content;
+                        if (!GenericHelpers.IsNullOrEmpty(cmd))
+                        {
+                            Commands.ProcessCommand(cmd);
+                        }
                     }
-                }).Start();
+                    catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
+                }
+                //}).Start();
             }
         }
 
