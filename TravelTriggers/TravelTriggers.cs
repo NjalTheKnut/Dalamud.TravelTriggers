@@ -49,6 +49,11 @@ namespace TravelTriggers
              48, // Bozja
              60, // Cosmic Exploration
         ];
+        private static readonly uint[] TeleportActionIds = [
+            5,
+            6,
+            10061
+            ];
 
         private static readonly uint[] TeleportActionIds = [
             5,
@@ -85,6 +90,55 @@ namespace TravelTriggers
             CommandManager.Dispose();
             WindowManager.Dispose();
         }
+        private void OnFrameworkUpdate(IFramework framework)
+        {
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
+
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled &&
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
+            {
+                if (IsPlayerTeleporting() && ShouldDoENF())
+                {
+                    try
+                    {
+                        while (IsPlayerTeleporting())
+                        {
+                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                        }
+                        var cmd = characterConfig.DefaultCommand.Content;
+                        if (!GenericHelpers.IsNullOrEmpty(cmd))
+                        {
+                            Commands.ProcessCommand(cmd);
+                        }
+                    }
+                    catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
+
+                }
+            }
+        }
+
+        private static bool IsPlayerTeleporting()
+        {
+            var result = false;
+            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds) && (Player.Object.BaseCastTime <= Player.Object.CurrentCastTime);
+            return result;
+        }
+
+        private static bool ShouldDoENF()
+        {
+            var result = false;
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled)
+            {
+                result = ((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
+            }
+            return result;
+        }
+
 
         private void OnFrameworkUpdate(IFramework framework)
         {
