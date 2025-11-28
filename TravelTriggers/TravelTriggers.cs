@@ -52,7 +52,14 @@ namespace TravelTriggers
         private static readonly uint[] TeleportActionIds = [
             5,
             6,
-            10061
+            10061,
+            21071,
+            21069,
+            21070,
+            30362,
+            41708,
+            28064,
+            49121
             ];
 
         /// <summary>
