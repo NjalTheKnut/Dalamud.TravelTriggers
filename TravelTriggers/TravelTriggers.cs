@@ -6,7 +6,8 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using Dalamud.Utility;
+using ECommons;
+using ECommons.GameHelpers;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
 using TravelTriggers.UI;
@@ -24,10 +25,12 @@ namespace TravelTriggers
         [PluginService] public static ICondition Condition { get; private set; }
         [PluginService] public static IFramework Framework { get; private set; }
         [PluginService] public static IPluginLog PluginLog { get; private set; }
+        [PluginService] public static IPlayerState PlayerState { get; private set; }
         public static CommandManager CommandManager { get; private set; }
         public static WindowManager WindowManager { get; private set; }
         public static PluginConfiguration PluginConfiguration { get; private set; }
         public static IEnumerable<TerritoryType> AllowedTerritories;
+        //public static bool DoENF = ShouldDoENF();
 #pragma warning restore CS8618
 
         private const uint ROLEPLAY_ONLINE_STATUS_ID = 22;
@@ -47,6 +50,12 @@ namespace TravelTriggers
              60, // Cosmic Exploration
         ];
 
+        private static readonly uint[] TeleportActionIds = [
+            5,
+            6,
+            10061
+            ];
+
         /// <summary>
         ///     The plugin's main entry point.
         /// </summary>
@@ -56,19 +65,73 @@ namespace TravelTriggers
             PluginConfiguration = PluginConfiguration.Load();
             WindowManager = new();
             CommandManager = new();
-            ClientState.TerritoryChanged += this.OnTerritoryChanged;
+            //ClientState.TerritoryChanged += this.OnTerritoryChanged;
+            Framework.Update += this.OnFrameworkUpdate;
             ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
+            ECommonsMain.Init(PluginInterface, this);
+            //DoENF = false;
         }
+
 
         /// <summary>
         ///     Disposes of the plugin's resources.
         /// </summary>
         public void Dispose()
         {
-            ClientState.TerritoryChanged -= this.OnTerritoryChanged;
+            ECommonsMain.Dispose();
             ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
+            //ClientState.TerritoryChanged -= this.OnTerritoryChanged;
+            Framework.Update -= this.OnFrameworkUpdate;
             CommandManager.Dispose();
             WindowManager.Dispose();
+        }
+
+        private void OnFrameworkUpdate(IFramework framework)
+        {
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
+
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled &&
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
+            {
+                if (IsPlayerTeleporting() && ShouldDoENF())
+                {
+                    try
+                    {
+                        while (IsPlayerTeleporting())
+                        {
+                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                        }
+                        var cmd = characterConfig.DefaultCommand.Content;
+                        if (!GenericHelpers.IsNullOrEmpty(cmd))
+                        {
+                            Commands.ProcessCommand(cmd);
+                        }
+                    }
+                    catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
+                }
+            }
+        }
+
+        private static bool IsPlayerTeleporting()
+        {
+            var result = false;
+            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds) && (Player.Object.BaseCastTime <= Player.Object.CurrentCastTime);
+            return result;
+        }
+
+        private static bool ShouldDoENF()
+        {
+            var result = false;
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled)
+            {
+                result = ((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
+            }
+            return result;
         }
 
         private void ClientState_ClassJobChanged(uint classJobId)
@@ -78,22 +141,20 @@ namespace TravelTriggers
                 return;
             }
 
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
-                characterConfig.EnableGearsetSwap && ClientState.LocalPlayer?.ClassJob.Value.ClassJobCategory.IsValid == true &&
-                !characterConfig.DefaultCommand.Content.IsNullOrEmpty())
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
+                characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid &&
+                !GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content))
             {
 
                 PluginLog.Information("ClientState_ClassJobChanged trigger");
                 new Task(() =>
                 {
-                    if (((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                    if (ShouldDoENF())
                     {
                         try
                         {
-                            //Commands.ProcessCommand("/porch play Damnation");
-                            //Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
                             while (Condition[ConditionFlag.BetweenAreas]
                                 || Condition[ConditionFlag.BetweenAreas51]
                                 || Condition[ConditionFlag.Occupied]
@@ -105,7 +166,7 @@ namespace TravelTriggers
                                 Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                             }
                             var cmd = characterConfig.DefaultCommand.Content;
-                            if (!cmd.IsNullOrEmpty())
+                            if (!GenericHelpers.IsNullOrEmpty(cmd))
                             {
                                 Commands.ProcessCommand(cmd);
                             }
@@ -113,16 +174,13 @@ namespace TravelTriggers
                         catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
                     }
                 }).Start();
-
-
             }
         }
-
 
         /// <summary>
         ///     Handles territory changes and custom command execution.
         /// </summary>
-        private void OnTerritoryChanged(ushort territory)
+        private static void OnTerritoryChanged(ushort territory)
         {
 
             if (!ClientState.IsLoggedIn)
@@ -130,10 +188,10 @@ namespace TravelTriggers
                 return;
             }
 
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(ClientState.LocalContentId, out var characterConfig) &&
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || ClientState.LocalPlayer?.OnlineStatus.RowId == ROLEPLAY_ONLINE_STATUS_ID) &&
-                ((!characterConfig.DefaultCommand.Content.IsNullOrEmpty()) || (characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)))
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
+                ((!GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content)) || (characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)))
             {
                 PluginLog.Information("OnTerritoryChanged trigger");
 
@@ -144,12 +202,10 @@ namespace TravelTriggers
                 }
                 new Task(() =>
                 {
-                    if (((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]))
+                    if (ShouldDoENF())
                     {
                         try
                         {
-                            //Commands.ProcessCommand("/porch play Damnation");
-                            //Commands.ProcessCommand("/popup -n -s You have an unsettled feeling of vulnerability...");
                             while (Condition[ConditionFlag.BetweenAreas]
                                 || Condition[ConditionFlag.BetweenAreas51]
                                 || Condition[ConditionFlag.Occupied]
@@ -160,8 +216,8 @@ namespace TravelTriggers
 
                                 Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                             }
-                            var cmd = characterConfig.DefaultCommand.Content.IsNullOrEmpty() ? characterConfig.ZoneCommands[territory].Content : characterConfig.DefaultCommand.Content;
-                            if (!cmd.IsNullOrEmpty())
+                            var cmd = GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content) ? characterConfig.ZoneCommands[territory].Content : characterConfig.DefaultCommand.Content;
+                            if (!GenericHelpers.IsNullOrEmpty(cmd))
                             {
                                 Commands.ProcessCommand(cmd);
                             }
