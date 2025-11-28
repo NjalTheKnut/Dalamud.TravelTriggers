@@ -102,46 +102,31 @@ namespace TravelTriggers
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
             {
-                if (IsPlayerTeleporting() && ShouldDoENF())
+                PluginLog.Information("ClientState_ClassJobChanged trigger");
+                new Task(() =>
                 {
-                    try
+                    if (IsPlayerTeleporting() && ShouldDoENF())
                     {
-                        while (Condition[ConditionFlag.BetweenAreas]
-                                || Condition[ConditionFlag.BetweenAreas51]
-                                || Condition[ConditionFlag.Occupied]
-                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                || Condition[ConditionFlag.Unconscious])
+                        try
                         {
-                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                            while (Condition[ConditionFlag.BetweenAreas]
+                                    || Condition[ConditionFlag.BetweenAreas51]
+                                    || Condition[ConditionFlag.Occupied]
+                                    || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                    || Condition[ConditionFlag.Unconscious])
+                            {
+                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                            }
+                            var cmd = characterConfig.DefaultCommand.Content;
+                            if (!GenericHelpers.IsNullOrEmpty(cmd))
+                            {
+                                Commands.ProcessCommand(cmd);
+                            }
                         }
-                        var cmd = characterConfig.DefaultCommand.Content;
-                        if (!GenericHelpers.IsNullOrEmpty(cmd))
-                        {
-                            Commands.ProcessCommand(cmd);
-                        }
+                        catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
                     }
-                    catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
-
-                }
+                }).Start();
             }
-        }
-
-        private static bool IsPlayerTeleporting()
-        {
-            var result = false;
-            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
-            return result;
-        }
-
-        private static bool ShouldDoENF()
-        {
-            var result = false;
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled)
-            {
-                result = ((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
-            }
-            return result;
         }
 
         private void ClientState_ClassJobChanged(uint classJobId)
@@ -154,8 +139,7 @@ namespace TravelTriggers
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
-                characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid &&
-                !GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content))
+                characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
 
                 PluginLog.Information("ClientState_ClassJobChanged trigger");
@@ -187,7 +171,26 @@ namespace TravelTriggers
             }
         }
 
-        /// <summary>
+        private static bool IsPlayerTeleporting()
+        {
+            var result = false;
+            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
+            return result;
+        }
+
+        private static bool ShouldDoENF()
+        {
+            var result = false;
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled)
+            {
+                result = ((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
+            }
+            return result;
+        }
+
+
+        /*/// <summary>
         ///     Handles territory changes and custom command execution.
         /// </summary>
         private static void OnTerritoryChanged(ushort territory)
@@ -236,7 +239,7 @@ namespace TravelTriggers
                     }
                 }).Start();
             }
-        }
+        }*/
 
     }
 }
