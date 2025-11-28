@@ -125,7 +125,7 @@ namespace TravelTriggers
         private static bool IsPlayerTeleporting()
         {
             var result = false;
-            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds));
+            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
             return result;
         }
 
