@@ -102,7 +102,7 @@ namespace TravelTriggers
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
             {
-                PluginLog.Information("ClientState_ClassJobChanged trigger");
+                PluginLog.Information("OnFrameworkUpdate trigger");
                 //new Task(() =>
                 //{
                 if (IsPlayerTeleporting() && ShouldDoENF())
