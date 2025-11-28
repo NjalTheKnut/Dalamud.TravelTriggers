@@ -43,10 +43,10 @@ namespace TravelTriggers.UI.Windows
 
         public override void Draw()
         {
-            if (!TravelTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(TravelTriggers.ClientState.LocalContentId, out var config))
+            if (!TravelTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(TravelTriggers.PlayerState.ContentId, out var config))
             {
                 config = new();
-                TravelTriggers.PluginConfiguration.CharacterConfigurations[TravelTriggers.ClientState.LocalContentId] = config;
+                TravelTriggers.PluginConfiguration.CharacterConfigurations[TravelTriggers.PlayerState.ContentId] = config;
             }
 
             // Top-level config options.

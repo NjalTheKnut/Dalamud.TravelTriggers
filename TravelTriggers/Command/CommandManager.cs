@@ -36,7 +36,7 @@ namespace TravelTriggers.Command
         ///
         private void OnCommand(string command, string args)
         {
-            var hasConfig = TravelTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(TravelTriggers.ClientState.LocalContentId, out var config);
+            var hasConfig = TravelTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(TravelTriggers.PlayerState.ContentId, out var config);
             if (!hasConfig || config is null)
             {
                 return;
@@ -49,7 +49,7 @@ namespace TravelTriggers.Command
                     {
                         config.PluginEnabled = !config.PluginEnabled;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Plugin Enabled == {config.PluginEnabled}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "rp":
@@ -57,7 +57,7 @@ namespace TravelTriggers.Command
                     {
                         config.RoleplayOnly = !config.RoleplayOnly;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Roleplay Only Module Enabled == {config.RoleplayOnly}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}");
                     }
                     break;
 
@@ -66,7 +66,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRNG = !config.EnableRNG;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers RNG Module Enabled == {config.EnableRNG}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "gs":
@@ -74,7 +74,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableGearsetSwap = !config.EnableGearsetSwap;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Gearset Module Enabled == {config.EnableGearsetSwap}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -s TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args?.Length == 0:
