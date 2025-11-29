@@ -102,30 +102,34 @@ namespace TravelTriggers
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
             {
-                //new Task(() =>
-                //{
-                if (IsPlayerTeleporting() && ShouldDoENF())
+                new Task(() =>
                 {
-                    PluginLog.Information("OnFrameworkUpdate trigger");
-                    try
+                    if (IsPlayerTeleporting() && ShouldDoENF())
                     {
-                        while (Condition[ConditionFlag.BetweenAreas]
-                                || Condition[ConditionFlag.BetweenAreas51]
-                                || Condition[ConditionFlag.Occupied]
-                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                || Condition[ConditionFlag.Unconscious])
+                        PluginLog.Information("OnFrameworkUpdate trigger");
+                        try
                         {
-                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                            while (Condition[ConditionFlag.BetweenAreas]
+                                    || Condition[ConditionFlag.BetweenAreas51]
+                                    || Condition[ConditionFlag.Occupied]
+                                    || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                    || Condition[ConditionFlag.Unconscious])
+                            {
+                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
+                            }
+                            var cmd = characterConfig.DefaultCommand.Content;
+                            if (!GenericHelpers.IsNullOrEmpty(cmd))
+                            {
+                                Commands.ProcessCommand(cmd);
+                            }
                         }
-                        var cmd = characterConfig.DefaultCommand.Content;
-                        if (!GenericHelpers.IsNullOrEmpty(cmd))
-                        {
-                            Commands.ProcessCommand(cmd);
-                        }
+                        catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
                     }
-                    catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
-                }
-                //}).Start();
+                    else
+                    {
+                        Commands.ProcessCommand("/macrocancel");
+                    }
+                }).Start();
             }
         }
 
@@ -166,6 +170,10 @@ namespace TravelTriggers
                             }
                         }
                         catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                    }
+                    else
+                    {
+                        Commands.ProcessCommand("/macrocancel");
                     }
                 }).Start();
             }
