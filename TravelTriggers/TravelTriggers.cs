@@ -102,21 +102,13 @@ namespace TravelTriggers
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
             {
-                var task = new Task(() =>
+                new Task(() =>
                 {
                     if (IsPlayerTeleporting() && ShouldDoENF())
                     {
                         PluginLog.Information("OnFrameworkUpdate trigger");
                         try
                         {
-                            while (Condition[ConditionFlag.BetweenAreas]
-                                    || Condition[ConditionFlag.BetweenAreas51]
-                                    || Condition[ConditionFlag.Occupied]
-                                    || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                    || Condition[ConditionFlag.Unconscious])
-                            {
-                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                            }
                             var cmd = characterConfig.DefaultCommand.Content;
                             if (!GenericHelpers.IsNullOrEmpty(cmd))
                             {
@@ -125,8 +117,7 @@ namespace TravelTriggers
                         }
                         catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
                     }
-                });
-                task.Wait();
+                }).Wait();
             }
         }
 
@@ -143,7 +134,7 @@ namespace TravelTriggers
                 characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
 
-                var task = new Task(() =>
+                new Task(() =>
                 {
                     if (ShouldDoENF())
                     {
@@ -168,8 +159,7 @@ namespace TravelTriggers
                         }
                         catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
                     }
-                });
-                task.Wait();
+                }).Wait();
             }
         }
 
