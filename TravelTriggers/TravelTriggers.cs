@@ -142,11 +142,11 @@ namespace TravelTriggers
                 characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
 
-                PluginLog.Information("ClientState_ClassJobChanged trigger");
                 new Task(() =>
                 {
                     if (ShouldDoENF())
                     {
+                        PluginLog.Information("ClientState_ClassJobChanged trigger");
                         try
                         {
                             while (Condition[ConditionFlag.BetweenAreas]
