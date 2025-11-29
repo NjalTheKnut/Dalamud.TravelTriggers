@@ -102,7 +102,7 @@ namespace TravelTriggers
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
             {
-                new Task(() =>
+                var task = new Task(() =>
                 {
                     if (IsPlayerTeleporting() && ShouldDoENF())
                     {
@@ -125,11 +125,8 @@ namespace TravelTriggers
                         }
                         catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
                     }
-                    else
-                    {
-                        Commands.ProcessCommand("/macrocancel");
-                    }
-                }).Start();
+                });
+                task.Wait();
             }
         }
 
@@ -146,7 +143,7 @@ namespace TravelTriggers
                 characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
 
-                new Task(() =>
+                var task = new Task(() =>
                 {
                     if (ShouldDoENF())
                     {
@@ -171,11 +168,8 @@ namespace TravelTriggers
                         }
                         catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
                     }
-                    else
-                    {
-                        Commands.ProcessCommand("/macrocancel");
-                    }
-                }).Start();
+                });
+                task.Wait();
             }
         }
 
