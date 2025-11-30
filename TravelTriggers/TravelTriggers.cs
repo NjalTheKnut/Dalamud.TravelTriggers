@@ -48,7 +48,7 @@ namespace TravelTriggers
              48, // Bozja
              60, // Cosmic Exploration
         ];
-        /*private static readonly uint[] TeleportActionIds = [
+        private static readonly uint[] TeleportActionIds = [
             5, //Teleport
             6, //Return (Patch 4.1)
             10061, //Return (Patch 4.15)
@@ -59,7 +59,7 @@ namespace TravelTriggers
             41708, //Gold Saucer Ticket
             28064, //Firmament Ticket
             49121  //Cosmic Exploration Ticket
-            ];*/
+            ];
 
         /// <summary>
         ///     The plugin's main entry point.
@@ -70,11 +70,10 @@ namespace TravelTriggers
             PluginConfiguration = PluginConfiguration.Load();
             WindowManager = new();
             CommandManager = new();
-            ClientState.TerritoryChanged += this.OnTerritoryChanged;
+            Framework.Update += this.OnFrameworkUpdate;
+            //ClientState.TerritoryChanged += this.OnTerritoryChanged;
             ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
             ECommonsMain.Init(PluginInterface, this);
-            //Framework.Update += this.OnFrameworkUpdate;
-            //DoENF = false;
         }
 
 
@@ -85,43 +84,49 @@ namespace TravelTriggers
         {
             ECommonsMain.Dispose();
             ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
-            ClientState.TerritoryChanged -= this.OnTerritoryChanged;
+            //ClientState.TerritoryChanged -= this.OnTerritoryChanged;
+            Framework.Update -= this.OnFrameworkUpdate;
             CommandManager.Dispose();
             WindowManager.Dispose();
-            //Framework.Update -= this.OnFrameworkUpdate;
         }
-        /*private void OnFrameworkUpdate(IFramework framework)
+        private void OnFrameworkUpdate(IFramework framework)
         {
             if (!ClientState.IsLoggedIn)
             {
                 return;
             }
 
-            if (!IsPlayerTeleporting())
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled &&
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
             {
-                Commands.ProcessCommand("/wolua reload");
-                return;
-            }
-
-            if (ShouldDoENF())
-            {
-                if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                    characterConfig.PluginEnabled &&
-                    (!characterConfig.RoleplayOnly || (!characterConfig.RoleplayOnly && Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID)))
+                //new Task(() =>
+                //{
+                if (IsPlayerTeleporting() && ShouldDoENF())
                 {
                     PluginLog.Information("OnFrameworkUpdate trigger");
                     try
                     {
-                        var cmd = characterConfig.DefaultCommand.Content;
-                        if (!GenericHelpers.IsNullOrEmpty(cmd))
+                        while (Condition[ConditionFlag.BetweenAreas]
+                                || Condition[ConditionFlag.BetweenAreas51]
+                                || Condition[ConditionFlag.Occupied]
+                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                || Condition[ConditionFlag.Unconscious])
                         {
-                            Commands.ProcessCommand(cmd);
+                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
+                        var cmd = characterConfig.DefaultCommand.Content;
+                        if (cmd.IsNullOrEmpty())
+                        {
+                            return;
+                        }
+                        Commands.ProcessCommand(cmd);
                     }
                     catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
                 }
+                //}).Start();
             }
-        }*/
+        }
 
         private void ClientState_ClassJobChanged(uint classJobId)
         {
@@ -132,9 +137,10 @@ namespace TravelTriggers
 
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || (!characterConfig.RoleplayOnly && Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID)) &&
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
                 characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
+
                 new Task(() =>
                 {
                     if (ShouldDoENF())
@@ -153,23 +159,24 @@ namespace TravelTriggers
                                 Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                             }
                             var cmd = characterConfig.DefaultCommand.Content;
-                            if (!GenericHelpers.IsNullOrEmpty(cmd))
+                            if (cmd.IsNullOrEmpty())
                             {
-                                Commands.ProcessCommand(cmd);
+                                return;
                             }
+                            Commands.ProcessCommand(cmd);
                         }
                         catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
                     }
-                }).Wait();
+                }).Start();
             }
         }
 
-        /*private static bool IsPlayerTeleporting()
+        private static bool IsPlayerTeleporting()
         {
             var result = false;
             result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
             return result;
-        }*/
+        }
 
         private static bool ShouldDoENF()
         {
@@ -182,7 +189,7 @@ namespace TravelTriggers
             return result;
         }
 
-        /// <summary>
+        /*/// <summary>
         ///     Handles territory changes and custom command execution.
         /// </summary>
         private void OnTerritoryChanged(ushort territory)
@@ -231,7 +238,7 @@ namespace TravelTriggers
                     }
                 }).Start();
             }
-        }
+        }*/
 
     }
 }
