@@ -30,7 +30,6 @@ namespace TravelTriggers
         public static WindowManager WindowManager { get; private set; }
         public static PluginConfiguration PluginConfiguration { get; private set; }
         public static IEnumerable<TerritoryType> AllowedTerritories;
-
 #pragma warning restore CS8618
 
         private const uint ROLEPLAY_ONLINE_STATUS_ID = 22;
@@ -49,18 +48,18 @@ namespace TravelTriggers
              48, // Bozja
              60, // Cosmic Exploration
         ];
-        //private static readonly uint[] TeleportActionIds = [
-        //    5,
-        //    6,
-        //    10061,
-        //    21071,
-        //    21069,
-        //    21070,
-        //    30362,
-        //    41708,
-        //    28064,
-        //    49121
-        //    ];
+        /*private static readonly uint[] TeleportActionIds = [
+            5, //Teleport
+            6, //Return (Patch 4.1)
+            10061, //Return (Patch 4.15)
+            21069, //Storm Ticket
+            21070, //Adder Ticket
+            21071, //Flame Ticket
+            30362, //Vesper Bay Ticket
+            41708, //Gold Saucer Ticket
+            28064, //Firmament Ticket
+            49121  //Cosmic Exploration Ticket
+            ];*/
 
         /// <summary>
         ///     The plugin's main entry point.
@@ -72,9 +71,9 @@ namespace TravelTriggers
             WindowManager = new();
             CommandManager = new();
             ClientState.TerritoryChanged += this.OnTerritoryChanged;
-            //Framework.Update += this.OnFrameworkUpdate;
             ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
             ECommonsMain.Init(PluginInterface, this);
+            //Framework.Update += this.OnFrameworkUpdate;
             //DoENF = false;
         }
 
@@ -87,42 +86,42 @@ namespace TravelTriggers
             ECommonsMain.Dispose();
             ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
             ClientState.TerritoryChanged -= this.OnTerritoryChanged;
-            //Framework.Update -= this.OnFrameworkUpdate;
             CommandManager.Dispose();
             WindowManager.Dispose();
+            //Framework.Update -= this.OnFrameworkUpdate;
         }
-        //private void OnFrameworkUpdate(IFramework framework)
-        //{
-        //    if (!ClientState.IsLoggedIn)
-        //    {
-        //        return;
-        //    }
+        /*private void OnFrameworkUpdate(IFramework framework)
+        {
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
 
-        //    if (!IsPlayerTeleporting())
-        //    {
-        //        Commands.ProcessCommand("/wolua reload");
-        //        return;
-        //    }
+            if (!IsPlayerTeleporting())
+            {
+                Commands.ProcessCommand("/wolua reload");
+                return;
+            }
 
-        //    if (ShouldDoENF())
-        //    {
-        //        if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-        //            characterConfig.PluginEnabled &&
-        //            (!characterConfig.RoleplayOnly || (!characterConfig.RoleplayOnly && Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID)))
-        //        {
-        //            PluginLog.Information("OnFrameworkUpdate trigger");
-        //            try
-        //            {
-        //                var cmd = characterConfig.DefaultCommand.Content;
-        //                if (!GenericHelpers.IsNullOrEmpty(cmd))
-        //                {
-        //                    Commands.ProcessCommand(cmd);
-        //                }
-        //            }
-        //            catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
-        //        }
-        //    }
-        //}
+            if (ShouldDoENF())
+            {
+                if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                    characterConfig.PluginEnabled &&
+                    (!characterConfig.RoleplayOnly || (!characterConfig.RoleplayOnly && Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID)))
+                {
+                    PluginLog.Information("OnFrameworkUpdate trigger");
+                    try
+                    {
+                        var cmd = characterConfig.DefaultCommand.Content;
+                        if (!GenericHelpers.IsNullOrEmpty(cmd))
+                        {
+                            Commands.ProcessCommand(cmd);
+                        }
+                    }
+                    catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
+                }
+            }
+        }*/
 
         private void ClientState_ClassJobChanged(uint classJobId)
         {
@@ -165,12 +164,12 @@ namespace TravelTriggers
             }
         }
 
-        //private static bool IsPlayerTeleporting()
-        //{
-        //    var result = false;
-        //    result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
-        //    return result;
-        //}
+        /*private static bool IsPlayerTeleporting()
+        {
+            var result = false;
+            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
+            return result;
+        }*/
 
         private static bool ShouldDoENF()
         {
