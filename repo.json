@@ -3,7 +3,7 @@
     "Author": "NjalTheKnut",
     "Name": "TravelTriggers",
     "InternalName": "TravelTriggers",
-    "AssemblyVersion": "0.3",
+    "AssemblyVersion": "0.2",
     "ApplicableVersion": "any",
     "Punchline": "Automatically execute commands when entering specified zones.",
     "Description": "Allows for automatic execution of commands upon entering new zones.",
