@@ -25,10 +25,10 @@ namespace TravelTriggers.UI.Windows
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(850, 150),
+                MinimumSize = new Vector2(600, 150),
                 MaximumSize = new Vector2(1200, 1000)
             };
-            this.Size = new Vector2(850, 150);
+            this.Size = new Vector2(600, 150);
             this.SizeCondition = ImGuiCond.FirstUseEver;
             this.TitleBarButtons = [
                  new() {
@@ -115,9 +115,9 @@ namespace TravelTriggers.UI.Windows
                     if (ImGui.BeginTable("##SettingsTable", 4, ImGuiTableFlags.ScrollY))
                     {
                         ImGui.TableSetupScrollFreeze(0, 1);
-                        ImGui.TableSetupColumn("Zone");
-                        ImGui.TableSetupColumn("Enabled", ImGuiTableColumnFlags.WidthFixed, 100);
-                        ImGui.TableSetupColumn("Command");
+                        ImGui.TableSetupColumn("Zone", ImGuiTableColumnFlags.WidthFixed, 250);
+                        ImGui.TableSetupColumn("Enabled", ImGuiTableColumnFlags.WidthFixed, 50);
+                        ImGui.TableSetupColumn("Command", ImGuiTableColumnFlags.WidthFixed, 250);
                         ImGui.TableHeadersRow();
                         foreach (var t in filteredTerritories)
                         {
