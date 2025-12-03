@@ -3,8 +3,7 @@
   "Name": "TravelTriggers",
   "InternalName": "TravelTriggers",
   "Punchline": "Automatically execute commands under certain conditions.",
-  "Description": "- Set a per-character command for:\\n- After Teleports (Teleport, Return, Grand Company Aetheryte Tickets, et cetera...)\\n- Changing Classes/Jobs\\n- Roleplay Only Mode (Prevents the command from executing if you are not in the \"RP\" Online Status)\\n- RNG Mode (Executes the command randomly based on a given range)",
-  "Changelog": "- Replace the original Territory Change feature with a new Teleport feature.\\n- Add toggle for the new Teleport feature.\\n- Add Toggle for the new Gearset feature.\\n- Add toggle for the new RNG feature.\\n- Add input fields to set range bounds for the new RNG feature.\\n- Adjust the plugin UI for clarity and visual aesthetics.\\n- Register UI callbacks to avoid Dalamud warnings prior to and after character login.\\n- Improve debugging log messages and logic paths for better performance.",
+  "Description": "- Set a per-character command for:\n - After Teleports (Teleport, Return, Grand Company Aetheryte Tickets, et cetera...)\n - Changing Classes/Jobs\n - Roleplay Only Mode (Prevents the command from executing if you are not in the \"RP\" Online Status)\n - RNG Mode (Executes the command randomly based on a given range)",
   "RepoUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers",
   "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/blob/main/.assets/1600.png?raw=true",
   "Tags": [
