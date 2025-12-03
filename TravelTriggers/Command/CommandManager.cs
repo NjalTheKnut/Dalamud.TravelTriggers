@@ -81,7 +81,7 @@ namespace TravelTriggers.Command
                 case SettingsCommand when args == "tp":
                     if (config != null)
                     {
-                        config.EnableGearsetSwap = !config.EnableGearsetSwap;
+                        config.EnableTeleportMode= !config.EnableTeleportMode;
                         TravelTriggers.PluginConfiguration.Save();
                         TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Teleport Module {(config.EnableTeleportMode ? "Enabled" : "Disabled")}");
                     }

@@ -96,6 +96,11 @@ namespace TravelTriggers
                 return;
             }
 
+            if (!Player.IsCasting)
+            {
+                return;
+            }
+
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&

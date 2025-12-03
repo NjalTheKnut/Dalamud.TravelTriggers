@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src=".assets/ttrig.png" alt="Rendering of a Fantasy stone arch, bedecked with crystals, and filled with a swirling, arcane portal." width="15%">
+<span><img src=".assets/ttrig.png" alt="Rendering of a Fantasy stone arch, bedecked with crystals, and filled with a swirling, arcane portal." width="15%"></span>
 
   
 ### TravelTriggers
-Automatically execute commands when entering specified zones.
+Automatically execute commands under certain conditions.
 
 [![Latest Stable](https://img.shields.io/github/v/release/NjalTheKnut/Dalamud.TravelTriggers?color=blue&label=Stable)](https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/latest)
 
@@ -18,7 +18,11 @@ Automatically execute commands when entering specified zones.
 Travelcase derivative that runs commands rather than changing gearset or appearance.
 
 ## Features
-- Set a per-character command for all zone changes
+- Set a per-character command for:
+	- After Teleports (Teleport, Return, Grand Company Aetheryte Tickets, et cetera...)
+	- Changing Classes/Jobs
+- Roleplay Only Mode (Prevents the command from executing if you are not in the "RP" Online Status)
+- RNG Mode (Executes the command randomly based on a given range)
 
 ## Installation
 > **Warning**  

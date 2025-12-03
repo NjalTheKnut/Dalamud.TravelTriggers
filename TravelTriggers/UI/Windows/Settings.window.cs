@@ -25,10 +25,10 @@ namespace TravelTriggers.UI.Windows
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(850, 300),
+                MinimumSize = new Vector2(850, 150),
                 MaximumSize = new Vector2(1200, 1000)
             };
-            this.Size = new Vector2(850, 450);
+            this.Size = new Vector2(850, 150);
             this.SizeCondition = ImGuiCond.FirstUseEver;
             this.TitleBarButtons = [
                  new() {
@@ -69,18 +69,23 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            ImGui.SameLine();
             if (ImGui.Checkbox("Enable Teleport feature", ref config.EnableTeleportMode))
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
-            ImGui.SameLine();
-            if (ImGui.InputInt("Min", ref config.OddsMin))
+            if (ImGui.BeginTable("##OddsTable", 2, ImGuiTableFlags.SizingFixedSame))
             {
-                TravelTriggers.PluginConfiguration.Save();
-            }
-            if (ImGui.InputInt("Max", ref config.OddsMax))
-            {
-                TravelTriggers.PluginConfiguration.Save();
+                if (ImGui.InputInt("Min", ref config.OddsMin, 1, 5, "25"))
+                {
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+                ImGui.SameLine();
+                if (ImGui.InputInt("Max", ref config.OddsMax))
+                {
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+                ImGui.EndTable();
             }
             ImGui.EndDisabled();
 
@@ -101,7 +106,6 @@ namespace TravelTriggers.UI.Windows
             // Zone list.
             if (ImGui.CollapsingHeader("Zone List"))
             {
-
                 ImGui.SetNextItemWidth(-1);
                 ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
                 var filteredTerritories = TerritoryList.Where(x => x.Value.Contains(this.searchQuery, StringComparison.InvariantCultureIgnoreCase));

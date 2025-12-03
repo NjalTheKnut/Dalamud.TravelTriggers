@@ -32,11 +32,11 @@ namespace TravelTriggers.UI
             TravelTriggers.PluginInterface.UiBuilder.Draw += this.windowingSystem.Draw;
             TravelTriggers.ClientState.Login += this.OnLogin;
             TravelTriggers.ClientState.Logout += this.OnLogout;
-            if (TravelTriggers.ClientState.IsLoggedIn)
-            {
-                TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
-                TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
-            }
+            //if (TravelTriggers.ClientState.IsLoggedIn)
+            //{
+            TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
+            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
+            //}
         }
 
         /// <summary>
@@ -71,7 +71,15 @@ namespace TravelTriggers.UI
             this.windows.FirstOrDefault(window => window is SettingsWindow)?.Toggle();
         }
 
-        private void OnLogin() => TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
-        private void OnLogout(int type, int code) => TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
+        private void OnLogin()
+        {
+            TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
+            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
+        }
+        private void OnLogout(int type, int code)
+        {
+            TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
+            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
+        }
     }
 }
