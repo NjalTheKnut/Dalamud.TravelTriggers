@@ -99,58 +99,61 @@ namespace TravelTriggers.UI.Windows
 
 #pragma warning restore CS8601 // Possible null reference assignment.
             // Zone list.
-            ImGui.CollapsingHeader("Zone List");
-            ImGui.SetNextItemWidth(-1);
-            ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
-            var filteredTerritories = TerritoryList.Where(x => x.Value.Contains(this.searchQuery, StringComparison.InvariantCultureIgnoreCase));
-            if (filteredTerritories.Any())
+            if (ImGui.CollapsingHeader("Zone List"))
             {
-                ImGui.BeginDisabled(!config.PluginEnabled);
-                if (ImGui.BeginTable("##SettingsTable", 4, ImGuiTableFlags.ScrollY))
+
+                ImGui.SetNextItemWidth(-1);
+                ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
+                var filteredTerritories = TerritoryList.Where(x => x.Value.Contains(this.searchQuery, StringComparison.InvariantCultureIgnoreCase));
+                if (filteredTerritories.Any())
                 {
-                    ImGui.TableSetupScrollFreeze(0, 1);
-                    ImGui.TableSetupColumn("Zone");
-                    ImGui.TableSetupColumn("Enabled", ImGuiTableColumnFlags.WidthFixed, 100);
-                    ImGui.TableSetupColumn("Command");
-                    ImGui.TableHeadersRow();
-                    foreach (var t in filteredTerritories)
+                    ImGui.BeginDisabled(!config.PluginEnabled);
+                    if (ImGui.BeginTable("##SettingsTable", 4, ImGuiTableFlags.ScrollY))
                     {
-                        var customCommand = config.DefaultCommand.Content.IsNullOrEmpty() ? config.ZoneCommands.GetValueOrDefault(t.Key, new()) : config.DefaultCommand;
-
-                        ImGui.TableNextRow();
-                        ImGui.TableNextColumn();
-                        ImGui.Text(t.Value);
-                        ImGui.TableNextColumn();
-                        if (ImGui.Checkbox($"##{t.Key}", ref customCommand.Enabled))
+                        ImGui.TableSetupScrollFreeze(0, 1);
+                        ImGui.TableSetupColumn("Zone");
+                        ImGui.TableSetupColumn("Enabled", ImGuiTableColumnFlags.WidthFixed, 100);
+                        ImGui.TableSetupColumn("Command");
+                        ImGui.TableHeadersRow();
+                        foreach (var t in filteredTerritories)
                         {
-                            config.ZoneCommands[t.Key] = customCommand;
-                            TravelTriggers.PluginConfiguration.Save();
-                        }
-                        ImGui.TableSetColumnIndex(2);
-                        ImGui.BeginDisabled(!customCommand.Enabled);
+                            var customCommand = config.DefaultCommand.Content.IsNullOrEmpty() ? config.ZoneCommands.GetValueOrDefault(t.Key, new()) : config.DefaultCommand;
 
-                        var slot = customCommand.Content;
-#pragma warning disable CS8601 // Possible null reference assignment.
-                        if (ImGui.InputTextWithHint($"##{t.Key} Command", "/command here...", ref slot, 100))
-                        {
-                            unsafe
+                            ImGui.TableNextRow();
+                            ImGui.TableNextColumn();
+                            ImGui.Text(t.Value);
+                            ImGui.TableNextColumn();
+                            if (ImGui.Checkbox($"##{t.Key}", ref customCommand.Enabled))
                             {
-                                customCommand.Content = slot;
                                 config.ZoneCommands[t.Key] = customCommand;
                                 TravelTriggers.PluginConfiguration.Save();
                             }
-                        }
+                            ImGui.TableSetColumnIndex(2);
+                            ImGui.BeginDisabled(!customCommand.Enabled);
+
+                            var slot = customCommand.Content;
+#pragma warning disable CS8601 // Possible null reference assignment.
+                            if (ImGui.InputTextWithHint($"##{t.Key} Command", "/command here...", ref slot, 100))
+                            {
+                                unsafe
+                                {
+                                    customCommand.Content = slot;
+                                    config.ZoneCommands[t.Key] = customCommand;
+                                    TravelTriggers.PluginConfiguration.Save();
+                                }
+                            }
 #pragma warning restore CS8601 // Possible null reference assignment.
 
+                            ImGui.EndDisabled();
+                        }
+                        ImGui.EndTable();
                         ImGui.EndDisabled();
                     }
-                    ImGui.EndTable();
-                    ImGui.EndDisabled();
                 }
-            }
-            else
-            {
-                ImGui.TextDisabled("No zones matching your search query");
+                else
+                {
+                    ImGui.TextDisabled("No zones matching your search query");
+                }
             }
         }
     }

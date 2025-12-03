@@ -35,6 +35,7 @@ namespace TravelTriggers.UI
             if (TravelTriggers.ClientState.IsLoggedIn)
             {
                 TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
+                TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
             }
         }
 
@@ -51,6 +52,7 @@ namespace TravelTriggers.UI
             TravelTriggers.ClientState.Login -= this.OnLogin;
             TravelTriggers.ClientState.Logout -= this.OnLogout;
             TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
+            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi -= this.ToggleConfigWindow;
             TravelTriggers.PluginInterface.UiBuilder.Draw -= this.windowingSystem.Draw;
             this.windowingSystem.RemoveAllWindows();
             foreach (var disposable in this.windows.OfType<IDisposable>())

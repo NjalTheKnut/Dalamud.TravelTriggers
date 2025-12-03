@@ -7,7 +7,6 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
-using ECommons.Configuration;
 using ECommons.GameHelpers;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
