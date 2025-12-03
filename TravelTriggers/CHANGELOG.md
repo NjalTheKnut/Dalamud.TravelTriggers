@@ -1,0 +1,8 @@
+- Replace the original Territory Change feature with a new Teleport feature.
+- Add toggle for the new Teleport feature.
+- Add Toggle for the new Gearset feature.
+- Add toggle for the new RNG feature.
+- Add input fields to set range bounds for the new RNG feature.
+- Adjust the plugin UI for clarity and visual aesthetics.
+- Register UI callbacks to avoid Dalamud warnings prior to and after character login.
+- Improve debugging log messages and logic paths for better performance.

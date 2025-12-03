@@ -33,6 +33,7 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Include="CHANGELOG.md" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ECommons" Version="3.0.1.28" />
