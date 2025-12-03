@@ -7,10 +7,29 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
+using ECommons.ExcelServices;
+using ECommons.EzEventManager;
+using ECommons.EzHookManager;
+using ECommons.GameFunctions;
 using ECommons.GameHelpers;
+using ECommons.Hooks.ActionEffectTypes;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
+using FFXIVClientStructs.FFXIV.Client.System.Resource;
+using FFXIVClientStructs.FFXIV.Client.System.Scheduler;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using FFXIVClientStructs.FFXIV.Client.UI.Misc;
+using Lumina;
+using Lumina.Excel.Sheets;
+using Lumina.Excel.Sheets.Experimental;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
 using TravelTriggers.UI;
+using Action = Lumina.Excel.Sheets.Action;
+using GeneralAction = Lumina.Excel.Sheets.GeneralAction;
+using ItemActionTelepo = Lumina.Excel.Sheets.ItemActionTelepo;
 using TerritoryType = Lumina.Excel.Sheets.TerritoryType;
 
 namespace TravelTriggers
@@ -70,8 +89,7 @@ namespace TravelTriggers
             PluginConfiguration = PluginConfiguration.Load();
             WindowManager = new();
             CommandManager = new();
-            Framework.Update += this.OnFrameworkUpdate;
-            //ClientState.TerritoryChanged += this.OnTerritoryChanged;
+            ClientState.TerritoryChanged += this.OnTerritoryChanged;
             ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
             ECommonsMain.Init(PluginInterface, this);
         }
@@ -84,12 +102,23 @@ namespace TravelTriggers
         {
             ECommonsMain.Dispose();
             ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
-            //ClientState.TerritoryChanged -= this.OnTerritoryChanged;
-            Framework.Update -= this.OnFrameworkUpdate;
+            ClientState.TerritoryChanged -= this.OnTerritoryChanged;
             CommandManager.Dispose();
             WindowManager.Dispose();
         }
-        private void OnFrameworkUpdate(IFramework framework)
+
+        private bool InSanctuary()
+        {
+            var result = ExcelTerritoryHelper.IsSanctuary(Player.Territory);
+            return result;
+
+        }
+
+        private static void OnCastAction()
+        {
+
+        }
+        /*private void OnFrameworkUpdate(IFramework framework)
         {
             if (!ClientState.IsLoggedIn)
             {
@@ -112,14 +141,16 @@ namespace TravelTriggers
                 {
                     try
                     {
-                        while (Condition[ConditionFlag.BetweenAreas]
-                                || Condition[ConditionFlag.BetweenAreas51]
-                                || Condition[ConditionFlag.Occupied]
-                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                || Condition[ConditionFlag.Unconscious])
+                        *//*while (Condition[ConditionFlag.BetweenAreas]
+                             || Condition[ConditionFlag.BetweenAreas51]
+                             || Condition[ConditionFlag.Occupied]
+                             || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                             || Condition[ConditionFlag.Unconscious])
                         {
+                            PluginLog.Debug("OnFrameworkUpdate: Unable to execute yet, waiting for conditions to clear.");
+
                             Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                        }
+                        }*//*
                         var cmd = characterConfig.DefaultCommand.Content;
                         if (!cmd.IsNullOrEmpty())
                         {
@@ -131,7 +162,7 @@ namespace TravelTriggers
                 }
                 //}).Start();
             }
-        }
+        }*/
 
         private void ClientState_ClassJobChanged(uint classJobId)
         {
@@ -152,7 +183,7 @@ namespace TravelTriggers
                     {
                         try
                         {
-                            while (Condition[ConditionFlag.BetweenAreas]
+                            /*while (Condition[ConditionFlag.BetweenAreas]
                                 || Condition[ConditionFlag.BetweenAreas51]
                                 || Condition[ConditionFlag.Occupied]
                                 || Condition[ConditionFlag.OccupiedInCutSceneEvent]
@@ -161,7 +192,7 @@ namespace TravelTriggers
                                 PluginLog.Debug("ClientState_ClassJobChanged: Unable to execute yet, waiting for conditions to clear.");
 
                                 Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                            }
+                            }*/
                             var cmd = characterConfig.DefaultCommand.Content;
                             if (!cmd.IsNullOrEmpty())
                             {
@@ -178,7 +209,7 @@ namespace TravelTriggers
         private static bool IsPlayerTeleporting()
         {
             var result = false;
-            result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
+            result = Player.Object.IsCasting(TeleportActionIds);
             PluginLog.Information($"IsPlayerTeleporting: " +
                 $"\nSpellId = {ECommons.ExcelServices.ExcelActionHelper.GetActionName(Player.Object.CastActionId, true)}" +
                 $"\nResult = {(result ? "True" : "False")}");
@@ -203,7 +234,7 @@ namespace TravelTriggers
             return result;
         }
 
-        /*/// <summary>
+        /// <summary>
         ///     Handles territory changes and custom command execution.
         /// </summary>
         private void OnTerritoryChanged(ushort territory)
@@ -216,6 +247,7 @@ namespace TravelTriggers
 
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
+                characterConfig.EnableTeleportMode &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
                 ((!GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content)) || (characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)))
             {
@@ -252,7 +284,7 @@ namespace TravelTriggers
                     }
                 }).Start();
             }
-        }*/
+        }
 
     }
 }
