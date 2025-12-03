@@ -25,10 +25,10 @@ namespace TravelTriggers.UI.Windows
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(600, 150),
+                MinimumSize = new Vector2(600, 200),
                 MaximumSize = new Vector2(1200, 1000)
             };
-            this.Size = new Vector2(600, 150);
+            this.Size = new Vector2(600, 200);
             this.SizeCondition = ImGuiCond.FirstUseEver;
             this.TitleBarButtons = [
                  new() {
@@ -74,18 +74,25 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
-            if (ImGui.BeginTable("##OddsTable", 2, ImGuiTableFlags.SizingFixedSame))
+            ImGui.BeginDisabled(!config.EnableRNG);
+            if (ImGui.BeginTable("##OddsTable", 2))
             {
-                if (ImGui.InputInt("Min", ref config.OddsMin, 1, 5, "25"))
+                ImGui.TableSetupColumn("Min", ImGuiTableColumnFlags.WidthFixed, 250);
+                ImGui.TableSetupColumn("Max", ImGuiTableColumnFlags.WidthFixed, 250);
+                ImGui.TableHeadersRow();
+                ImGui.TableNextRow();
+                ImGui.TableNextColumn();
+                if (ImGui.InputInt("Min", ref config.OddsMin, 1, 25))
                 {
                     TravelTriggers.PluginConfiguration.Save();
                 }
-                ImGui.SameLine();
-                if (ImGui.InputInt("Max", ref config.OddsMax))
+                ImGui.TableSetColumnIndex(1);
+                if (ImGui.InputInt("Max", ref config.OddsMax, 1, 25))
                 {
                     TravelTriggers.PluginConfiguration.Save();
                 }
                 ImGui.EndTable();
+                ImGui.EndDisabled();
             }
             ImGui.EndDisabled();
 
