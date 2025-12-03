@@ -101,30 +101,30 @@ namespace TravelTriggers
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
                 characterConfig.EnableTeleportMode)
             {
-                new Task(() =>
+                //new Task(() =>
+                //{
+                if (IsPlayerTeleporting() && ShouldDoENF())
                 {
-                    if (IsPlayerTeleporting() && ShouldDoENF())
+                    try
                     {
-                        try
+                        while (Condition[ConditionFlag.BetweenAreas]
+                                || Condition[ConditionFlag.BetweenAreas51]
+                                || Condition[ConditionFlag.Occupied]
+                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                                || Condition[ConditionFlag.Unconscious])
                         {
-                            while (Condition[ConditionFlag.BetweenAreas]
-                                    || Condition[ConditionFlag.BetweenAreas51]
-                                    || Condition[ConditionFlag.Occupied]
-                                    || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                    || Condition[ConditionFlag.Unconscious])
-                            {
-                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                            }
-                            var cmd = characterConfig.DefaultCommand.Content;
-                            if (!cmd.IsNullOrEmpty())
-                            {
-                                PluginLog.Information("OnFrameworkUpdate: Command Triggered");
-                                Commands.ProcessCommand(cmd);
-                            }
+                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                         }
-                        catch (Exception e) { PluginLog.Error(e, "OnFrameworkUpdate: An error occured processing Framework Update."); }
+                        var cmd = characterConfig.DefaultCommand.Content;
+                        if (!cmd.IsNullOrEmpty())
+                        {
+                            PluginLog.Information("OnFrameworkUpdate: Command Triggered");
+                            Commands.ProcessCommand(cmd);
+                        }
                     }
-                }).Start();
+                    catch (Exception e) { PluginLog.Error(e, "OnFrameworkUpdate: An error occured processing Framework Update."); }
+                }
+                //}).Start();
             }
         }
 
