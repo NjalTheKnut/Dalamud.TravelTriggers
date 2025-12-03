@@ -69,6 +69,19 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            if (ImGui.Checkbox("Enable Teleport feature", ref config.EnableTeleportMode))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            ImGui.SameLine();
+            if (ImGui.InputInt("Min", ref config.OddsMin))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            if (ImGui.InputInt("Max", ref config.OddsMax))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
             ImGui.EndDisabled();
 
             var defaultCmd = config.DefaultCommand;
@@ -83,8 +96,10 @@ namespace TravelTriggers.UI.Windows
                     TravelTriggers.PluginConfiguration.Save();
                 }
             }
+
 #pragma warning restore CS8601 // Possible null reference assignment.
             // Zone list.
+            ImGui.CollapsingHeader("Zone List");
             ImGui.SetNextItemWidth(-1);
             ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
             var filteredTerritories = TerritoryList.Where(x => x.Value.Contains(this.searchQuery, StringComparison.InvariantCultureIgnoreCase));

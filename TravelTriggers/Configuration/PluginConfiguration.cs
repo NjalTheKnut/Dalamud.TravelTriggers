@@ -19,6 +19,9 @@ namespace TravelTriggers.Configuration
         public bool RoleplayOnly;
         public bool EnableRNG;
         public bool EnableGearsetSwap;
+        public bool EnableTeleportMode;
+        public int OddsMax;
+        public int OddsMin;
         public Dictionary<uint, CustomCommand> ZoneCommands = [];
         public CustomCommand DefaultCommand = new();
     }

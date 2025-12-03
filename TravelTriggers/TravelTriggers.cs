@@ -7,6 +7,7 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
+using ECommons.Configuration;
 using ECommons.GameHelpers;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
@@ -98,13 +99,13 @@ namespace TravelTriggers
 
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID))
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
+                characterConfig.EnableTeleportMode)
             {
                 new Task(() =>
                 {
                     if (IsPlayerTeleporting() && ShouldDoENF())
                     {
-                        PluginLog.Information("OnFrameworkUpdate trigger");
                         try
                         {
                             while (Condition[ConditionFlag.BetweenAreas]
@@ -118,10 +119,11 @@ namespace TravelTriggers
                             var cmd = characterConfig.DefaultCommand.Content;
                             if (!cmd.IsNullOrEmpty())
                             {
+                                PluginLog.Information("OnFrameworkUpdate: Command Triggered");
                                 Commands.ProcessCommand(cmd);
                             }
                         }
-                        catch (Exception e) { PluginLog.Error(e, "An error occured processing Framework Update."); }
+                        catch (Exception e) { PluginLog.Error(e, "OnFrameworkUpdate: An error occured processing Framework Update."); }
                     }
                 }).Start();
             }
@@ -144,7 +146,6 @@ namespace TravelTriggers
                 {
                     if (ShouldDoENF())
                     {
-                        PluginLog.Information("ClientState_ClassJobChanged trigger");
                         try
                         {
                             while (Condition[ConditionFlag.BetweenAreas]
@@ -153,17 +154,18 @@ namespace TravelTriggers
                                 || Condition[ConditionFlag.OccupiedInCutSceneEvent]
                                 || Condition[ConditionFlag.Unconscious])
                             {
-                                PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
+                                PluginLog.Debug("ClientState_ClassJobChanged: Unable to execute yet, waiting for conditions to clear.");
 
                                 Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                             }
                             var cmd = characterConfig.DefaultCommand.Content;
                             if (!cmd.IsNullOrEmpty())
                             {
+                                PluginLog.Information("ClientState_ClassJobChanged: Command Triggered");
                                 Commands.ProcessCommand(cmd);
                             }
                         }
-                        catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                        catch (Exception e) { PluginLog.Error(e, "ClientState_ClassJobChanged: An error occured processing ClientState_ClassJobChanged."); }
                     }
                 }).Start();
             }
@@ -173,6 +175,9 @@ namespace TravelTriggers
         {
             var result = false;
             result = Player.IsCasting && Player.Object.CastActionId.NotNull(out var spellId) && spellId.EqualsAny(TeleportActionIds);
+            PluginLog.Information($"IsPlayerTeleporting: " +
+                $"\nSpellId = {ECommons.ExcelServices.ExcelActionHelper.GetActionName(Player.Object.CastActionId, true)}" +
+                $"\nResult = {(result ? "True" : "False")}");
             return result;
         }
 
@@ -182,7 +187,14 @@ namespace TravelTriggers
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled)
             {
-                result = ((characterConfig.EnableRNG && Random.Shared.Next(100) <= 25) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
+                result = ((characterConfig.EnableRNG && (Random.Shared.Next(characterConfig.OddsMax) <= characterConfig.OddsMin)) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
+                PluginLog.Information($"ShouldDoENF: " +
+                    $"\nEnableRNG = {(characterConfig.EnableRNG ? "Enabled" : "Disabled")} " +
+                    $"\nOddsMin = {characterConfig.OddsMin}" +
+                    $"\nOddsMax = {characterConfig.OddsMax}" +
+                    $"\nMounted = {(Condition[ConditionFlag.Mounted] ? "True" : "False")}" +
+                    $"\nWaitingForDuty = {(Condition[ConditionFlag.WaitingForDuty] ? "True" : "False")}" +
+                    $"\nResult = {(result ? "True" : "False")}");
             }
             return result;
         }

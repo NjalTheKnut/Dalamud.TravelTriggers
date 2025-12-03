@@ -19,7 +19,8 @@ namespace TravelTriggers.Command
             "\n'/ttrig toggle' to toggle the plugin. " +
             "\n'/ttrig rp' to toggle roleplay mode. " +
             "\n'/ttrig rng' to toggle RNG mode. " +
-            "\n'/ttrig gs' to toggle Gearset mode. ",
+            "\n'/ttrig gs' to toggle Gearset mode." +
+            "\n'/ttrig tp' to toggle Teleport mode. ",
             ShowInHelp = true
         });
 
@@ -75,6 +76,14 @@ namespace TravelTriggers.Command
                         config.EnableGearsetSwap = !config.EnableGearsetSwap;
                         TravelTriggers.PluginConfiguration.Save();
                         TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}");
+                    }
+                    break;
+                case SettingsCommand when args == "tp":
+                    if (config != null)
+                    {
+                        config.EnableGearsetSwap = !config.EnableGearsetSwap;
+                        TravelTriggers.PluginConfiguration.Save();
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Teleport Module {(config.EnableTeleportMode ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args?.Length == 0:
