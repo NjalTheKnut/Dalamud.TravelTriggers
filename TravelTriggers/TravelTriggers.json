@@ -3,7 +3,7 @@
   "Name": "TravelTriggers",
   "InternalName": "TravelTriggers",
   "Punchline": "Automatically execute commands under certain conditions.",
-  "Description": "- Set a per-character command for:\n - After Teleports (Teleport, Return, Grand Company Aetheryte Tickets, et cetera...)\n - Changing Classes/Jobs\n - Roleplay Only Mode (Prevents the command from executing if you are not in the \"RP\" Online Status)\n - RNG Mode (Executes the command randomly based on a given range)",
+  "Description": "- Set a per-character command for:\n - After changing territories (Teleport, Return, walking outside, et cetera)\n - Changing Classes/Jobs\n - Roleplay Only Mode (Prevents the command from executing if you are not in the \"RP\" Online Status)\n - RNG Mode (Executes the command randomly based on a given range)",
   "RepoUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers",
   "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/blob/main/.assets/1600.png?raw=true",
   "Tags": [

@@ -20,7 +20,7 @@ namespace TravelTriggers.Command
             "\n'/ttrig rp' to toggle roleplay mode. " +
             "\n'/ttrig rng' to toggle RNG mode. " +
             "\n'/ttrig gs' to toggle Gearset mode." +
-            "\n'/ttrig tp' to toggle Teleport mode. ",
+            "\n'/ttrig tp' to toggle Territory mode. ",
             ShowInHelp = true
         });
 
@@ -81,9 +81,9 @@ namespace TravelTriggers.Command
                 case SettingsCommand when args == "tp":
                     if (config != null)
                     {
-                        config.EnableTeleportMode= !config.EnableTeleportMode;
+                        config.EnableTerritoryMode = !config.EnableTerritoryMode;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Teleport Module {(config.EnableTeleportMode ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Teleport Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args?.Length == 0:

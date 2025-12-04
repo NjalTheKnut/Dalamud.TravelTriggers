@@ -8,28 +8,10 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
 using ECommons.ExcelServices;
-using ECommons.EzEventManager;
-using ECommons.EzHookManager;
-using ECommons.GameFunctions;
 using ECommons.GameHelpers;
-using ECommons.Hooks.ActionEffectTypes;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.Character;
-using FFXIVClientStructs.FFXIV.Client.Game.Event;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using FFXIVClientStructs.FFXIV.Client.System.Resource;
-using FFXIVClientStructs.FFXIV.Client.System.Scheduler;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using Lumina;
-using Lumina.Excel.Sheets;
-using Lumina.Excel.Sheets.Experimental;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
 using TravelTriggers.UI;
-using Action = Lumina.Excel.Sheets.Action;
-using GeneralAction = Lumina.Excel.Sheets.GeneralAction;
-using ItemActionTelepo = Lumina.Excel.Sheets.ItemActionTelepo;
 using TerritoryType = Lumina.Excel.Sheets.TerritoryType;
 
 namespace TravelTriggers
@@ -67,18 +49,6 @@ namespace TravelTriggers
              48, // Bozja
              60, // Cosmic Exploration
         ];
-        private static readonly uint[] TeleportActionIds = [
-            5, //Teleport
-            6, //Return (Patch 4.1)
-            10061, //Return (Patch 4.15)
-            21069, //Storm Ticket
-            21070, //Adder Ticket
-            21071, //Flame Ticket
-            30362, //Vesper Bay Ticket
-            41708, //Gold Saucer Ticket
-            28064, //Firmament Ticket
-            49121  //Cosmic Exploration Ticket
-            ];
 
         /// <summary>
         ///     The plugin's main entry point.
@@ -94,7 +64,6 @@ namespace TravelTriggers
             ECommonsMain.Init(PluginInterface, this);
         }
 
-
         /// <summary>
         ///     Disposes of the plugin's resources.
         /// </summary>
@@ -107,63 +76,10 @@ namespace TravelTriggers
             WindowManager.Dispose();
         }
 
-        private bool InSanctuary()
-        {
-            var result = ExcelTerritoryHelper.IsSanctuary(Player.Territory);
-            return result;
-
-        }
-
-        private static void OnCastAction()
-        {
-
-        }
-        /*private void OnFrameworkUpdate(IFramework framework)
-        {
-            if (!ClientState.IsLoggedIn)
-            {
-                return;
-            }
-
-            if (!Player.IsCasting)
-            {
-                return;
-            }
-
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
-                characterConfig.EnableTeleportMode)
-            {
-                //new Task(() =>
-                //{
-                if (IsPlayerTeleporting() && ShouldDoENF())
-                {
-                    try
-                    {
-                        *//*while (Condition[ConditionFlag.BetweenAreas]
-                             || Condition[ConditionFlag.BetweenAreas51]
-                             || Condition[ConditionFlag.Occupied]
-                             || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                             || Condition[ConditionFlag.Unconscious])
-                        {
-                            PluginLog.Debug("OnFrameworkUpdate: Unable to execute yet, waiting for conditions to clear.");
-
-                            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                        }*//*
-                        var cmd = characterConfig.DefaultCommand.Content;
-                        if (!cmd.IsNullOrEmpty())
-                        {
-                            PluginLog.Information("OnFrameworkUpdate: Command Triggered");
-                            Commands.ProcessCommand(cmd);
-                        }
-                    }
-                    catch (Exception e) { PluginLog.Error(e, "OnFrameworkUpdate: An error occured processing Framework Update."); }
-                }
-                //}).Start();
-            }
-        }*/
-
+        /// <summary>
+        ///     Handles class/job changes and custom command execution.
+        /// </summary>
+        /// <param name="classJobId"></param>
         private void ClientState_ClassJobChanged(uint classJobId)
         {
             if (!ClientState.IsLoggedIn)
@@ -179,26 +95,18 @@ namespace TravelTriggers
 
                 new Task(() =>
                 {
-                    if (ShouldDoENF())
+                    if (ShouldDoENF() && InSanctuary())
                     {
                         try
                         {
-                            /*while (Condition[ConditionFlag.BetweenAreas]
-                                || Condition[ConditionFlag.BetweenAreas51]
-                                || Condition[ConditionFlag.Occupied]
-                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                || Condition[ConditionFlag.Unconscious])
-                            {
-                                PluginLog.Debug("ClientState_ClassJobChanged: Unable to execute yet, waiting for conditions to clear.");
-
-                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                            }*/
                             var cmd = characterConfig.DefaultCommand.Content;
+#pragma warning disable CS8604 // Possible null reference argument.
                             if (!cmd.IsNullOrEmpty())
                             {
                                 PluginLog.Information("ClientState_ClassJobChanged: Command Triggered");
                                 Commands.ProcessCommand(cmd);
                             }
+#pragma warning restore CS8604 // Possible null reference argument.
                         }
                         catch (Exception e) { PluginLog.Error(e, "ClientState_ClassJobChanged: An error occured processing ClientState_ClassJobChanged."); }
                     }
@@ -206,37 +114,10 @@ namespace TravelTriggers
             }
         }
 
-        private static bool IsPlayerTeleporting()
-        {
-            var result = false;
-            result = Player.Object.IsCasting(TeleportActionIds);
-            PluginLog.Information($"IsPlayerTeleporting: " +
-                $"\nSpellId = {ECommons.ExcelServices.ExcelActionHelper.GetActionName(Player.Object.CastActionId, true)}" +
-                $"\nResult = {(result ? "True" : "False")}");
-            return result;
-        }
-
-        private static bool ShouldDoENF()
-        {
-            var result = false;
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled)
-            {
-                result = ((characterConfig.EnableRNG && (Random.Shared.Next(characterConfig.OddsMax) <= characterConfig.OddsMin)) || !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
-                PluginLog.Information($"ShouldDoENF: " +
-                    $"\nEnableRNG = {(characterConfig.EnableRNG ? "Enabled" : "Disabled")} " +
-                    $"\nOddsMin = {characterConfig.OddsMin}" +
-                    $"\nOddsMax = {characterConfig.OddsMax}" +
-                    $"\nMounted = {(Condition[ConditionFlag.Mounted] ? "True" : "False")}" +
-                    $"\nWaitingForDuty = {(Condition[ConditionFlag.WaitingForDuty] ? "True" : "False")}" +
-                    $"\nResult = {(result ? "True" : "False")}");
-            }
-            return result;
-        }
-
         /// <summary>
         ///     Handles territory changes and custom command execution.
         /// </summary>
+        /// <param name="territory"></param>
         private void OnTerritoryChanged(ushort territory)
         {
 
@@ -245,9 +126,10 @@ namespace TravelTriggers
                 return;
             }
 
+#pragma warning disable CS8604 // Possible null reference argument.
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
-                characterConfig.EnableTeleportMode &&
+                characterConfig.EnableTerritoryMode &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
                 ((!GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content)) || (characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)))
             {
@@ -260,7 +142,7 @@ namespace TravelTriggers
                 }
                 new Task(() =>
                 {
-                    if (ShouldDoENF())
+                    if (ShouldDoENF() && InSanctuary())
                     {
                         try
                         {
@@ -275,16 +157,51 @@ namespace TravelTriggers
                                 Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                             }
                             var cmd = GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content) ? characterConfig.ZoneCommands[territory].Content : characterConfig.DefaultCommand.Content;
+#pragma warning disable CS8604 // Possible null reference argument.
                             if (!GenericHelpers.IsNullOrEmpty(cmd))
                             {
                                 Commands.ProcessCommand(cmd);
                             }
+#pragma warning restore CS8604 // Possible null reference argument.
                         }
                         catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
                     }
                 }).Start();
             }
+#pragma warning restore CS8604 // Possible null reference argument.
         }
 
+        /// <summary>
+        ///     Checks whether the player character is currently in a Sanctuary.
+        /// </summary>
+        /// <returns>True if the player is in a Sanctuary, False if they are not.</returns>
+        private static bool InSanctuary()
+        {
+            var result = ExcelTerritoryHelper.IsSanctuary(Player.Territory);
+            return result;
+        }
+
+        /// <summary>
+        ///     Checks the current player status and the plugin configuration to determine whether to queue an attempted execution of custom commands.
+        /// </summary>
+        /// <returns>True if conditions for attempting the commands are met, and False otherwise.</returns>
+        private static bool ShouldDoENF()
+        {
+            var result = false;
+            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
+                characterConfig.PluginEnabled)
+            {
+                result = ((characterConfig.EnableRNG && (Random.Shared.Next(characterConfig.OddsMax) <= characterConfig.OddsMin)) ||
+                          !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
+                PluginLog.Information($"ShouldDoENF: " +
+                    $"\nEnableRNG = {(characterConfig.EnableRNG ? "Enabled" : "Disabled")} " +
+                    $"\nOddsMin = {characterConfig.OddsMin}" +
+                    $"\nOddsMax = {characterConfig.OddsMax}" +
+                    $"\nMounted = {(Condition[ConditionFlag.Mounted] ? "True" : "False")}" +
+                    $"\nWaitingForDuty = {(Condition[ConditionFlag.WaitingForDuty] ? "True" : "False")}" +
+                    $"\nResult = {(result ? "True" : "False")}");
+            }
+            return result;
+        }
     }
 }

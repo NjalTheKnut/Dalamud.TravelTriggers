@@ -70,7 +70,7 @@ namespace TravelTriggers.UI.Windows
                 TravelTriggers.PluginConfiguration.Save();
             }
             ImGui.SameLine();
-            if (ImGui.Checkbox("Enable Teleport feature", ref config.EnableTeleportMode))
+            if (ImGui.Checkbox("Enable Territory feature", ref config.EnableTerritoryMode))
             {
                 TravelTriggers.PluginConfiguration.Save();
             }

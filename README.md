@@ -19,7 +19,7 @@ Travelcase derivative that runs commands rather than changing gearset or appeara
 
 ## Features
 - Set a per-character command for:
-	- After Teleports (Teleport, Return, Grand Company Aetheryte Tickets, et cetera...)
+	- After changing territories (Teleport, Return, walking outside, et cetera)
 	- Changing Classes/Jobs
 - Roleplay Only Mode (Prevents the command from executing if you are not in the "RP" Online Status)
 - RNG Mode (Executes the command randomly based on a given range)

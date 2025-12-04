@@ -1,5 +1,4 @@
-- Replace the original Territory Change feature with a new Teleport feature.
-- Add toggle for the new Teleport feature.
+- Add toggle for the Territory feature.
 - Add Toggle for the new Gearset feature.
 - Add toggle for the new RNG feature.
 - Add input fields to set range bounds for the new RNG feature.
