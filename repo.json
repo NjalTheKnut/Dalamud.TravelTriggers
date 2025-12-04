@@ -1,12 +1,12 @@
 [
   {
-    "Author": "NjalTheKnut",
+    "Author": "NaughtyNeko",
     "Name": "TravelTriggers",
     "InternalName": "TravelTriggers",
     "AssemblyVersion": "0.2",
     "ApplicableVersion": "any",
-    "Punchline": "Automatically execute commands when entering specified zones.",
-    "Description": "Allows for automatic execution of commands upon entering new zones.",
+    "Punchline": "Automatically execute commands under certain conditions.",
+    "Description": "- Set a per-character command for:\n - After changing territories (Teleport, Return, walking outside, et cetera)\n - Changing Classes/Jobs\n - Roleplay Only Mode (Prevents the command from executing if you are not in the \"RP\" Online Status)\n - RNG Mode (Executes the command randomly based on a given range)",
     "RepoUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers",
     "Tags": [
       "utility",
