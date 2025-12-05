@@ -95,7 +95,7 @@ namespace TravelTriggers
 
                 new Task(() =>
                 {
-                    if (ShouldDoENF() && InSanctuary())
+                    if (ShouldDoENF())
                     {
                         try
                         {
@@ -142,7 +142,7 @@ namespace TravelTriggers
                 }
                 new Task(() =>
                 {
-                    if (ShouldDoENF() && InSanctuary())
+                    if (ShouldDoENF())
                     {
                         try
                         {
