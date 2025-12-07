@@ -7,7 +7,6 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
-using ECommons.ExcelServices;
 using ECommons.GameHelpers;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
@@ -169,16 +168,6 @@ namespace TravelTriggers
                 }).Start();
             }
 #pragma warning restore CS8604 // Possible null reference argument.
-        }
-
-        /// <summary>
-        ///     Checks whether the player character is currently in a Sanctuary.
-        /// </summary>
-        /// <returns>True if the player is in a Sanctuary, False if they are not.</returns>
-        private static bool InSanctuary()
-        {
-            var result = ExcelTerritoryHelper.IsSanctuary(Player.Territory);
-            return result;
         }
 
         /// <summary>
