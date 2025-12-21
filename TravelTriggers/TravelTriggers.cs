@@ -88,7 +88,7 @@ namespace TravelTriggers
 
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
                 characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
 
@@ -125,11 +125,10 @@ namespace TravelTriggers
                 return;
             }
 
-#pragma warning disable CS8604 // Possible null reference argument.
             if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
                 characterConfig.PluginEnabled &&
                 characterConfig.EnableTerritoryMode &&
-                (!characterConfig.RoleplayOnly || Player.OnlineStatus == ROLEPLAY_ONLINE_STATUS_ID) &&
+                (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
                 ((!GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content)) || (characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)))
             {
                 PluginLog.Information("OnTerritoryChanged trigger");
@@ -167,7 +166,6 @@ namespace TravelTriggers
                     }
                 }).Start();
             }
-#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         /// <summary>
