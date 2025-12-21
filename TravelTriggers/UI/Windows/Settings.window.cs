@@ -33,7 +33,7 @@ namespace TravelTriggers.UI.Windows
             this.TitleBarButtons = [
                  new() {
                     Icon = FontAwesomeIcon.Comment,
-                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/TravelTriggers"),
+                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.TravelTriggers"),
                     ShowTooltip = () => ImGui.SetTooltip("Repository"),
                 },
             ];
