@@ -3,7 +3,7 @@
     "Author": "NaughtyNeko",
     "Name": "TravelTriggers",
     "InternalName": "TravelTriggers",
-    "AssemblyVersion": "0.3",
+    "AssemblyVersion": "0.4",
     "ApplicableVersion": "any",
     "Punchline": "Automatically execute commands under certain conditions.",
     "Description": "- Set a per-character command for:\n - After changing territories (Teleport, Return, walking outside, et cetera)\n - Changing Classes/Jobs\n - Roleplay Only Mode (Prevents the command from executing if you are not in the \"RP\" Online Status)\n - RNG Mode (Executes the command randomly based on a given range)",
@@ -16,13 +16,13 @@
       "Utility",
       "Other"
     ],
-    "DalamudApiLevel": 13,
+    "DalamudApiLevel": 14,
     "LoadPriority": 0,
     "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/raw/main/.assets/ttrig.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3/latest.zip",
-    "DownloadLinkTesting": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.3/latest.zip"
+    "DownloadLinkInstall": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.4/latest.zip",
+    "DownloadLinkTesting": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.4/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/releases/download/v0.4/latest.zip"
   }
 ]
