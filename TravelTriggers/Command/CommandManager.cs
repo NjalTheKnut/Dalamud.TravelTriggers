@@ -50,7 +50,7 @@ namespace TravelTriggers.Command
                     {
                         config.PluginEnabled = !config.PluginEnabled;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "rp":
@@ -58,7 +58,7 @@ namespace TravelTriggers.Command
                     {
                         config.RoleplayOnly = !config.RoleplayOnly;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}");
                     }
                     break;
 
@@ -67,7 +67,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRNG = !config.EnableRNG;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "gs":
@@ -75,7 +75,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableGearsetSwap = !config.EnableGearsetSwap;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "tp":
@@ -83,7 +83,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableTerritoryMode = !config.EnableTerritoryMode;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Commands.ProcessCommand($"/popup -n -f TravelTriggers Teleport Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Territory Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args?.Length == 0:

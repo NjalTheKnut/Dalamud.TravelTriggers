@@ -26,6 +26,7 @@ namespace TravelTriggers
         [PluginService] public static IFramework Framework { get; private set; }
         [PluginService] public static IPluginLog PluginLog { get; private set; }
         [PluginService] public static IPlayerState PlayerState { get; private set; }
+        [PluginService] internal static IToastGui Toast { get; private set; } = null!;
         public static CommandManager CommandManager { get; private set; }
         public static WindowManager WindowManager { get; private set; }
         public static PluginConfiguration PluginConfiguration { get; private set; }
@@ -98,7 +99,7 @@ namespace TravelTriggers
                     {
                         try
                         {
-                            var cmd = characterConfig.DefaultCommand.Content;
+                            var cmd = GenericHelpers.IsNullOrEmpty(characterConfig.GearsetCommand.Content) ? characterConfig.GearsetCommand.Content : characterConfig.DefaultCommand.Content;
 #pragma warning disable CS8604 // Possible null reference argument.
                             if (!cmd.IsNullOrEmpty())
                             {
@@ -129,7 +130,7 @@ namespace TravelTriggers
                 characterConfig.PluginEnabled &&
                 characterConfig.EnableTerritoryMode &&
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
-                ((!GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content)) || (characterConfig.ZoneCommands.TryGetValue(territory, out var customCommand) && customCommand.Enabled)))
+                (!GenericHelpers.IsNullOrEmpty(characterConfig.TerritoryCommand.Content)))
             {
                 PluginLog.Information("OnTerritoryChanged trigger");
 
@@ -154,7 +155,7 @@ namespace TravelTriggers
 
                                 Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                             }
-                            var cmd = GenericHelpers.IsNullOrEmpty(characterConfig.DefaultCommand.Content) ? characterConfig.ZoneCommands[territory].Content : characterConfig.DefaultCommand.Content;
+                            var cmd = GenericHelpers.IsNullOrEmpty(characterConfig.TerritoryCommand.Content) ? characterConfig.TerritoryCommand.Content : characterConfig.DefaultCommand.Content;
 #pragma warning disable CS8604 // Possible null reference argument.
                             if (!GenericHelpers.IsNullOrEmpty(cmd))
                             {

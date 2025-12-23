@@ -1,3 +1,9 @@
+v0.5
+- Replace use of in-line chat command calls to TinyCmds features.
+- Add separate commands for Gearset anmd Territory triggers.
+v0.4
+- Initial 7.4 and Dalamud API 14 patches
+v0.3
 - Add toggle for the Territory feature.
 - Add Toggle for the new Gearset feature.
 - Add toggle for the new RNG feature.

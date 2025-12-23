@@ -24,6 +24,8 @@ namespace TravelTriggers.Configuration
         public int OddsMin;
         public Dictionary<uint, CustomCommand> ZoneCommands = [];
         public CustomCommand DefaultCommand = new();
+        public CustomCommand GearsetCommand = new();
+        public CustomCommand TerritoryCommand = new();
     }
 
     internal sealed class CustomCommand

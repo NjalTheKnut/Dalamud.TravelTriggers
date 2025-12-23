@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -11,15 +8,15 @@ namespace TravelTriggers.UI.Windows
 {
     public sealed class SettingsWindow : Window
     {
-        private static readonly Dictionary<uint, string> TerritoryList = TravelTriggers.AllowedTerritories
-            .Where(t => !string.IsNullOrEmpty(t.PlaceName.Value.Name.ExtractText())
-                )
-            .OrderBy(x => x.PlaceName.Value.Name.ExtractText())
-            .ToDictionary(
-                t => t.RowId,
-                t => t.PlaceName.Value.Name.ExtractText()
-            );
-        private string searchQuery = string.Empty;
+        //private static readonly Dictionary<uint, string> TerritoryList = TravelTriggers.AllowedTerritories
+        //    .Where(t => !string.IsNullOrEmpty(t.PlaceName.Value.Name.ExtractText())
+        //        )
+        //    .OrderBy(x => x.PlaceName.Value.Name.ExtractText())
+        //    .ToDictionary(
+        //        t => t.RowId,
+        //        t => t.PlaceName.Value.Name.ExtractText()
+        //    );
+        //private string searchQuery = string.Empty;
 
         public SettingsWindow() : base(TravelTriggers.PluginInterface.Manifest.Name)
         {
@@ -97,21 +94,43 @@ namespace TravelTriggers.UI.Windows
             ImGui.EndDisabled();
 
             var defaultCmd = config.DefaultCommand;
-            var cmdslot = config.DefaultCommand.Content;
+            var dcmdslot = config.DefaultCommand.Content;
 #pragma warning disable CS8601 // Possible null reference assignment.
-            if (ImGui.InputTextWithHint("Default/Override Command", "/command here...", ref cmdslot, 100))
+            if (ImGui.InputTextWithHint("Default/Override Command", "/command here...", ref dcmdslot, 100))
             {
                 unsafe
                 {
-                    defaultCmd.Content = cmdslot;
+                    defaultCmd.Content = dcmdslot;
                     config.DefaultCommand = defaultCmd;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+            }
+            var territoryCmd = config.TerritoryCommand;
+            var tcmdslot = config.TerritoryCommand.Content;
+            if (ImGui.InputTextWithHint("Territory Command", "/command here...", ref tcmdslot, 100))
+            {
+                unsafe
+                {
+                    territoryCmd.Content = tcmdslot;
+                    config.TerritoryCommand = territoryCmd;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+            }
+            var gearsetCmd = config.GearsetCommand;
+            var gscmdslot = config.GearsetCommand.Content;
+            if (ImGui.InputTextWithHint("Gearset Command", "/command here...", ref gscmdslot, 100))
+            {
+                unsafe
+                {
+                    gearsetCmd.Content = gscmdslot;
+                    config.GearsetCommand = gearsetCmd;
                     TravelTriggers.PluginConfiguration.Save();
                 }
             }
 
 #pragma warning restore CS8601 // Possible null reference assignment.
             // Zone list.
-            if (ImGui.CollapsingHeader("Zone List"))
+            /*if (ImGui.CollapsingHeader("Zone List"))
             {
                 ImGui.SetNextItemWidth(-1);
                 ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
@@ -165,7 +184,7 @@ namespace TravelTriggers.UI.Windows
                 {
                     ImGui.TextDisabled("No zones matching your search query");
                 }
-            }
+            }*/
         }
     }
 }
