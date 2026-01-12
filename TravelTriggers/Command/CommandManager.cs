@@ -1,5 +1,7 @@
 using System;
 using Dalamud.Game.Command;
+using Dalamud.Plugin.Services;
+using ECommons.Logging;
 
 namespace TravelTriggers.Command
 {
@@ -18,11 +20,13 @@ namespace TravelTriggers.Command
             HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. " +
             "\n'/ttrig toggle' to toggle the plugin. " +
             "\n'/ttrig rp' to toggle roleplay mode. " +
+            "\n'/ttrig ocmd' to toggle Command Override mode. " +
             "\n'/ttrig rng' to toggle RNG mode. " +
             "\n'/ttrig gs' to toggle Gearset mode." +
             "\n'/ttrig tp' to toggle Territory mode. ",
             ShowInHelp = true
         });
+        /*"\n'/ttrig loot' to toggle 'Cursed Loot' mode."*/
 
         /// <summary>
         ///     Dispose of the PluginCommandManager and its resources.
@@ -50,7 +54,8 @@ namespace TravelTriggers.Command
                     {
                         config.PluginEnabled = !config.PluginEnabled;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
+                        PluginLog.Information($"TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "rp":
@@ -58,16 +63,26 @@ namespace TravelTriggers.Command
                     {
                         config.RoleplayOnly = !config.RoleplayOnly;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
+                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}");
                     }
                     break;
-
+                case SettingsCommand when args == "ocmd":
+                    if (config != null)
+                    {
+                        config.EnableOverride = !config.EnableOverride;
+                        TravelTriggers.PluginConfiguration.Save();
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Command Override Module {(config.EnableOverride ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
+                        PluginLog.Information($"TravelTriggers Command Override Module {(config.EnableOverride ? "Enabled" : "Disabled")}");
+                    }
+                    break;
                 case SettingsCommand when args == "rng":
                     if (config != null)
                     {
                         config.EnableRNG = !config.EnableRNG;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Toast.ShowNormal($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
+                        PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "gs":
@@ -75,7 +90,8 @@ namespace TravelTriggers.Command
                     {
                         config.EnableGearsetSwap = !config.EnableGearsetSwap;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
+                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}");
                     }
                     break;
                 case SettingsCommand when args == "tp":
@@ -83,9 +99,19 @@ namespace TravelTriggers.Command
                     {
                         config.EnableTerritoryMode = !config.EnableTerritoryMode;
                         TravelTriggers.PluginConfiguration.Save();
-                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Territory Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}");
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers Territory Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
+                        PluginLog.Information($"TravelTriggers Territory Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}");
                     }
                     break;
+                /*case SettingsCommand when args == "loot":
+                    if (config != null)
+                    {
+                        config.EnableCursedLootMode = !config.EnableCursedLootMode;
+                        TravelTriggers.PluginConfiguration.Save();
+                        TravelTriggers.Toast.ShowNormal($"TravelTriggers 'Cursed Loot' Module {(config.EnableCursedLootMode ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
+                        PluginLog.Information($"TravelTriggers 'Cursed Loot' Module {(config.EnableCursedLootMode ? "Enabled" : "Disabled")}");
+                    }
+                    break;*/
                 case SettingsCommand when args?.Length == 0:
                     TravelTriggers.WindowManager.ToggleConfigWindow();
                     break;

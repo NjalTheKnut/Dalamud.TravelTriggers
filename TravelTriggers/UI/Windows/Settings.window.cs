@@ -22,14 +22,14 @@ namespace TravelTriggers.UI.Windows
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(600, 200),
-                MaximumSize = new Vector2(1200, 1000)
+                MinimumSize = new Vector2(500, 300),
+                MaximumSize = new Vector2(500, 300)
             };
-            this.Size = new Vector2(600, 200);
+            this.Size = new Vector2(500, 300);
             this.SizeCondition = ImGuiCond.FirstUseEver;
             this.TitleBarButtons = [
                  new() {
-                    Icon = FontAwesomeIcon.Comment,
+                    Icon = FontAwesomeIcon.Code,
                     Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.TravelTriggers"),
                     ShowTooltip = () => ImGui.SetTooltip("Repository"),
                 },
@@ -51,26 +51,36 @@ namespace TravelTriggers.UI.Windows
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+#pragma warning disable CS8601 // Possible null reference assignment.
             ImGui.SameLine();
             ImGui.BeginDisabled(!config.PluginEnabled);
             if (ImGui.Checkbox("Only enable when roleplaying", ref config.RoleplayOnly))
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
+            if (ImGui.Checkbox("Enable Command Override feature", ref config.EnableOverride))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            ImGui.BeginDisabled(!config.EnableOverride);
+            var defaultCmd = config.DefaultCommand;
+            var dcmdslot = config.DefaultCommand.Content;
+            if (ImGui.InputTextWithHint("Override Command", "/command here...", ref dcmdslot, 100))
+            {
+                unsafe
+                {
+                    defaultCmd.Content = dcmdslot;
+                    config.DefaultCommand = defaultCmd;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+            }
+            ImGui.EndDisabled();
+
             if (ImGui.Checkbox("Enable RNG feature", ref config.EnableRNG))
             {
                 TravelTriggers.PluginConfiguration.Save();
             }
-            ImGui.SameLine();
-            if (ImGui.Checkbox("Enable Gearset Swap feature", ref config.EnableGearsetSwap))
-            {
-                TravelTriggers.PluginConfiguration.Save();
-            }
-            ImGui.SameLine();
-            if (ImGui.Checkbox("Enable Territory feature", ref config.EnableTerritoryMode))
-            {
-                TravelTriggers.PluginConfiguration.Save();
-            }
+
             ImGui.BeginDisabled(!config.EnableRNG);
             if (ImGui.BeginTable("##OddsTable", 2))
             {
@@ -93,29 +103,11 @@ namespace TravelTriggers.UI.Windows
             }
             ImGui.EndDisabled();
 
-            var defaultCmd = config.DefaultCommand;
-            var dcmdslot = config.DefaultCommand.Content;
-#pragma warning disable CS8601 // Possible null reference assignment.
-            if (ImGui.InputTextWithHint("Default/Override Command", "/command here...", ref dcmdslot, 100))
+            if (ImGui.Checkbox("Enable Gearset Swap feature", ref config.EnableGearsetSwap))
             {
-                unsafe
-                {
-                    defaultCmd.Content = dcmdslot;
-                    config.DefaultCommand = defaultCmd;
-                    TravelTriggers.PluginConfiguration.Save();
-                }
+                TravelTriggers.PluginConfiguration.Save();
             }
-            var territoryCmd = config.TerritoryCommand;
-            var tcmdslot = config.TerritoryCommand.Content;
-            if (ImGui.InputTextWithHint("Territory Command", "/command here...", ref tcmdslot, 100))
-            {
-                unsafe
-                {
-                    territoryCmd.Content = tcmdslot;
-                    config.TerritoryCommand = territoryCmd;
-                    TravelTriggers.PluginConfiguration.Save();
-                }
-            }
+            ImGui.BeginDisabled(!config.EnableGearsetSwap);
             var gearsetCmd = config.GearsetCommand;
             var gscmdslot = config.GearsetCommand.Content;
             if (ImGui.InputTextWithHint("Gearset Command", "/command here...", ref gscmdslot, 100))
@@ -127,8 +119,61 @@ namespace TravelTriggers.UI.Windows
                     TravelTriggers.PluginConfiguration.Save();
                 }
             }
+            ImGui.EndDisabled();
+
+            if (ImGui.Checkbox("Enable Territory feature", ref config.EnableTerritoryMode))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            ImGui.BeginDisabled(!config.EnableTerritoryMode);
+            var territoryCmd = config.TerritoryCommand;
+            var tcmdslot = config.TerritoryCommand.Content;
+            if (ImGui.InputTextWithHint("Territory Command", "/command here...", ref tcmdslot, 100))
+            {
+                unsafe
+                {
+                    territoryCmd.Content = tcmdslot;
+                    config.TerritoryCommand = territoryCmd;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+            }
+            ImGui.EndDisabled();
+            /*if (ImGui.Checkbox("Cursed Loot feature", ref config.EnableCursedLootMode))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+            }
+            ImGui.BeginDisabled(!config.EnableCursedLootMode);
+            var cursedLootCmd = config.CursedLootCommand;
+            var lcmdslot = config.CursedLootCommand.Content;
+            if (ImGui.InputTextWithHint("'Cursed Loot' Command (Coming Soon!)", "/command here...", ref lcmdslot, 100))
+            {
+                unsafe
+                {
+                    cursedLootCmd.Content = lcmdslot;
+                    config.CursedLootCommand = cursedLootCmd;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+            }
+            ImGui.EndDisabled();*/
+
+
+            /*if (config.PluginEnabled)
+            {
+                TravelTriggers.DtrEntry.Text = new SeString(
+                        new IconPayload(BitmapFontIcon.Mentor),
+                        new TextPayload($"TTrig Enabled"));
+            }
+            else
+            {
+                TravelTriggers.DtrEntry.Text = new SeString(
+                    new IconPayload(BitmapFontIcon.NoCircle),
+                    new TextPayload("TTrig Disabled"));
+            }
+
+            TravelTriggers.DtrEntry.Shown = true;*/
 
 #pragma warning restore CS8601 // Possible null reference assignment.
+
             // Zone list.
             /*if (ImGui.CollapsingHeader("Zone List"))
             {

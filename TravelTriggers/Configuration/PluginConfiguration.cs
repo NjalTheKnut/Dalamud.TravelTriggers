@@ -18,14 +18,17 @@ namespace TravelTriggers.Configuration
         public bool PluginEnabled = true;
         public bool RoleplayOnly;
         public bool EnableRNG;
-        public bool EnableGearsetSwap;
-        public bool EnableTerritoryMode;
-        public int OddsMax;
-        public int OddsMin;
+        public bool EnableOverride = false;
+        public bool EnableGearsetSwap = true;
+        public bool EnableTerritoryMode = true;
+        public bool EnableCursedLootMode = false;
+        public int OddsMax = 100;
+        public int OddsMin = 25;
         public Dictionary<uint, CustomCommand> ZoneCommands = [];
         public CustomCommand DefaultCommand = new();
         public CustomCommand GearsetCommand = new();
         public CustomCommand TerritoryCommand = new();
+        public CustomCommand CursedLootCommand = new();
     }
 
     internal sealed class CustomCommand

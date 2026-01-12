@@ -1,50 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/14.0.1">
   <PropertyGroup>
-    <Title>TravelTriggers</Title>
-    <Authors>NaughtyNeko</Authors>
-    <Version>0.5</Version>
-    <RepositoryUrl>https://github.com/NjalTheKnut/Dalamud.TravelTriggers</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/NjalTheKnut/Dalamud.TravelTriggers</PackageProjectUrl>
-    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OutputPath>bin\x64\$(Configuration)\</OutputPath>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <PackageIcon>ttrig.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <ApplicationIcon>ttrig.ico</ApplicationIcon>
+    <Author>NaughtyNeko</Author>
+    <Name>TravelTriggers</Name>
+    <InternalName>TravelTriggers</InternalName>
     <AssemblyVersion>0.5</AssemblyVersion>
-    <FileVersion>0.5</FileVersion>
-    <AnalysisLevel>none</AnalysisLevel>
-    <TargetFramework>net10.0-windows7.0</TargetFramework>
+    <MinimumDalamudVersion>13.0.0</MinimumDalamudVersion>
+    <Punchline>Automatically execute commands under certain conditions.</Punchline>
+    <Description>- Set a per-character command for:
+                 - After changing territories (Teleport, Return, walking outside, et cetera)
+                 - Changing Classes/Jobs
+                 - Roleplay Only Mode (Prevents the command from executing if you are not in the "RP" Online Status)
+                 - RNG Mode (Executes the command randomly based on a given range)</Description>
+    <RepoUrl>https://github.com/NjalTheKnut/Dalamud.TravelTriggers</RepoUrl>
+    <Tags>trigger;plugin;NNeko</Tags>
+    <CategoryTags>utility;other</CategoryTags>
+    <DalamudApiLevel>14</DalamudApiLevel>
+    <LoadRequiredState>1</LoadRequiredState>
+    <LoadSync>true</LoadSync>
+    <CanUnloadAsync>true</CanUnloadAsync>
+    <LoadPriority>1</LoadPriority>
+    <IconUrl>$(RepoUrl)/TravelTriggers/ttrig.ico</IconUrl>
+    <ImageUrl>$(RepoUrl)/TravelTriggers/ttrig.png</ImageUrl>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="ttrig.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\.assets\ttrig.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
+    <Content Include="ttrig.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="CHANGELOG.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ECommons" Version="3.1.0.6" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="DalamudPackager" Version="14.0.1" />
-    <PackageReference Update="DotNet.ReproducibleBuilds" Version="1.2.39" />
+    <PackageReference Include="ECommons" Version="3.1.0.13" />
   </ItemGroup>
 </Project>
