@@ -5,3 +5,5 @@ Lib/
 .idea/
 *.user
 *.log
+/5.15.2/msvc2019_64
+/5.15.2-0-202011130602qttools-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z
