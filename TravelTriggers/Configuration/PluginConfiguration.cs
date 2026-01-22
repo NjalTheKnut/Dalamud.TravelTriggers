@@ -16,12 +16,12 @@ namespace TravelTriggers.Configuration
     {
         public int Version { get; set; }
         public bool PluginEnabled = true;
+        public bool ShowInDtr;
         public bool RoleplayOnly;
         public bool EnableRNG;
-        public bool EnableOverride = false;
+        public bool EnableOverride;
         public bool EnableGearsetSwap = true;
         public bool EnableTerritoryMode = true;
-        public bool EnableCursedLootMode = false;
         public int OddsMax = 100;
         public int OddsMin = 25;
         public Dictionary<uint, CustomCommand> ZoneCommands = [];

@@ -1,25 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.ServerSentEvents;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Gui.Toast;
-using Dalamud.Game.Inventory;
-using Dalamud.Game.Text.SeStringHandling;
-using Dalamud.Game.Text.SeStringHandling.Payloads;
-using Dalamud.Interface.Textures;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using Dalamud.Utility;
 using ECommons;
-using ECommons.DalamudServices;
 using ECommons.GameHelpers;
-using ECommons.Logging;
-using Lumina;
-using Lumina.Text.ReadOnly;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
 using TravelTriggers.UI;
@@ -81,12 +71,6 @@ namespace TravelTriggers
             AllowedTerritories = DataManager.Excel.GetSheet<TerritoryType>().Where(x => AllowedTerritoryUse.Contains(x.TerritoryIntendedUse.RowId) && !x.IsPvpZone);
             WindowManager = new();
             CommandManager = new();
-            DtrEntry ??= Svc.DtrBar.Get("TravelTriggers");
-            DtrEntry.Text = new SeString(
-                        new IconPayload(BitmapFontIcon.None),
-                        new TextPayload($"TTrig Enabled"));
-            DtrEntry.Shown = true;
-            //+= this.OnLootCoffer;
             ClientState.TerritoryChanged += this.OnTerritoryChanged;
             ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
         }
@@ -98,68 +82,10 @@ namespace TravelTriggers
         {
             ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
             ClientState.TerritoryChanged -= this.OnTerritoryChanged;
-            DtrEntry.Remove();
             CommandManager.Dispose();
             WindowManager.Dispose();
             ECommonsMain.Dispose();
         }
-
-        //private void OnFrameworkUpdate()
-        //{
-        //    if (!ClientState.IsLoggedIn)
-        //    {
-        //        return;
-        //    }
-
-        //    if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-        //        characterConfig.PluginEnabled)
-        //    {
-
-
-        //        DtrEntry.Text = new SeString(
-        //                new IconPayload(BitmapFontIcon.Mentor),
-        //                new TextPayload($"TTrig Enabled"));
-
-        //    }
-        //    else
-        //    {
-        //        DtrEntry.Text = new SeString(
-        //        new IconPayload(BitmapFontIcon.NoCircle),
-        //        new TextPayload("TTrig Disabled"));
-        //    }
-
-        //    DtrEntry.Shown = true;
-        //}
-
-        /*private void OnLootCoffer(AgentGameEventArgs agentGameEventArgs)
-        {
-            if (!ClientState.IsLoggedIn)
-            {
-                return;
-            }
-
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
-                characterConfig.EnableCursedLootMode)
-            {
-                PluginLog.Information("OnLootCoffer: 'Cursed Loot' Command Triggered");
-                if (agentGameEventArgs == null)
-                {
-                    return;
-                }
-                else if (agentGameEventArgs.AgentId == Dalamud.Game.Agent.AgentId.Loot)
-                {
-                    var cmd = "/echo TravelTriggers: 'Cursed Loot' Command is Unset.";
-                    if (!GenericHelpers.IsNullOrEmpty(cmd))
-                    {
-                        PluginLog.Information("OnLootCoffer: Trigger Successful. Processing 'Cursed Loot' Command.");
-                        Commands.ProcessCommand(cmd);
-                    }
-                }
-            }
-        }*/
-
 
         /// <summary>
         ///     Handles class/job changes and custom command execution.
@@ -177,7 +103,7 @@ namespace TravelTriggers
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
                 characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
-                PluginLog.Information("ClientState_ClassJobChanged: Job Swap Command Triggered");
+                PluginLog.Debug("ClientState_ClassJobChanged: Job Swap Command Triggered");
                 new Task(() =>
                 {
                     if (ShouldDoENF())
@@ -202,7 +128,7 @@ namespace TravelTriggers
 #pragma warning disable CS8604 // Possible null reference argument.
                             if (!GenericHelpers.IsNullOrEmpty(cmd))
                             {
-                                PluginLog.Information("ClientState_ClassJobChanged: Trigger Successful. Processing Job Swap Command.");
+                                PluginLog.Debug("ClientState_ClassJobChanged: Trigger Successful. Processing Job Swap Command.");
                                 Commands.ProcessCommand(cmd);
                             }
 #pragma warning restore CS8604 // Possible null reference argument.
@@ -231,7 +157,7 @@ namespace TravelTriggers
                 (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
                 (!GenericHelpers.IsNullOrEmpty(characterConfig.TerritoryCommand.Content)))
             {
-                PluginLog.Information("OnTerritoryChanged: Terriotry Command Triggered");
+                PluginLog.Debug("OnTerritoryChanged: Terriotry Command Triggered");
 
                 if (!AllowedTerritories.Any(t => t.RowId == territory))
                 {
@@ -271,7 +197,7 @@ namespace TravelTriggers
 #pragma warning disable CS8604 // Possible null reference argument.
                             if (!GenericHelpers.IsNullOrEmpty(cmd))
                             {
-                                PluginLog.Information("OnTerritoryChanged: Trigger Successful. Processing Territory Command.");
+                                PluginLog.Debug("OnTerritoryChanged: Trigger Successful. Processing Territory Command.");
                                 Commands.ProcessCommand(cmd);
                             }
 #pragma warning restore CS8604 // Possible null reference argument.
@@ -294,7 +220,7 @@ namespace TravelTriggers
             {
                 result = ((characterConfig.EnableRNG && (Random.Shared.Next(characterConfig.OddsMax) <= characterConfig.OddsMin)) ||
                           !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
-                PluginLog.Information($"ShouldDoENF: " +
+                PluginLog.Debug($"ShouldDoENF: " +
                     $"\nEnableRNG = {(characterConfig.EnableRNG ? "Enabled" : "Disabled")} " +
                     $"\nOddsMin = {characterConfig.OddsMin}" +
                     $"\nOddsMax = {characterConfig.OddsMax}" +

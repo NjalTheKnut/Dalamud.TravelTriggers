@@ -1,6 +1,11 @@
 using System;
 using System.Linq;
+using Dalamud.Game.Gui.Dtr;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Interface.Windowing;
+using ECommons.DalamudServices;
+using TravelTriggers.Configuration;
 using TravelTriggers.UI.Windows;
 
 namespace TravelTriggers.UI
@@ -32,11 +37,29 @@ namespace TravelTriggers.UI
             TravelTriggers.PluginInterface.UiBuilder.Draw += this.windowingSystem.Draw;
             TravelTriggers.ClientState.Login += this.OnLogin;
             TravelTriggers.ClientState.Logout += this.OnLogout;
-            //if (TravelTriggers.ClientState.IsLoggedIn)
-            //{
             TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
             TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
-            //}
+            if (!TravelTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(TravelTriggers.PlayerState.ContentId, out var config))
+            {
+                config = new();
+                TravelTriggers.PluginConfiguration.CharacterConfigurations[TravelTriggers.PlayerState.ContentId] = config;
+            }
+            if (config.PluginEnabled && config.ShowInDtr)
+            {
+                TravelTriggers.DtrEntry ??= Svc.DtrBar.Get("TravelTriggers");
+                TravelTriggers.DtrEntry.OnClick += this.OnDtrInteractionEvent;
+                UpdateDtrEntry(config);
+            }
+        }
+
+        private void OnDtrInteractionEvent(DtrInteractionEvent @event)
+        {
+            if (@event == null)
+            {
+                return;
+            }
+
+            this.ToggleConfigWindow();
         }
 
         /// <summary>
@@ -80,6 +103,41 @@ namespace TravelTriggers.UI
         {
             TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
             TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
+        }
+
+        /// <summary>
+        /// Updates the plugin DTR element (Server Info Text)
+        /// </summary>
+        /// <param name="config"></param>
+        public static void UpdateDtrEntry(CharacterConfiguration? config)
+        {
+            if (config is null)
+            {
+                return;
+            }
+
+            if (config.PluginEnabled && config.ShowInDtr)
+            {
+                TravelTriggers.DtrEntry ??= Svc.DtrBar.Get("TravelTriggers");
+                TravelTriggers.DtrEntry.Text = new SeString(
+                        new IconPayload(BitmapFontIcon.RolePlaying),
+                        new IconPayload(config.RoleplayOnly ? BitmapFontIcon.GreenDot : BitmapFontIcon.NoCircle),
+                        //new TextPayload(config.RoleplayOnly ? "On" : "Off"),
+                        new IconPayload(BitmapFontIcon.Dice),
+                        new IconPayload(config.EnableRNG ? BitmapFontIcon.GreenDot : BitmapFontIcon.NoCircle),
+                        //new TextPayload(config.EnableRNG ? "On" : "Off"),
+                        new IconPayload(BitmapFontIcon.Aetheryte),
+                        new IconPayload(config.EnableTerritoryMode ? BitmapFontIcon.GreenDot : BitmapFontIcon.NoCircle),
+                        //new TextPayload(config.EnableTerritoryMode ? "On" : "Off"),
+                        new IconPayload(BitmapFontIcon.SwordSheathed),
+                        new IconPayload(config.EnableGearsetSwap ? BitmapFontIcon.GreenDot : BitmapFontIcon.NoCircle),
+                        //new TextPayload(config.EnableGearsetSwap ? "On" : "Off"),
+                        new IconPayload(BitmapFontIcon.Mentor),
+                        new IconPayload(config.EnableOverride ? BitmapFontIcon.GreenDot : BitmapFontIcon.NoCircle)
+                        //new TextPayload(config.EnableOverride ? "On" : "Off")
+                        );
+                TravelTriggers.DtrEntry.Shown = true;
+            }
         }
     }
 }

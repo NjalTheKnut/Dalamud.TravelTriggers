@@ -8,16 +8,6 @@ namespace TravelTriggers.UI.Windows
 {
     public sealed class SettingsWindow : Window
     {
-        //private static readonly Dictionary<uint, string> TerritoryList = TravelTriggers.AllowedTerritories
-        //    .Where(t => !string.IsNullOrEmpty(t.PlaceName.Value.Name.ExtractText())
-        //        )
-        //    .OrderBy(x => x.PlaceName.Value.Name.ExtractText())
-        //    .ToDictionary(
-        //        t => t.RowId,
-        //        t => t.PlaceName.Value.Name.ExtractText()
-        //    );
-        //private string searchQuery = string.Empty;
-
         public SettingsWindow() : base(TravelTriggers.PluginInterface.Manifest.Name)
         {
             this.SizeConstraints = new WindowSizeConstraints
@@ -50,6 +40,10 @@ namespace TravelTriggers.UI.Windows
             if (ImGui.Checkbox($"Enable {TravelTriggers.PluginInterface.Manifest.Name}", ref config.PluginEnabled))
             {
                 TravelTriggers.PluginConfiguration.Save();
+                if (ImGui.Checkbox("Enable Territory feature", ref config.ShowInDtr))
+                {
+                    WindowManager.UpdateDtrEntry(config);
+                }
             }
 #pragma warning disable CS8601 // Possible null reference assignment.
             ImGui.SameLine();
@@ -61,175 +55,83 @@ namespace TravelTriggers.UI.Windows
             if (ImGui.Checkbox("Enable Command Override feature", ref config.EnableOverride))
             {
                 TravelTriggers.PluginConfiguration.Save();
-            }
-            ImGui.BeginDisabled(!config.EnableOverride);
-            var defaultCmd = config.DefaultCommand;
-            var dcmdslot = config.DefaultCommand.Content;
-            if (ImGui.InputTextWithHint("Override Command", "/command here...", ref dcmdslot, 100))
-            {
-                unsafe
+                ImGui.BeginDisabled(!config.EnableOverride);
+                var defaultCmd = config.DefaultCommand;
+                var dcmdslot = config.DefaultCommand.Content;
+                if (ImGui.InputTextWithHint("Override Command", "/command here...", ref dcmdslot, 100))
                 {
-                    defaultCmd.Content = dcmdslot;
-                    config.DefaultCommand = defaultCmd;
-                    TravelTriggers.PluginConfiguration.Save();
+                    unsafe
+                    {
+                        defaultCmd.Content = dcmdslot;
+                        config.DefaultCommand = defaultCmd;
+                        TravelTriggers.PluginConfiguration.Save();
+                    }
                 }
+                ImGui.EndDisabled();
             }
-            ImGui.EndDisabled();
 
             if (ImGui.Checkbox("Enable RNG feature", ref config.EnableRNG))
             {
                 TravelTriggers.PluginConfiguration.Save();
-            }
-
-            ImGui.BeginDisabled(!config.EnableRNG);
-            if (ImGui.BeginTable("##OddsTable", 2))
-            {
-                ImGui.TableSetupColumn("Min", ImGuiTableColumnFlags.WidthFixed, 250);
-                ImGui.TableSetupColumn("Max", ImGuiTableColumnFlags.WidthFixed, 250);
-                ImGui.TableHeadersRow();
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                if (ImGui.InputInt("Min", ref config.OddsMin, 1, 25))
+                ImGui.BeginDisabled(!config.EnableRNG);
+                if (ImGui.BeginTable("##OddsTable", 2))
                 {
-                    TravelTriggers.PluginConfiguration.Save();
+                    ImGui.TableSetupColumn("Min", ImGuiTableColumnFlags.WidthFixed, 250);
+                    ImGui.TableSetupColumn("Max", ImGuiTableColumnFlags.WidthFixed, 250);
+                    ImGui.TableHeadersRow();
+                    ImGui.TableNextRow();
+                    ImGui.TableNextColumn();
+                    if (ImGui.InputInt("Min", ref config.OddsMin, 1, 25))
+                    {
+                        TravelTriggers.PluginConfiguration.Save();
+                    }
+                    ImGui.TableSetColumnIndex(1);
+                    if (ImGui.InputInt("Max", ref config.OddsMax, 1, 25))
+                    {
+                        TravelTriggers.PluginConfiguration.Save();
+                    }
+                    ImGui.EndTable();
+                    ImGui.EndDisabled();
                 }
-                ImGui.TableSetColumnIndex(1);
-                if (ImGui.InputInt("Max", ref config.OddsMax, 1, 25))
-                {
-                    TravelTriggers.PluginConfiguration.Save();
-                }
-                ImGui.EndTable();
                 ImGui.EndDisabled();
             }
-            ImGui.EndDisabled();
+
 
             if (ImGui.Checkbox("Enable Gearset Swap feature", ref config.EnableGearsetSwap))
             {
                 TravelTriggers.PluginConfiguration.Save();
-            }
-            ImGui.BeginDisabled(!config.EnableGearsetSwap);
-            var gearsetCmd = config.GearsetCommand;
-            var gscmdslot = config.GearsetCommand.Content;
-            if (ImGui.InputTextWithHint("Gearset Command", "/command here...", ref gscmdslot, 100))
-            {
-                unsafe
+                ImGui.BeginDisabled(!config.EnableGearsetSwap);
+                var gearsetCmd = config.GearsetCommand;
+                var gscmdslot = config.GearsetCommand.Content;
+                if (ImGui.InputTextWithHint("Gearset Command", "/command here...", ref gscmdslot, 100))
                 {
-                    gearsetCmd.Content = gscmdslot;
-                    config.GearsetCommand = gearsetCmd;
-                    TravelTriggers.PluginConfiguration.Save();
+                    unsafe
+                    {
+                        gearsetCmd.Content = gscmdslot;
+                        config.GearsetCommand = gearsetCmd;
+                        TravelTriggers.PluginConfiguration.Save();
+                    }
                 }
+                ImGui.EndDisabled();
             }
-            ImGui.EndDisabled();
 
             if (ImGui.Checkbox("Enable Territory feature", ref config.EnableTerritoryMode))
             {
                 TravelTriggers.PluginConfiguration.Save();
-            }
-            ImGui.BeginDisabled(!config.EnableTerritoryMode);
-            var territoryCmd = config.TerritoryCommand;
-            var tcmdslot = config.TerritoryCommand.Content;
-            if (ImGui.InputTextWithHint("Territory Command", "/command here...", ref tcmdslot, 100))
-            {
-                unsafe
+                ImGui.BeginDisabled(!config.EnableTerritoryMode);
+                var territoryCmd = config.TerritoryCommand;
+                var tcmdslot = config.TerritoryCommand.Content;
+                if (ImGui.InputTextWithHint("Territory Command", "/command here...", ref tcmdslot, 100))
                 {
-                    territoryCmd.Content = tcmdslot;
-                    config.TerritoryCommand = territoryCmd;
-                    TravelTriggers.PluginConfiguration.Save();
-                }
-            }
-            ImGui.EndDisabled();
-            /*if (ImGui.Checkbox("Cursed Loot feature", ref config.EnableCursedLootMode))
-            {
-                TravelTriggers.PluginConfiguration.Save();
-            }
-            ImGui.BeginDisabled(!config.EnableCursedLootMode);
-            var cursedLootCmd = config.CursedLootCommand;
-            var lcmdslot = config.CursedLootCommand.Content;
-            if (ImGui.InputTextWithHint("'Cursed Loot' Command (Coming Soon!)", "/command here...", ref lcmdslot, 100))
-            {
-                unsafe
-                {
-                    cursedLootCmd.Content = lcmdslot;
-                    config.CursedLootCommand = cursedLootCmd;
-                    TravelTriggers.PluginConfiguration.Save();
-                }
-            }
-            ImGui.EndDisabled();*/
-
-
-            /*if (config.PluginEnabled)
-            {
-                TravelTriggers.DtrEntry.Text = new SeString(
-                        new IconPayload(BitmapFontIcon.Mentor),
-                        new TextPayload($"TTrig Enabled"));
-            }
-            else
-            {
-                TravelTriggers.DtrEntry.Text = new SeString(
-                    new IconPayload(BitmapFontIcon.NoCircle),
-                    new TextPayload("TTrig Disabled"));
-            }
-
-            TravelTriggers.DtrEntry.Shown = true;*/
-
-#pragma warning restore CS8601 // Possible null reference assignment.
-
-            // Zone list.
-            /*if (ImGui.CollapsingHeader("Zone List"))
-            {
-                ImGui.SetNextItemWidth(-1);
-                ImGui.InputTextWithHint("##Search", "Search...", ref this.searchQuery, 100);
-                var filteredTerritories = TerritoryList.Where(x => x.Value.Contains(this.searchQuery, StringComparison.InvariantCultureIgnoreCase));
-                if (filteredTerritories.Any())
-                {
-                    ImGui.BeginDisabled(!config.PluginEnabled);
-                    if (ImGui.BeginTable("##SettingsTable", 4, ImGuiTableFlags.ScrollY))
+                    unsafe
                     {
-                        ImGui.TableSetupScrollFreeze(0, 1);
-                        ImGui.TableSetupColumn("Zone", ImGuiTableColumnFlags.WidthFixed, 250);
-                        ImGui.TableSetupColumn("Enabled", ImGuiTableColumnFlags.WidthFixed, 50);
-                        ImGui.TableSetupColumn("Command", ImGuiTableColumnFlags.WidthFixed, 250);
-                        ImGui.TableHeadersRow();
-                        foreach (var t in filteredTerritories)
-                        {
-                            var customCommand = config.DefaultCommand.Content.IsNullOrEmpty() ? config.ZoneCommands.GetValueOrDefault(t.Key, new()) : config.DefaultCommand;
-
-                            ImGui.TableNextRow();
-                            ImGui.TableNextColumn();
-                            ImGui.Text(t.Value);
-                            ImGui.TableNextColumn();
-                            if (ImGui.Checkbox($"##{t.Key}", ref customCommand.Enabled))
-                            {
-                                config.ZoneCommands[t.Key] = customCommand;
-                                TravelTriggers.PluginConfiguration.Save();
-                            }
-                            ImGui.TableSetColumnIndex(2);
-                            ImGui.BeginDisabled(!customCommand.Enabled);
-
-                            var slot = customCommand.Content;
-#pragma warning disable CS8601 // Possible null reference assignment.
-                            if (ImGui.InputTextWithHint($"##{t.Key} Command", "/command here...", ref slot, 100))
-                            {
-                                unsafe
-                                {
-                                    customCommand.Content = slot;
-                                    config.ZoneCommands[t.Key] = customCommand;
-                                    TravelTriggers.PluginConfiguration.Save();
-                                }
-                            }
-#pragma warning restore CS8601 // Possible null reference assignment.
-
-                            ImGui.EndDisabled();
-                        }
-                        ImGui.EndTable();
-                        ImGui.EndDisabled();
+                        territoryCmd.Content = tcmdslot;
+                        config.TerritoryCommand = territoryCmd;
+                        TravelTriggers.PluginConfiguration.Save();
                     }
                 }
-                else
-                {
-                    ImGui.TextDisabled("No zones matching your search query");
-                }
-            }*/
+                ImGui.EndDisabled();
+            }
         }
     }
 }
