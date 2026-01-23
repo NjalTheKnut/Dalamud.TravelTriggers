@@ -5,7 +5,6 @@
     <Name>TravelTriggers</Name>
     <InternalName>TravelTriggers</InternalName>
     <AssemblyVersion>0.7</AssemblyVersion>
-    <TestingAssemblyVersion>0.7</TestingAssemblyVersion>
     <MinimumDalamudVersion>13.0.0</MinimumDalamudVersion>
     <Punchline>Automatically send chat commands on zone changes and other triggers.</Punchline>
     <Description>
@@ -18,17 +17,14 @@
       - Override Toggle (Overrides commands set for all triggers with a master command)
     </Description>
     <RepoUrl>https://github.com/NjalTheKnut/Dalamud.TravelTriggers</RepoUrl>
-    <Tags>trigger;conditions;commands;roleplay;rp;NaughtyNeko;NNeko</Tags>
+    <Tags>trigger;conditions;chat;commands;roleplay;rp;NaughtyNeko;NNeko</Tags>
     <CategoryTags>utility;other</CategoryTags>
     <DalamudApiLevel>14</DalamudApiLevel>
-    <TestingDalamudApiLevel>14</TestingDalamudApiLevel>
     <LoadSync>true</LoadSync>
     <CanUnloadAsync>true</CanUnloadAsync>
-    <LoadPriority>1</LoadPriority>
+    <LoadPriority>0</LoadPriority>
     <IconUrl>$(RepoUrl)/TravelTriggers/ttrig.ico</IconUrl>
     <ImageUrls>$(RepoUrl)/TravelTriggers/ttrig.png</ImageUrls>
-    <AcceptsFeedback>true</AcceptsFeedback>
-    <FeedbackMessage>Problems? Submit bug reports at: https://github.com/NjalTheKnut/Dalamud.TravelTriggers/issues</FeedbackMessage>
     <Changelog>
       v0.7 - Major Rework (Expect and report bugs)
       - Add DTR (Server Info Bar) Entry for setting statuses
@@ -54,33 +50,7 @@
       - Register UI callbacks to avoid Dalamud warnings prior to and after character login.
       - Improve debugging log messages and logic paths for better performance.
     </Changelog>
-    <PackageIcon>ttrig.png</PackageIcon>
-    <RepositoryUrl></RepositoryUrl>
-    <PackageTags></PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <ApplicationIcon>ttrig.ico</ApplicationIcon>
-    <Authors>$(AssemblyName)</Authors>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="ttrig.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ttrig.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ttrig.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ttrig.ico">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ECommons" Version="3.1.0.16" />
   </ItemGroup>
