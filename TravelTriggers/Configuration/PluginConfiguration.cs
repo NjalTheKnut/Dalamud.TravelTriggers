@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using Dalamud.Configuration;
 
 namespace TravelTriggers.Configuration
 {
     internal sealed class PluginConfiguration : IPluginConfiguration
     {
-        public int Version { get; set; }
+        public int Version { get; set; } = 8;
         public Dictionary<ulong, CharacterConfiguration> CharacterConfigurations = [];
 
         public void Save() => TravelTriggers.PluginInterface.SavePluginConfig(this);
@@ -16,19 +15,22 @@ namespace TravelTriggers.Configuration
     {
         public int Version { get; set; }
         public bool PluginEnabled = true;
-        public bool ShowInDtr;
-        public bool RoleplayOnly;
+        public bool ShowInDtr = true;
+        public bool RpOnlyInDtr;
+        public bool OcmdInDtr;
+        public bool RngInDtr;
+        public bool ZoneInDtr;
+        public bool GsetInDtr;
+        public bool EnableRpOnly;
+        public bool EnableOcmd;
         public bool EnableRNG;
-        public bool EnableOverride;
-        public bool EnableGearsetSwap = true;
-        public bool EnableTerritoryMode = true;
+        public bool EnableZones;
+        public bool EnableGset;
         public int OddsMax = 100;
         public int OddsMin = 25;
-        public Dictionary<uint, CustomCommand> ZoneCommands = [];
-        public CustomCommand DefaultCommand = new();
+        public CustomCommand OverrideCommand = new();
         public CustomCommand GearsetCommand = new();
-        public CustomCommand TerritoryCommand = new();
-        public CustomCommand CursedLootCommand = new();
+        public CustomCommand ZoneCommand = new();
     }
 
     internal sealed class CustomCommand

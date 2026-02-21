@@ -1,4 +1,3 @@
-using System;
 using Dalamud.Game.Command;
 using ECommons.Logging;
 
@@ -9,27 +8,85 @@ namespace TravelTriggers.Command
     /// </summary>
     public sealed class CommandManager : IDisposable
     {
-        private const string SettingsCommand = "/ttrig";
+        /// <summary>
+        ///     Defines the command prefix for all other plugin commands.
+        /// </summary>
+        private const string SettingsCommand = "/tConfig";
+        private const string RpOnlyCmd = "/tRpOnly";
+        private const string RngCmd = "/tRng";
+        private const string GsetCmd = "/tGset";
+        private const string ZoneCmd = "/tZone";
+        private const string OverrideCmd = "/tOverride";
 
         /// <summary>
         ///     Initializes the CommandManager and its resources.
         /// </summary>
-        public CommandManager() => TravelTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
+        public CommandManager()
         {
-            HelpMessage = "Opens the TravelTriggers configuration window when no arguments are specified. " +
-            "\n'/ttrig toggle' to toggle the plugin. " +
-            "\n'/ttrig rp' to toggle roleplay mode. " +
-            "\n'/ttrig ocmd' to toggle Command Override mode. " +
-            "\n'/ttrig rng' to toggle RNG mode. " +
-            "\n'/ttrig gs' to toggle Gearset mode." +
-            "\n'/ttrig tp' to toggle Territory mode. ",
-            ShowInHelp = true
-        });
+            TravelTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "Opens the TravelTriggers configuration window. ",
+                ShowInHelp = true
+            });
+
+            TravelTriggers.Commands.AddHandler(RpOnlyCmd, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "toggles the Roleplay Only trigger behavior.",
+                ShowInHelp = true
+            });
+
+            TravelTriggers.Commands.AddHandler(OverrideCmd, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "toggles the Command Override feature.",
+                ShowInHelp = true
+            });
+
+            TravelTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "toggles the RNG trigger behavior.",
+                ShowInHelp = true
+            });
+
+            TravelTriggers.Commands.AddHandler(GsetCmd, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "toggles the trigger.",
+                ShowInHelp = true
+            });
+
+            TravelTriggers.Commands.AddHandler(ZoneCmd, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "toggles the Zone change trigger.",
+                ShowInHelp = true
+            });
+
+            /*TravelTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "Toggles the feature, and sets, increments, or reduces the bounds of your custom RNG range." +
+                "\n'/rng t' toggles the RNG feature on and off" +
+                "\n'/rng min <number>' sets Min to a fixed value. (default is 25)" +
+                "\n'/rng max <number' sets Max to a fixed value. (default is 100)" +
+                "\n'/rng minAdd <number>' Adds <number> to the existing Min value. " +
+                "\n'/rng minSub <number>' Subtracts <number> from the existing Min value. " +
+                "\n'/rng maxAdd <number>' Adds <number> to the existing Max value. " +
+                "\n'/rng maxSub <number>' Subtracts <number> from the existing Max value. " +
+                "\n'/rng ' ",
+                ShowInHelp = true
+
+            });*/
+        }
 
         /// <summary>
         ///     Dispose of the PluginCommandManager and its resources.
         /// </summary>
-        public void Dispose() => TravelTriggers.Commands.RemoveHandler(SettingsCommand);
+        public void Dispose()
+        {
+            TravelTriggers.Commands.RemoveHandler(SettingsCommand);
+            TravelTriggers.Commands.RemoveHandler(RpOnlyCmd);
+            TravelTriggers.Commands.RemoveHandler(RngCmd);
+            TravelTriggers.Commands.RemoveHandler(OverrideCmd);
+            TravelTriggers.Commands.RemoveHandler(GsetCmd);
+            TravelTriggers.Commands.RemoveHandler(ZoneCmd);
+        }
 
         /// <summary>
         ///     Event handler for when a command is issued by the user.
@@ -39,76 +96,150 @@ namespace TravelTriggers.Command
         ///
         private void OnCommand(string command, string args)
         {
-            var hasConfig = TravelTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(TravelTriggers.PlayerState.ContentId, out var config);
-            if (!hasConfig || config is null)
+            var config = Helpers.Utils.GetCharacterConfig();
+            if (config is null)
             {
                 return;
             }
-
             switch (command)
             {
-                case SettingsCommand when args == "toggle":
+                case SettingsCommand when args?.Length == 0:
+                    TravelTriggers.WindowManager.ToggleConfigWindow();
+                    break;
+                case RpOnlyCmd when args?.Length == 0:
                     if (config != null)
                     {
-                        config.PluginEnabled = !config.PluginEnabled;
+                        config.EnableRpOnly = !config.EnableRpOnly;
                         TravelTriggers.PluginConfiguration.Save();
-                        //TravelTriggers.Toast.ShowNormal($"TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
-                        PluginLog.Debug($"TravelTriggers Plugin {(config.PluginEnabled ? "Enabled" : "Disabled")}");
-                        UI.WindowManager.UpdateDtrEntry(config);
+                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case SettingsCommand when args == "rp":
+                case RpOnlyCmd when args == "on":
                     if (config != null)
                     {
-                        config.RoleplayOnly = !config.RoleplayOnly;
+                        config.EnableRpOnly = true;
                         TravelTriggers.PluginConfiguration.Save();
-                        //TravelTriggers.Toast.ShowNormal($"TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
-                        PluginLog.Debug($"TravelTriggers Roleplay Only Module {(config.RoleplayOnly ? "Enabled" : "Disabled")}");
-                        UI.WindowManager.UpdateDtrEntry(config);
+                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case SettingsCommand when args == "ocmd":
+                case RpOnlyCmd when args == "off":
                     if (config != null)
                     {
-                        config.EnableOverride = !config.EnableOverride;
+                        config.EnableRpOnly = false;
                         TravelTriggers.PluginConfiguration.Save();
-                        //TravelTriggers.Toast.ShowNormal($"TravelTriggers Command Override Module {(config.EnableOverride ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
-                        PluginLog.Debug($"TravelTriggers Command Override Module {(config.EnableOverride ? "Enabled" : "Disabled")}");
-                        UI.WindowManager.UpdateDtrEntry(config);
+                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case SettingsCommand when args == "rng":
+                case RngCmd when args?.Length == 0:
                     if (config != null)
                     {
                         config.EnableRNG = !config.EnableRNG;
                         TravelTriggers.PluginConfiguration.Save();
-                        //TravelTriggers.Toast.ShowNormal($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
-                        PluginLog.Debug($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
-                        UI.WindowManager.UpdateDtrEntry(config);
+                        PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case SettingsCommand when args == "gs":
+                case RngCmd when args == "on":
                     if (config != null)
                     {
-                        config.EnableGearsetSwap = !config.EnableGearsetSwap;
+                        config.EnableRNG = true;
                         TravelTriggers.PluginConfiguration.Save();
-                        //TravelTriggers.Toast.ShowNormal($"TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
-                        PluginLog.Debug($"TravelTriggers Gearset Module {(config.EnableGearsetSwap ? "Enabled" : "Disabled")}");
-                        UI.WindowManager.UpdateDtrEntry(config);
+                        PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case SettingsCommand when args == "tp":
+                case RngCmd when args == "off":
                     if (config != null)
                     {
-                        config.EnableTerritoryMode = !config.EnableTerritoryMode;
+                        config.EnableRNG = false;
                         TravelTriggers.PluginConfiguration.Save();
-                        //TravelTriggers.Toast.ShowNormal($"TravelTriggers Territory Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}", TravelTriggers.ToastOptions);
-                        PluginLog.Debug($"TravelTriggers Territory Module {(config.EnableTerritoryMode ? "Enabled" : "Disabled")}");
-                        UI.WindowManager.UpdateDtrEntry(config);
+                        PluginLog.Information($"TravelTriggers  Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case SettingsCommand when args?.Length == 0:
-                    TravelTriggers.WindowManager.ToggleConfigWindow();
+                case GsetCmd when args?.Length == 0:
+                    if (config != null)
+                    {
+                        config.EnableGset = !config.EnableGset;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case GsetCmd when args == "on":
+                    if (config != null)
+                    {
+                        config.EnableGset = true;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case GsetCmd when args == "off":
+                    if (config != null)
+                    {
+                        config.EnableGset = false;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case ZoneCmd when args?.Length == 0:
+                    if (config != null)
+                    {
+                        config.EnableZones = !config.EnableZones;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case ZoneCmd when args == "on":
+                    if (config != null)
+                    {
+                        config.EnableZones = true;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case ZoneCmd when args == "off":
+                    if (config != null)
+                    {
+                        config.EnableZones = false;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case OverrideCmd when args?.Length == 0:
+                    if (config != null)
+                    {
+                        config.EnableOcmd = !config.EnableOcmd;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case OverrideCmd when args == "on":
+                    if (config != null)
+                    {
+                        config.EnableOcmd = true;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case OverrideCmd when args == "off":
+                    if (config != null)
+                    {
+                        config.EnableOcmd = false;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
                     break;
             }
         }

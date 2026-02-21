@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Gui.Toast;
 using Dalamud.IoC;
 using Dalamud.Plugin;
@@ -13,6 +9,7 @@ using ECommons.GameHelpers;
 using TravelTriggers.Command;
 using TravelTriggers.Configuration;
 using TravelTriggers.UI;
+using TravelTriggers.Helpers;
 using Task = System.Threading.Tasks.Task;
 using TerritoryType = Lumina.Excel.Sheets.TerritoryType;
 
@@ -20,6 +17,7 @@ namespace TravelTriggers
 {
     internal sealed class TravelTriggers : IDalamudPlugin, IDisposable
     {
+        #region
 #pragma warning disable CS8618
         [PluginService] public static IDalamudPluginInterface PluginInterface { get; private set; }
         [PluginService] public static ICommandManager Commands { get; private set; }
@@ -40,19 +38,19 @@ namespace TravelTriggers
         public static CommandManager CommandManager { get; private set; }
         public static WindowManager WindowManager { get; private set; }
         public static PluginConfiguration PluginConfiguration { get; private set; }
-        internal static IDtrBarEntry DtrEntry;
+        //internal static IDtrBarEntry DtrEntry;
         public static IEnumerable<TerritoryType> AllowedTerritories;
 #pragma warning restore CS8618
 
         private const uint ROLEPLAY_ONLINE_STATUS_ID = 22;
         private static readonly uint[] AllowedTerritoryUse = [
-              0,  // Town
-              1,  // Open World
-              2,  // Inn
+              0, // Town
+              1, // Open World
+              2, // Inn
              13, // Housing Area
              19, // Chocobo Square
              23, // Gold Saucer
-             30, // Free Company Garrison
+             30, // Grand Company Garrison
              41, // Eureka
              45, // Masked Carnival
              46, // Ocean Fishing
@@ -60,17 +58,22 @@ namespace TravelTriggers
              48, // Bozja
              60, // Cosmic Exploration
         ];
+        #endregion
 
         /// <summary>
         ///     The plugin's main entry point.
         /// </summary>
         public TravelTriggers()
         {
-            ECommonsMain.Init(PluginInterface, this);
+            ECommonsMain.Init(PluginInterface, this, Module.DalamudReflector);
             PluginConfiguration = PluginConfiguration.Load();
             AllowedTerritories = DataManager.Excel.GetSheet<TerritoryType>().Where(x => AllowedTerritoryUse.Contains(x.TerritoryIntendedUse.RowId) && !x.IsPvpZone);
             WindowManager = new();
             CommandManager = new();
+            var config = Utils.GetCharacterConfig();
+            WindowManager.UpdateDtrEntry();
+            ClientState.ZoneInit += this.ClientState_ZoneInit;
+            ClientState.MapIdChanged += this.ClientState_MapIdChanged;
             ClientState.TerritoryChanged += this.OnTerritoryChanged;
             ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
         }
@@ -82,6 +85,8 @@ namespace TravelTriggers
         {
             ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
             ClientState.TerritoryChanged -= this.OnTerritoryChanged;
+            ClientState.MapIdChanged -= this.ClientState_MapIdChanged;
+            ClientState.ZoneInit -= this.ClientState_ZoneInit;
             CommandManager.Dispose();
             WindowManager.Dispose();
             ECommonsMain.Dispose();
@@ -97,24 +102,21 @@ namespace TravelTriggers
             {
                 return;
             }
-
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled &&
-                (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
-                characterConfig.EnableGearsetSwap && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
+            var characterConfig = Utils.GetCharacterConfig();
+            if (characterConfig.PluginEnabled && (!characterConfig.EnableRpOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
+                characterConfig.EnableGset && PlayerState.ClassJob.Value.ClassJobCategory.IsValid)
             {
-                PluginLog.Debug("ClientState_ClassJobChanged: Job Swap Command Triggered");
+                PluginLog.Information("ClientState_ClassJobChanged: Job Swap Command Triggered");
                 new Task(() =>
                 {
                     if (ShouldDoENF())
                     {
                         try
                         {
-
                             var cmd = "/echo TravelTriggers: Job Swap Command is Unset.";
-                            if (characterConfig.EnableOverride)
+                            if (characterConfig.EnableOcmd)
                             {
-                                cmd = characterConfig.DefaultCommand.Content;
+                                cmd = characterConfig.OverrideCommand.Content;
                             }
                             else if (!GenericHelpers.IsNullOrEmpty(characterConfig.GearsetCommand.Content))
                             {
@@ -122,20 +124,86 @@ namespace TravelTriggers
                             }
                             else
                             {
-                                PluginLog.Debug("Unable to execute, because no Override or Job Swap commands were found.");
+                                PluginLog.Information("Unable to execute, because no Override or Job Swap commands were found.");
                                 return;
                             }
-#pragma warning disable CS8604 // Possible null reference argument.
-                            if (!GenericHelpers.IsNullOrEmpty(cmd))
+                            if (cmd == null)
                             {
-                                PluginLog.Debug("ClientState_ClassJobChanged: Trigger Successful. Processing Job Swap Command.");
-                                Commands.ProcessCommand(cmd);
+                                PluginLog.Error("Unable to execute, because the command appears to be empty.");
+                                return;
                             }
-#pragma warning restore CS8604 // Possible null reference argument.
+                            else if (cmd != null)
+                            {
+                                PluginLog.Information("ClientState_ClassJobChanged: Trigger Successful. Processing Job Swap Command.");
+                                if (!Player.Mounted)
+                                {
+                                    Commands.ProcessCommand(cmd);
+                                }
+                            }
                         }
                         catch (Exception e) { PluginLog.Error(e, "ClientState_ClassJobChanged: An error occured processing ClientState_ClassJobChanged."); }
                     }
                 }).Start();
+            }
+        }
+
+        /// <summary>
+        ///     Handles Map changes and custom command execution.
+        /// </summary>
+        /// <param name="obj"></param>
+        private void ClientState_MapIdChanged(uint obj)
+        {
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
+            else
+            {
+                var characterConfig = Utils.GetCharacterConfig();
+                if (characterConfig.PluginEnabled &&
+                characterConfig.EnableZones &&
+                (!characterConfig.EnableRpOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
+                (!GenericHelpers.IsNullOrEmpty(characterConfig.ZoneCommand.Content)))
+                {
+                    PluginLog.Information("OnTerritoryChanged: Territory Command Triggered");
+
+                    if (!AllowedTerritories.Any(t => t.RowId == Player.Territory.RowId))
+                    {
+                        PluginLog.Warning($"Territory {Player.Territory} is not an allowed territoryID, skipping custom executions.");
+                        return;
+                    }
+                    HandleZoneTriggerENF(characterConfig);
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Handles Zone changes and custom command execution.
+        /// </summary>
+        /// <param name="obj"></param>
+        private void ClientState_ZoneInit(Dalamud.Game.ClientState.ZoneInitEventArgs obj)
+        {
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
+            else
+            {
+                var characterConfig = Utils.GetCharacterConfig();
+                if (characterConfig.PluginEnabled &&
+                characterConfig.EnableZones &&
+                (!characterConfig.EnableRpOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
+                (!GenericHelpers.IsNullOrEmpty(characterConfig.ZoneCommand.Content)))
+                {
+                    PluginLog.Information("OnTerritoryChanged: Territory Command Triggered");
+
+                    if (!AllowedTerritories.Any(t => t.RowId == Player.Territory.RowId))
+                    {
+                        PluginLog.Warning($"Territory {Player.Territory} is not an allowed territoryID, skipping custom executions.");
+                        return;
+                    }
+                    HandleZoneTriggerENF(characterConfig);
+                }
             }
         }
 
@@ -150,63 +218,78 @@ namespace TravelTriggers
             {
                 return;
             }
-
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled &&
-                characterConfig.EnableTerritoryMode &&
-                (!characterConfig.RoleplayOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
-                (!GenericHelpers.IsNullOrEmpty(characterConfig.TerritoryCommand.Content)))
+            else
             {
-                PluginLog.Debug("OnTerritoryChanged: Terriotry Command Triggered");
+                var characterConfig = Utils.GetCharacterConfig();
+                if (characterConfig.PluginEnabled &&
+                characterConfig.EnableZones &&
+                (!characterConfig.EnableRpOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
+                (!GenericHelpers.IsNullOrEmpty(characterConfig.ZoneCommand.Content)))
+                {
+                    PluginLog.Information("OnTerritoryChanged: Territory Command Triggered");
 
-                if (!AllowedTerritories.Any(t => t.RowId == territory))
-                {
-                    PluginLog.Warning($"Territory {territory} is not an allowed territoryID, skipping custom executions.");
-                    return;
-                }
-                new Task(() =>
-                {
-                    if (ShouldDoENF())
+                    if (!AllowedTerritories.Any(t => t.RowId == territory))
                     {
-                        try
-                        {
-                            while (Condition[ConditionFlag.BetweenAreas]
-                                || Condition[ConditionFlag.BetweenAreas51]
-                                || Condition[ConditionFlag.Occupied]
-                                || Condition[ConditionFlag.OccupiedInCutSceneEvent]
-                                || Condition[ConditionFlag.Unconscious])
-                            {
-                                PluginLog.Debug("Unable to execute yet, waiting for conditions to clear.");
-
-                                Task.Delay(TimeSpan.FromSeconds(1)).Wait();
-                            }
-                            var cmd = "/echo TravelTriggers: Territory Command is Unset.";
-                            if (characterConfig.EnableOverride)
-                            {
-                                cmd = characterConfig.DefaultCommand.Content;
-                            }
-                            else if (!GenericHelpers.IsNullOrEmpty(characterConfig.TerritoryCommand.Content))
-                            {
-                                cmd = characterConfig.TerritoryCommand.Content;
-                            }
-                            else
-                            {
-                                PluginLog.Debug("Unable to execute, because no Override or Territory commands were found.");
-                                return;
-                            }
-#pragma warning disable CS8604 // Possible null reference argument.
-                            if (!GenericHelpers.IsNullOrEmpty(cmd))
-                            {
-                                PluginLog.Debug("OnTerritoryChanged: Trigger Successful. Processing Territory Command.");
-                                Commands.ProcessCommand(cmd);
-                            }
-#pragma warning restore CS8604 // Possible null reference argument.
-                        }
-                        catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                        PluginLog.Warning($"Territory {territory} is not an allowed territoryID, skipping custom executions.");
+                        return;
                     }
-                }).Start();
+                    HandleZoneTriggerENF(characterConfig);
+                }
             }
         }
+
+        /// <summary>
+        /// Processes the command used for any changes in zone, map, or territory.
+        /// </summary>
+        /// <param name="characterConfig"></param>
+        private static void HandleZoneTriggerENF(CharacterConfiguration characterConfig) => new Task(() =>
+        {
+            if (ShouldDoENF())
+            {
+                try
+                {
+                    /*while (Condition[ConditionFlag.BetweenAreas]
+                        || Condition[ConditionFlag.BetweenAreas51]
+                        || Condition[ConditionFlag.Occupied]
+                        || Condition[ConditionFlag.OccupiedInCutSceneEvent]
+                        || Condition[ConditionFlag.Unconscious])*/
+                    while (!Utils.CanUseGlamourPlates())
+                    {
+                        PluginLog.Information("Unable to execute yet, waiting for conditions to clear.");
+                        var delay = TimeSpan.FromSeconds(1);
+                        Task.Delay(delay).Wait();
+                    }
+                    var cmd = "/echo TravelTriggers: Territory Command is Unset.";
+                    if (characterConfig.EnableOcmd)
+                    {
+                        cmd = characterConfig.OverrideCommand.Content;
+                    }
+                    else if (!GenericHelpers.IsNullOrEmpty(characterConfig.ZoneCommand.Content))
+                    {
+                        cmd = characterConfig.ZoneCommand.Content;
+                    }
+                    else
+                    {
+                        PluginLog.Information("Unable to execute, because no Override or Territory commands were found.");
+                        return;
+                    }
+                    if (cmd == null)
+                    {
+                        PluginLog.Error("Unable to execute, because the command appears to be empty.");
+                        return;
+                    }
+                    else if (cmd != null)
+                    {
+                        PluginLog.Information("OnTerritoryChanged: Trigger Successful. Processing Territory Command.");
+                        if (!Player.Mounted)
+                        {
+                            Commands.ProcessCommand(cmd);
+                        }
+                    }
+                }
+                catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+            }
+        }).Start();
 
         /// <summary>
         ///     Checks the current player status and the plugin configuration to determine whether to queue an attempted execution of custom commands.
@@ -215,12 +298,12 @@ namespace TravelTriggers
         private static bool ShouldDoENF()
         {
             var result = false;
-            if (PluginConfiguration.CharacterConfigurations.TryGetValue(PlayerState.ContentId, out var characterConfig) &&
-                characterConfig.PluginEnabled)
+            var characterConfig = Utils.GetCharacterConfig();
+            if (characterConfig.PluginEnabled)
             {
                 result = ((characterConfig.EnableRNG && (Random.Shared.Next(characterConfig.OddsMax) <= characterConfig.OddsMin)) ||
                           !characterConfig.EnableRNG) && !(Condition[ConditionFlag.Mounted] || Condition[ConditionFlag.WaitingForDuty]);
-                PluginLog.Debug($"ShouldDoENF: " +
+                PluginLog.Information($"ShouldDoENF: " +
                     $"\nEnableRNG = {(characterConfig.EnableRNG ? "Enabled" : "Disabled")} " +
                     $"\nOddsMin = {characterConfig.OddsMin}" +
                     $"\nOddsMax = {characterConfig.OddsMax}" +

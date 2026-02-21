@@ -3,15 +3,24 @@
   "Name": "TravelTriggers",
   "InternalName": "TravelTriggers",
   "Punchline": "Automatically execute commands under certain conditions.",
-  "Description": "- Set a per-character command for:\n - After changing territories (Teleport, Return, walking outside, et cetera)\n - Changing Classes/Jobs\n - Roleplay Only Mode (Prevents the command from executing if you are not in the \"RP\" Online Status)\n - RNG Mode (Executes the command randomly based on a given range)",
-  "RepoUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers",
-  "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/blob/main/.assets/1600.png?raw=true",
+  "Description": "Sets per-character chat command triggered on:\n- Zone changes\n - Class/Job Swaps\n Other Options:\n - Roleplay Only Toggle (Blocks unless \"RP\" Online Status is set)\n - RNG Toggle (Triggers fire randomly, given a custom min/max range)\n - Override Toggle (Overrides commands set for all triggers with a master command)",
+  "ApplicableVersion": "any",
   "Tags": [
     "utility",
-    "other"
+    "other",
+    "trigger",
+    "conditions",
+    "chat",
+    "commands",
+    "roleplay",
+    "rp",
+    "NaughtyNeko",
+    "NNeko"
   ],
   "CategoryTags": [
     "Utility",
     "Other"
-  ]
+  ],
+  "IconUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers/blob/main/.assets/1600.png?raw=true",
+  "RepoUrl": "https://github.com/NjalTheKnut/Dalamud.TravelTriggers"
 }
