@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/14.0.2">
   <PropertyGroup>
+    <Name>NNekoTriggers</Name>
+    <Author>NaughtyNeko</Author>
+    <Punchline>Automatically execute commands under certain conditions.</Punchline>
+    <Description>
+      Set a per-character command for:
+      After changing territories (Teleport, Return, walking outside, et cetera)
+      Changing Classes/Jobs
+      Roleplay Only Mode (Prevents the command from executing if you are not in the "RP" Online Status)
+      RNG Mode (Executes the command randomly based on a given range)
+    </Description>
     <Version>0.8</Version>
     <WarningLevel>4</WarningLevel>
     <PackageLicenseExpression>APGL-3.0-or-later</PackageLicenseExpression>

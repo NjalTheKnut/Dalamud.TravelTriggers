@@ -15,7 +15,7 @@ using TerritoryType = Lumina.Excel.Sheets.TerritoryType;
 
 namespace TravelTriggers
 {
-    internal sealed class TravelTriggers : IDalamudPlugin, IDisposable
+    internal sealed class NNekoTriggers : IDalamudPlugin, IDisposable
     {
         #region
         [PluginService] public static IDalamudPluginInterface PluginInterface { get; private set; }
@@ -60,7 +60,7 @@ namespace TravelTriggers
         /// <summary>
         ///     The plugin's main entry point.
         /// </summary>
-        public TravelTriggers()
+        public NNekoTriggers()
         {
             ECommonsMain.Init(PluginInterface, this, Module.DalamudReflector);
             PluginConfiguration = PluginConfiguration.Load();

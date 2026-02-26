@@ -7,8 +7,8 @@ namespace TravelTriggers.Configuration
         public int Version { get; set; }
         public Dictionary<ulong, CharacterConfiguration> CharacterConfigurations = [];
 
-        public void Save() => TravelTriggers.PluginInterface.SavePluginConfig(this);
-        public static PluginConfiguration Load() => TravelTriggers.PluginInterface.GetPluginConfig() as PluginConfiguration ?? new();
+        public void Save() => NNekoTriggers.PluginInterface.SavePluginConfig(this);
+        public static PluginConfiguration Load() => NNekoTriggers.PluginInterface.GetPluginConfig() as PluginConfiguration ?? new();
     }
 
     internal sealed class CharacterConfiguration

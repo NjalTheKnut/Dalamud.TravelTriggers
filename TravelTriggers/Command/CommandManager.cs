@@ -24,43 +24,43 @@ namespace TravelTriggers.Command
         /// </summary>
         public CommandManager()
         {
-            TravelTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
+            NNekoTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "Opens the TravelTriggers configuration window. ",
                 ShowInHelp = true
             });
 
-            TravelTriggers.Commands.AddHandler(RpOnlyCmd, new CommandInfo(this.OnCommand)
+            NNekoTriggers.Commands.AddHandler(RpOnlyCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "toggles the Roleplay Only trigger behavior.",
                 ShowInHelp = true
             });
 
-            TravelTriggers.Commands.AddHandler(OverrideCmd, new CommandInfo(this.OnCommand)
+            NNekoTriggers.Commands.AddHandler(OverrideCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "toggles the Command Override feature.",
                 ShowInHelp = true
             });
 
-            TravelTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
+            NNekoTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "toggles the RNG trigger behavior.",
                 ShowInHelp = true
             });
 
-            TravelTriggers.Commands.AddHandler(GsetCmd, new CommandInfo(this.OnCommand)
+            NNekoTriggers.Commands.AddHandler(GsetCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "toggles the trigger.",
                 ShowInHelp = true
             });
 
-            TravelTriggers.Commands.AddHandler(ZoneCmd, new CommandInfo(this.OnCommand)
+            NNekoTriggers.Commands.AddHandler(ZoneCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "toggles the Zone change trigger.",
                 ShowInHelp = true
             });
 
-            TravelTriggers.Commands.AddHandler(OnLoginCmd, new CommandInfo(this.OnCommand)
+            NNekoTriggers.Commands.AddHandler(OnLoginCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "toggles the Login trigger.",
                 ShowInHelp = true
@@ -87,12 +87,12 @@ namespace TravelTriggers.Command
         /// </summary>
         public void Dispose()
         {
-            TravelTriggers.Commands.RemoveHandler(SettingsCommand);
-            TravelTriggers.Commands.RemoveHandler(RpOnlyCmd);
-            TravelTriggers.Commands.RemoveHandler(RngCmd);
-            TravelTriggers.Commands.RemoveHandler(OverrideCmd);
-            TravelTriggers.Commands.RemoveHandler(GsetCmd);
-            TravelTriggers.Commands.RemoveHandler(ZoneCmd);
+            NNekoTriggers.Commands.RemoveHandler(SettingsCommand);
+            NNekoTriggers.Commands.RemoveHandler(RpOnlyCmd);
+            NNekoTriggers.Commands.RemoveHandler(RngCmd);
+            NNekoTriggers.Commands.RemoveHandler(OverrideCmd);
+            NNekoTriggers.Commands.RemoveHandler(GsetCmd);
+            NNekoTriggers.Commands.RemoveHandler(ZoneCmd);
         }
 
         /// <summary>
@@ -111,168 +111,168 @@ namespace TravelTriggers.Command
             switch (command)
             {
                 case SettingsCommand when args?.Length == 0:
-                    TravelTriggers.WindowManager.ToggleConfigWindow();
+                    NNekoTriggers.WindowManager.ToggleConfigWindow();
                     break;
                 case RpOnlyCmd when args?.Length == 0:
                     if (config != null)
                     {
                         config.EnableRpOnly = !config.EnableRpOnly;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case RpOnlyCmd when args == "on":
                     if (config != null)
                     {
                         config.EnableRpOnly = true;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case RpOnlyCmd when args == "off":
                     if (config != null)
                     {
                         config.EnableRpOnly = false;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case RngCmd when args?.Length == 0:
                     if (config != null)
                     {
                         config.EnableRNG = !config.EnableRNG;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case RngCmd when args == "on":
                     if (config != null)
                     {
                         config.EnableRNG = true;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case RngCmd when args == "off":
                     if (config != null)
                     {
                         config.EnableRNG = false;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers  Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case GsetCmd when args?.Length == 0:
                     if (config != null)
                     {
                         config.EnableGset = !config.EnableGset;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case GsetCmd when args == "on":
                     if (config != null)
                     {
                         config.EnableGset = true;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case GsetCmd when args == "off":
                     if (config != null)
                     {
                         config.EnableGset = false;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case ZoneCmd when args?.Length == 0:
                     if (config != null)
                     {
                         config.EnableZones = !config.EnableZones;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case ZoneCmd when args == "on":
                     if (config != null)
                     {
                         config.EnableZones = true;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case ZoneCmd when args == "off":
                     if (config != null)
                     {
                         config.EnableZones = false;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case OverrideCmd when args?.Length == 0:
                     if (config != null)
                     {
                         config.EnableOcmd = !config.EnableOcmd;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case OverrideCmd when args == "on":
                     if (config != null)
                     {
                         config.EnableOcmd = true;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case OverrideCmd when args == "off":
                     if (config != null)
                     {
                         config.EnableOcmd = false;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case OnLoginCmd when args?.Length == 0:
                     if (config != null)
                     {
                         config.EnableOnLogin = !config.EnableOnLogin;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case OnLoginCmd when args == "on":
                     if (config != null)
                     {
                         config.EnableOnLogin = true;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
                 case OnLoginCmd when args == "off":
                     if (config != null)
                     {
                         config.EnableOnLogin = false;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
-                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                        NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
             }

@@ -41,16 +41,16 @@ namespace TravelTriggers.UI
         /// </summary>
         public WindowManager()
         {
-            this.windowingSystem = new WindowSystem(TravelTriggers.PluginInterface.Manifest.InternalName);
+            this.windowingSystem = new WindowSystem(NNekoTriggers.PluginInterface.Manifest.InternalName);
             foreach (var window in this.windows)
             {
                 this.windowingSystem.AddWindow(window);
             }
-            TravelTriggers.PluginInterface.UiBuilder.Draw += this.windowingSystem.Draw;
-            TravelTriggers.ClientState.Login += this.OnLogin;
-            TravelTriggers.ClientState.Logout += this.OnLogout;
-            TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
-            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.Draw += this.windowingSystem.Draw;
+            NNekoTriggers.ClientState.Login += this.OnLogin;
+            NNekoTriggers.ClientState.Logout += this.OnLogout;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
             var config = Utils.GetCharacterConfig();
             if (config.PluginEnabled && config.ShowInDtr)
             {
@@ -64,7 +64,7 @@ namespace TravelTriggers.UI
                     else
                     {
                         config.EnableRpOnly = !config.EnableRpOnly;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
@@ -78,7 +78,7 @@ namespace TravelTriggers.UI
                     else
                     {
                         config.EnableRNG = !config.EnableRNG;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
@@ -92,7 +92,7 @@ namespace TravelTriggers.UI
                     else
                     {
                         config.EnableZones = !config.EnableZones;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Territory Module {(config.EnableZones ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
@@ -106,7 +106,7 @@ namespace TravelTriggers.UI
                     else
                     {
                         config.EnableGset = !config.EnableGset;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
@@ -120,7 +120,7 @@ namespace TravelTriggers.UI
                     else
                     {
                         config.EnableOcmd = !config.EnableOcmd;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Command Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
@@ -134,7 +134,7 @@ namespace TravelTriggers.UI
                     else
                     {
                         config.EnableOnLogin = !config.EnableOnLogin;
-                        TravelTriggers.PluginConfiguration.Save();
+                        NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
@@ -160,11 +160,11 @@ namespace TravelTriggers.UI
             this.GsEntry.Remove();
             this.OcmdEntry.Remove();
             this.OnLoginEntry.Remove();
-            TravelTriggers.ClientState.Login -= this.OnLogin;
-            TravelTriggers.ClientState.Logout -= this.OnLogout;
-            TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
-            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi -= this.ToggleConfigWindow;
-            TravelTriggers.PluginInterface.UiBuilder.Draw -= this.windowingSystem.Draw;
+            NNekoTriggers.ClientState.Login -= this.OnLogin;
+            NNekoTriggers.ClientState.Logout -= this.OnLogout;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenMainUi -= this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.Draw -= this.windowingSystem.Draw;
             this.windowingSystem.RemoveAllWindows();
             foreach (var disposable in this.windows.OfType<IDisposable>())
             {
@@ -178,7 +178,7 @@ namespace TravelTriggers.UI
         /// </summary>
         public void ToggleConfigWindow()
         {
-            if (TravelTriggers.ClientState.IsLoggedIn)
+            if (NNekoTriggers.ClientState.IsLoggedIn)
             {
                 ObjectDisposedException.ThrowIf(this.disposedValue, nameof(this.windowingSystem));
                 this.windows.FirstOrDefault(window => window is SettingsWindow)?.Toggle();
@@ -191,8 +191,8 @@ namespace TravelTriggers.UI
         private void OnLogin()
         {
             var config = Utils.GetCharacterConfig();
-            TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
-            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenConfigUi += this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
             this.UpdateDtrEntry();
         }
 
@@ -203,8 +203,8 @@ namespace TravelTriggers.UI
         /// <param name="code"></param>
         private void OnLogout(int type, int code)
         {
-            TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
-            TravelTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
+            NNekoTriggers.PluginInterface.UiBuilder.OpenMainUi += this.ToggleConfigWindow;
         }
 
         /*/// <summary>

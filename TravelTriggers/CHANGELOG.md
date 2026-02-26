@@ -1,3 +1,6 @@
+v1.0 - Repository changes
+- Rename Repository
+- Rename Plugin
 v0.9 - Added Login trigger
 - Added an OnLogin event trigger.
 - Improvements to the Plugin UI.

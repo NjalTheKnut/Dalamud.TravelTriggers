@@ -49,14 +49,14 @@ namespace TravelTriggers.Helpers
         /// <returns></returns>
         internal static CharacterConfiguration GetCharacterConfig()
         {
-            if (TravelTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(TravelTriggers.PlayerState.ContentId, out var characterConfig))
+            if (NNekoTriggers.PluginConfiguration.CharacterConfigurations.TryGetValue(NNekoTriggers.PlayerState.ContentId, out var characterConfig))
             {
                 return characterConfig;
             }
             else
             {
                 characterConfig = new();
-                TravelTriggers.PluginConfiguration.CharacterConfigurations[TravelTriggers.PlayerState.ContentId] = characterConfig;
+                NNekoTriggers.PluginConfiguration.CharacterConfigurations[NNekoTriggers.PlayerState.ContentId] = characterConfig;
                 return characterConfig;
             }
         }
@@ -84,7 +84,7 @@ namespace TravelTriggers.Helpers
             var result = false;
             foreach (var item in BusyFlags)
             {
-                if (TravelTriggers.Condition[item])
+                if (NNekoTriggers.Condition[item])
                 {
                     result = true;
                 }
