@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11520.95 d18.3
+VisualStudioVersion = 18.3.11520.95
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NNekoTriggers", "TravelTriggers\NNekoTriggers.csproj", "{FE2D49BF-D294-52F8-6424-58B6A8C286F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NNekoTriggers", "NNekoTriggers\NNekoTriggers.csproj", "{D8298994-0511-9A71-BB70-3B985B089B01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,10 +10,10 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FE2D49BF-D294-52F8-6424-58B6A8C286F7}.Debug|x64.ActiveCfg = Debug|x64
-		{FE2D49BF-D294-52F8-6424-58B6A8C286F7}.Debug|x64.Build.0 = Debug|x64
-		{FE2D49BF-D294-52F8-6424-58B6A8C286F7}.Release|x64.ActiveCfg = Release|x64
-		{FE2D49BF-D294-52F8-6424-58B6A8C286F7}.Release|x64.Build.0 = Release|x64
+		{D8298994-0511-9A71-BB70-3B985B089B01}.Debug|x64.ActiveCfg = Debug|x64
+		{D8298994-0511-9A71-BB70-3B985B089B01}.Debug|x64.Build.0 = Debug|x64
+		{D8298994-0511-9A71-BB70-3B985B089B01}.Release|x64.ActiveCfg = Release|x64
+		{D8298994-0511-9A71-BB70-3B985B089B01}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
