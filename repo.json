@@ -1,4 +1,4 @@
-[
+{
     "Author": "NaughtyNeko",
     "Name": "NNekoTriggers",
     "InternalName": "NNekoTriggers",
@@ -8,12 +8,12 @@
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/NNekoPlugins/NNekoTriggers",
     "Tags": [ "utility", "other", "trigger", "conditions", "chat", "commands", "roleplay", "rp", "NaughtyNeko", "NNeko" ],
-    "DalamudApiLevel": 14,
-    "LoadPriority": 69,
+    "DalamudApiLevel": "14",
+    "LoadPriority": "69",
     "IconUrl": "https://github.com/NNekoPlugins/NNekoTriggers/raw/main/NNekoTriggers/images/ttrig.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
     "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
     "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
     "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip"
-]
+}
