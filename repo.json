@@ -13,7 +13,7 @@
     "IconUrl": "https://github.com/NNekoPlugins/NNekoPlugins/raw/main/ttrig.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip",
-    "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip"
+    "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.0/latest.zip",
+    "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.0/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.0/latest.zip"
   }
