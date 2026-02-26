@@ -6,14 +6,14 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
 using ECommons.GameHelpers;
-using TravelTriggers.Command;
-using TravelTriggers.Configuration;
-using TravelTriggers.UI;
-using TravelTriggers.Helpers;
+using NNekoTriggers.Command;
+using NNekoTriggers.Configuration;
+using NNekoTriggers.UI;
+using NNekoTriggers.Helpers;
 using Task = System.Threading.Tasks.Task;
 using TerritoryType = Lumina.Excel.Sheets.TerritoryType;
 
-namespace TravelTriggers
+namespace NNekoTriggers
 {
     internal sealed class NNekoTriggers : IDalamudPlugin, IDisposable
     {
@@ -112,7 +112,7 @@ namespace TravelTriggers
                     {
                         try
                         {
-                            var cmd = "/echo TravelTriggers: Job Swap Command is Unset.";
+                            var cmd = "/echo NNekoTriggers: Job Swap Command is Unset.";
                             if (characterConfig.EnableOcmd)
                             {
                                 cmd = characterConfig.OverrideCommand.Content;
@@ -256,7 +256,7 @@ namespace TravelTriggers
                             var delay = TimeSpan.FromSeconds(1);
                             Task.Delay(delay).Wait();
                         }
-                        var cmd = "/echo TravelTriggers: Login Command is Unset.";
+                        var cmd = "/echo NNekoTriggers: Login Command is Unset.";
                         if (characterConfig.EnableOcmd)
                         {
                             cmd = characterConfig.OverrideCommand.Content;
@@ -313,7 +313,7 @@ namespace TravelTriggers
                         var delay = TimeSpan.FromSeconds(1);
                         Task.Delay(delay).Wait();
                     }
-                    var cmd = "/echo TravelTriggers: Territory Command is Unset.";
+                    var cmd = "/echo NNekoTriggers: Territory Command is Unset.";
                     if (characterConfig.EnableOcmd)
                     {
                         cmd = characterConfig.OverrideCommand.Content;

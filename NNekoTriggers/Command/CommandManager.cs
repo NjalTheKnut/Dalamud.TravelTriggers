@@ -1,7 +1,7 @@
 using Dalamud.Game.Command;
 using ECommons.Logging;
 
-namespace TravelTriggers.Command
+namespace NNekoTriggers.Command
 {
     /// <summary>
     ///     Initializes and manages all commands and command-events for the plugin.
@@ -26,7 +26,7 @@ namespace TravelTriggers.Command
         {
             NNekoTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "Opens the TravelTriggers configuration window. ",
+                HelpMessage = "Opens the NNekoTriggers configuration window. ",
                 ShowInHelp = true
             });
 
@@ -66,7 +66,7 @@ namespace TravelTriggers.Command
                 ShowInHelp = true
             });
 
-            /*TravelTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
+            /*NNekoTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "Toggles the feature, and sets, increments, or reduces the bounds of your custom RNG range." +
                 "\n'/rng t' toggles the RNG feature on and off" +
@@ -118,7 +118,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRpOnly = !config.EnableRpOnly;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -127,7 +127,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRpOnly = true;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -136,7 +136,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRpOnly = false;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -145,7 +145,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRNG = !config.EnableRNG;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -154,7 +154,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRNG = true;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -163,7 +163,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableRNG = false;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers  Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers  Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -172,7 +172,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableGset = !config.EnableGset;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -181,7 +181,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableGset = true;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -190,7 +190,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableGset = false;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -199,7 +199,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableZones = !config.EnableZones;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -208,7 +208,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableZones = true;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -217,7 +217,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableZones = false;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Zone Module {(config.EnableZones ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -226,7 +226,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableOcmd = !config.EnableOcmd;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -235,7 +235,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableOcmd = true;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -244,7 +244,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableOcmd = false;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -253,7 +253,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableOnLogin = !config.EnableOnLogin;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -262,7 +262,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableOnLogin = true;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
@@ -271,7 +271,7 @@ namespace TravelTriggers.Command
                     {
                         config.EnableOnLogin = false;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;

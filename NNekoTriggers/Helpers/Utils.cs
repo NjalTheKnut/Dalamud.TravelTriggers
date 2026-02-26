@@ -2,9 +2,9 @@ using Dalamud.Game.ClientState.Conditions;
 using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using TravelTriggers.Configuration;
+using NNekoTriggers.Configuration;
 
-namespace TravelTriggers.Helpers
+namespace NNekoTriggers.Helpers
 {
     public static unsafe class Utils
     {

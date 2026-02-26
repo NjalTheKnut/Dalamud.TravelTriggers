@@ -4,9 +4,9 @@ using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using Dalamud.Utility;
 using ECommons.Logging;
-using TravelTriggers.Helpers;
+using NNekoTriggers.Helpers;
 
-namespace TravelTriggers.UI.Windows
+namespace NNekoTriggers.UI.Windows
 {
     public sealed class SettingsWindow : Window
     {
@@ -27,12 +27,12 @@ namespace TravelTriggers.UI.Windows
             this.TitleBarButtons = [
                  new() {
                     Icon = FontAwesomeIcon.Code,
-                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.TravelTriggers"),
+                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.NNekoTriggers"),
                     ShowTooltip = () => ImGui.SetTooltip("Repository"),
                 },
                 new() {
                     Icon = FontAwesomeIcon.Comment,
-                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.TravelTriggers/issues"),
+                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.NNekoTriggers/issues"),
                     ShowTooltip = () => ImGui.SetTooltip("Feedback"),
                 },
             ];
@@ -100,7 +100,7 @@ namespace TravelTriggers.UI.Windows
             }
             /*if (ImGui.Checkbox("", ref config.))
             {
-                TravelTriggers.PluginConfiguration.Save();
+                NNekoTriggers.PluginConfiguration.Save();
                 WindowManager.UpdateDtrEntry(config);
             }*/
             ImGui.EndDisabled();
@@ -108,8 +108,8 @@ namespace TravelTriggers.UI.Windows
             if (ImGui.Checkbox("Only enable when roleplaying", ref config.EnableRpOnly))
             {
                 NNekoTriggers.PluginConfiguration.Save();
-                PluginLog.Information($"TravelTriggers RP Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
-                //PluginLog.Information($"TravelTriggers  Module {(config. ? "Enabled" : "Disabled")}");
+                PluginLog.Information($"NNekoTriggers RP Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                //PluginLog.Information($"NNekoTriggers  Module {(config. ? "Enabled" : "Disabled")}");
                 mgr.UpdateDtrEntry();
             }
 
@@ -190,7 +190,7 @@ namespace TravelTriggers.UI.Windows
             if (ImGui.Checkbox("Enable Login feature", ref config.EnableOnLogin))
             {
                 NNekoTriggers.PluginConfiguration.Save();
-                PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                PluginLog.Information($"NNekoTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
                 mgr.UpdateDtrEntry();
             }
             ImGui.BeginDisabled(!config.EnableOnLogin);
@@ -212,7 +212,7 @@ namespace TravelTriggers.UI.Windows
             if (ImGui.Checkbox("Enable Command Override feature", ref config.EnableOcmd))
             {
                 NNekoTriggers.PluginConfiguration.Save();
-                PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                PluginLog.Information($"NNekoTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
                 mgr.UpdateDtrEntry();
             }
             ImGui.BeginDisabled(!config.EnableOcmd);

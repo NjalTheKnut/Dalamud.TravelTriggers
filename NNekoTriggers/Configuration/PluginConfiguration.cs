@@ -1,6 +1,6 @@
 using Dalamud.Configuration;
 
-namespace TravelTriggers.Configuration
+namespace NNekoTriggers.Configuration
 {
     internal sealed class PluginConfiguration : IPluginConfiguration
     {

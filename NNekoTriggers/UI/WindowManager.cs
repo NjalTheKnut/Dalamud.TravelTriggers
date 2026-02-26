@@ -4,10 +4,10 @@ using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Interface.Windowing;
 using ECommons.DalamudServices;
 using ECommons.Logging;
-using TravelTriggers.Helpers;
-using TravelTriggers.UI.Windows;
+using NNekoTriggers.Helpers;
+using NNekoTriggers.UI.Windows;
 
-namespace TravelTriggers.UI
+namespace NNekoTriggers.UI
 {
     internal sealed class WindowManager : IDisposable
     {
@@ -65,7 +65,7 @@ namespace TravelTriggers.UI
                     {
                         config.EnableRpOnly = !config.EnableRpOnly;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Roleplay Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
                 };
@@ -79,7 +79,7 @@ namespace TravelTriggers.UI
                     {
                         config.EnableRNG = !config.EnableRNG;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers RNG Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
                 };
@@ -93,7 +93,7 @@ namespace TravelTriggers.UI
                     {
                         config.EnableZones = !config.EnableZones;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Territory Module {(config.EnableZones ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Territory Module {(config.EnableZones ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
                 };
@@ -107,7 +107,7 @@ namespace TravelTriggers.UI
                     {
                         config.EnableGset = !config.EnableGset;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Gearset Module {(config.EnableGset ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
                 };
@@ -121,7 +121,7 @@ namespace TravelTriggers.UI
                     {
                         config.EnableOcmd = !config.EnableOcmd;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Command Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Command Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
                 };
@@ -135,7 +135,7 @@ namespace TravelTriggers.UI
                     {
                         config.EnableOnLogin = !config.EnableOnLogin;
                         NNekoTriggers.PluginConfiguration.Save();
-                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                        PluginLog.Information($"NNekoTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
                         this.UpdateDtrEntry();
                     }
                 };
@@ -153,7 +153,7 @@ namespace TravelTriggers.UI
                 ObjectDisposedException.ThrowIf(this.disposedValue, nameof(this.windowingSystem));
                 return;
             }
-            //var mgr = TravelTriggers.WindowManager;
+            //var mgr = NNekoTriggers.WindowManager;
             this.RpEntry.Remove();
             this.RngEntry.Remove();
             this.TpEntry.Remove();
@@ -297,8 +297,8 @@ namespace TravelTriggers.UI
                 {
                     this.OnLoginEntry.Shown = false;
                 }
-                //TravelTriggers.WindowManager._ocmdEntry.Text = new SeString(new SeHyphenPayload(), );
-                /*TravelTriggers.DtrEntry.Text = new SeString(
+                //NNekoTriggers.WindowManager._ocmdEntry.Text = new SeString(new SeHyphenPayload(), );
+                /*NNekoTriggers.DtrEntry.Text = new SeString(
                         new SeHyphenPayload(),
                         config.RpOnlyInDtr ? config.EnableRpOnly ? new IconPayload(BitmapFontIcon.RolePlaying) : new IconPayload(BitmapFontIcon.NoCircle) : new SeHyphenPayload(),
                         new SeHyphenPayload(),
@@ -311,8 +311,8 @@ namespace TravelTriggers.UI
                         config.OcmdInDtr ? config.EnableOcmd ? new IconPayload(BitmapFontIcon.Mentor) : new IconPayload(BitmapFontIcon.NoCircle) : new SeHyphenPayload(),
                         new SeHyphenPayload()
                         );
-                TravelTriggers.DtrEntry.Shown = true;*/
-                //TravelTriggers.DtrEntry.OnClick += TravelTriggers.WindowManager.OnDtrInteractionEvent;
+                NNekoTriggers.DtrEntry.Shown = true;*/
+                //NNekoTriggers.DtrEntry.OnClick += NNekoTriggers.WindowManager.OnDtrInteractionEvent;
             }
             //else
             //{
@@ -326,12 +326,12 @@ namespace TravelTriggers.UI
             this.TpEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));
             this.GsEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));
             this.OcmdEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));*/
-            //TravelTriggers.DtrEntry.Text = new SeString(
+            //NNekoTriggers.DtrEntry.Text = new SeString(
             //        new SeHyphenPayload(),
             //        new IconPayload(BitmapFontIcon.Disconnecting),
             //        new SeHyphenPayload()
             //        );
-            //TravelTriggers.DtrEntry.Shown = false;
+            //NNekoTriggers.DtrEntry.Shown = false;
 
             //}
         }
