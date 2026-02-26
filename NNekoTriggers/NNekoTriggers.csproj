@@ -11,7 +11,7 @@
       Roleplay Only Mode (Prevents the command from executing if you are not in the "RP" Online Status)
       RNG Mode (Executes the command randomly based on a given range)
     </Description>
-    <Version>0.8</Version>
+    <Version>1.0</Version>
     <WarningLevel>4</WarningLevel>
     <PackageLicenseExpression>APGL-3.0-or-later</PackageLicenseExpression>
   </PropertyGroup>
