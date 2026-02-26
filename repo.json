@@ -1,19 +1,21 @@
-{
-    "Author": "NaughtyNeko",
-    "Name": "NNekoTriggers",
-    "InternalName": "NNekoTriggers",
-    "AssemblyVersion": "1.0",
-    "Punchline": "Automatically execute commands under certain conditions.",
-    "Description": "Sets per-character chat command triggered on:\n- Zone changes\n - Class/Job Swaps\n- Login\n Other Options:\n - Roleplay Only Toggle (Blocks unless \"RP\" Online Status is set)\n - RNG Toggle (Triggers fire randomly, given a custom min/max range)\n - Override Toggle (Overrides commands set for all triggers with a master command)",
-    "ApplicableVersion": "any",
-    "RepoUrl": "https://github.com/NNekoPlugins/NNekoTriggers",
-    "Tags": [ "utility", "other", "trigger", "conditions", "chat", "commands", "roleplay", "rp", "NaughtyNeko", "NNeko" ],
-    "DalamudApiLevel": "14",
-    "LoadPriority": "69",
-    "IconUrl": "https://github.com/NNekoPlugins/NNekoTriggers/raw/main/NNekoTriggers/images/ttrig.png",
-    "IsHide": "False",
-    "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
-    "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip"
-}
+[
+    {
+        "Author": "NaughtyNeko",
+        "Name": "NNekoTriggers",
+        "InternalName": "NNekoTriggers",
+        "AssemblyVersion": "1.0",
+        "Punchline": "Automatically execute commands under certain conditions.",
+        "Description": "Sets per-character chat command triggered on:\n- Zone changes\n - Class/Job Swaps\n- Login\n Other Options:\n - Roleplay Only Toggle (Blocks unless \"RP\" Online Status is set)\n - RNG Toggle (Triggers fire randomly, given a custom min/max range)\n - Override Toggle (Overrides commands set for all triggers with a master command)",
+        "ApplicableVersion": "any",
+        "RepoUrl": "https://github.com/NNekoPlugins/NNekoTriggers",
+        "Tags": [ "utility", "other", "trigger", "conditions", "chat", "commands", "roleplay", "rp", "NaughtyNeko", "NNeko" ],
+        "DalamudApiLevel": 14,
+        "LoadPriority": 69,
+        "IconUrl": "https://github.com/NNekoPlugins/NNekoTriggers/raw/main/NNekoTriggers/images/ttrig.png",
+        "IsHide": "False",
+        "IsTestingExclusive": "False",
+        "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
+        "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip"
+    }
+]
