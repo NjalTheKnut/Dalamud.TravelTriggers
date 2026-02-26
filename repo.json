@@ -1,4 +1,5 @@
-{
+[
+  {
   "Author": "NaughtyNeko",
     "Name": "NNekoTriggers",
     "InternalName": "NNekoTriggers",
@@ -17,3 +18,4 @@
     "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
     "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip"
   }
+]
