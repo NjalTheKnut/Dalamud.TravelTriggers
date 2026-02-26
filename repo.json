@@ -2,7 +2,7 @@
   "Author": "NaughtyNeko",
     "Name": "NNekoTriggers",
     "InternalName": "NNekoTriggers",
-    "AssemblyVersion": "1.0".
+    "AssemblyVersion": "1.0",
     "Punchline": "Automatically execute commands under certain conditions.",
     "Description": "Sets per-character chat command triggered on:\n- Zone changes\n - Class/Job Swaps\n- Login\n Other Options:\n - Roleplay Only Toggle (Blocks unless \"RP\" Online Status is set)\n - RNG Toggle (Triggers fire randomly, given a custom min/max range)\n - Override Toggle (Overrides commands set for all triggers with a master command)",
     "ApplicableVersion": "any",
