@@ -31,7 +31,7 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Setup Dalamud
-        uses: NjalTheKnut/setup-dalamud@v1
+        uses: Blooym/setup-dalamud@v1.1.0
 
       - name: Restore Dependencies
         run: dotnet restore
