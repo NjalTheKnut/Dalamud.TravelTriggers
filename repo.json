@@ -6,14 +6,14 @@
     "Punchline": "Automatically execute commands under certain conditions.",
     "Description": "Sets per-character chat command triggered on:\n- Zone changes\n - Class/Job Swaps\n- Login\n Other Options:\n - Roleplay Only Toggle (Blocks unless \"RP\" Online Status is set)\n - RNG Toggle (Triggers fire randomly, given a custom min/max range)\n - Override Toggle (Overrides commands set for all triggers with a master command)",
     "ApplicableVersion": "any",
-    "RepoUrl": "https://github.com/NNekoPlugins/NNekoTriggers",
+    "RepoUrl": "https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers",
     "Tags": [ "utility", "other", "trigger", "conditions", "chat", "commands", "roleplay", "rp", "NaughtyNeko", "NNeko" ],
     "DalamudApiLevel": 14,
     "LoadPriority": 69,
     "IconUrl": "https://github.com/NNekoPlugins/NNekoPlugins/raw/main/ttrig.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip",
-    "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip"
+    "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip",
+    "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/download/v0.9/latest.zip"
   }
