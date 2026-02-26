@@ -4,7 +4,7 @@ namespace TravelTriggers.Configuration
 {
     internal sealed class PluginConfiguration : IPluginConfiguration
     {
-        public int Version { get; set; } = 8;
+        public int Version { get; set; }
         public Dictionary<ulong, CharacterConfiguration> CharacterConfigurations = [];
 
         public void Save() => TravelTriggers.PluginInterface.SavePluginConfig(this);
@@ -21,13 +21,16 @@ namespace TravelTriggers.Configuration
         public bool RngInDtr;
         public bool ZoneInDtr;
         public bool GsetInDtr;
+        public bool OnLoginInDtr;
         public bool EnableRpOnly;
         public bool EnableOcmd;
         public bool EnableRNG;
         public bool EnableZones;
         public bool EnableGset;
+        public bool EnableOnLogin;
         public int OddsMax = 100;
         public int OddsMin = 25;
+        public CustomCommand OnLoginCommand = new();
         public CustomCommand OverrideCommand = new();
         public CustomCommand GearsetCommand = new();
         public CustomCommand ZoneCommand = new();

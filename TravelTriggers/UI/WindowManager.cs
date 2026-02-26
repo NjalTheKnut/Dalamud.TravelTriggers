@@ -32,6 +32,7 @@ namespace TravelTriggers.UI
         public IDtrBarEntry GsEntry { get; } = Svc.DtrBar.Get("TTrig-GS");
 
         public IDtrBarEntry OcmdEntry { get; } = Svc.DtrBar.Get("TTrig-OCMD");
+        public IDtrBarEntry OnLoginEntry { get; } = Svc.DtrBar.Get("TTrig-OnLogin");
 
         //private readonly IDtrBarEntry _Entry = Svc.DtrBar.Get("TTrig-");
 
@@ -124,6 +125,20 @@ namespace TravelTriggers.UI
                         this.UpdateDtrEntry();
                     }
                 };
+                this.OnLoginEntry.OnClick = ev =>
+                {
+                    if (ev.ClickType == MouseClickType.Right)
+                    {
+                        this.ToggleConfigWindow();
+                    }
+                    else
+                    {
+                        config.EnableOnLogin = !config.EnableOnLogin;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                        this.UpdateDtrEntry();
+                    }
+                };
                 this.UpdateDtrEntry();
             }
         }
@@ -144,6 +159,7 @@ namespace TravelTriggers.UI
             this.TpEntry.Remove();
             this.GsEntry.Remove();
             this.OcmdEntry.Remove();
+            this.OnLoginEntry.Remove();
             TravelTriggers.ClientState.Login -= this.OnLogin;
             TravelTriggers.ClientState.Logout -= this.OnLogout;
             TravelTriggers.PluginInterface.UiBuilder.OpenConfigUi -= this.ToggleConfigWindow;
@@ -270,6 +286,16 @@ namespace TravelTriggers.UI
                 else
                 {
                     this.OcmdEntry.Shown = false;
+                }
+                if (config.OnLoginInDtr)
+                {
+                    this.OnLoginEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Meteor), config.EnableOnLogin ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
+                    this.OnLoginEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Login Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
+                    this.OnLoginEntry.Shown = true;
+                }
+                else
+                {
+                    this.OnLoginEntry.Shown = false;
                 }
                 //TravelTriggers.WindowManager._ocmdEntry.Text = new SeString(new SeHyphenPayload(), );
                 /*TravelTriggers.DtrEntry.Text = new SeString(

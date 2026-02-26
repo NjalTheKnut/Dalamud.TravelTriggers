@@ -18,7 +18,6 @@ namespace TravelTriggers
     internal sealed class TravelTriggers : IDalamudPlugin, IDisposable
     {
         #region
-#pragma warning disable CS8618
         [PluginService] public static IDalamudPluginInterface PluginInterface { get; private set; }
         [PluginService] public static ICommandManager Commands { get; private set; }
         [PluginService] public static IClientState ClientState { get; private set; }
@@ -40,8 +39,6 @@ namespace TravelTriggers
         public static PluginConfiguration PluginConfiguration { get; private set; }
         //internal static IDtrBarEntry DtrEntry;
         public static IEnumerable<TerritoryType> AllowedTerritories;
-#pragma warning restore CS8618
-
         private const uint ROLEPLAY_ONLINE_STATUS_ID = 22;
         private static readonly uint[] AllowedTerritoryUse = [
               0, // Town
@@ -76,6 +73,7 @@ namespace TravelTriggers
             ClientState.MapIdChanged += this.ClientState_MapIdChanged;
             ClientState.TerritoryChanged += this.OnTerritoryChanged;
             ClientState.ClassJobChanged += this.ClientState_ClassJobChanged;
+            ClientState.Login += ClientState_OnLogin;
         }
 
         /// <summary>
@@ -83,6 +81,7 @@ namespace TravelTriggers
         /// </summary>
         public void Dispose()
         {
+            ClientState.Login -= ClientState_OnLogin;
             ClientState.ClassJobChanged -= this.ClientState_ClassJobChanged;
             ClientState.TerritoryChanged -= this.OnTerritoryChanged;
             ClientState.MapIdChanged -= this.ClientState_MapIdChanged;
@@ -234,6 +233,61 @@ namespace TravelTriggers
                         return;
                     }
                     HandleZoneTriggerENF(characterConfig);
+                }
+            }
+        }
+
+        private static void ClientState_OnLogin()
+        {
+            var characterConfig = Utils.GetCharacterConfig();
+            if (!ClientState.IsLoggedIn)
+            {
+                return;
+            }
+            else
+            {
+                if (ShouldDoENF())
+                {
+                    try
+                    {
+                        while (!Utils.CanUseGlamourPlates())
+                        {
+                            PluginLog.Information("Unable to execute yet, waiting for conditions to clear.");
+                            var delay = TimeSpan.FromSeconds(1);
+                            Task.Delay(delay).Wait();
+                        }
+                        var cmd = "/echo TravelTriggers: Login Command is Unset.";
+                        if (characterConfig.EnableOcmd)
+                        {
+                            cmd = characterConfig.OverrideCommand.Content;
+                        }
+                        else if (!GenericHelpers.IsNullOrEmpty(characterConfig.OnLoginCommand.Content))
+                        {
+                            cmd = characterConfig.OnLoginCommand.Content;
+                        }
+                        else
+                        {
+                            PluginLog.Information("Unable to execute, because no Override or Login commands were found.");
+                            return;
+                        }
+                        if (cmd == null)
+                        {
+                            PluginLog.Error("Unable to execute, because the command appears to be empty.");
+                            return;
+                        }
+                        else if (cmd != null)
+                        {
+                            PluginLog.Information("OnLogin: Trigger Successful. Processing Login Command.");
+
+                            if (!Player.Mounted)
+                            {
+                                var delay = TimeSpan.FromSeconds(1);
+                                Task.Delay(delay).Wait();
+                                Commands.ProcessCommand(cmd);
+                            }
+                        }
+                    }
+                    catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
                 }
             }
         }

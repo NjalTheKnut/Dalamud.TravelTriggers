@@ -17,6 +17,7 @@ namespace TravelTriggers.Command
         private const string GsetCmd = "/tGset";
         private const string ZoneCmd = "/tZone";
         private const string OverrideCmd = "/tOverride";
+        private const string OnLoginCmd = "/tOnLogin";
 
         /// <summary>
         ///     Initializes the CommandManager and its resources.
@@ -56,6 +57,12 @@ namespace TravelTriggers.Command
             TravelTriggers.Commands.AddHandler(ZoneCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "toggles the Zone change trigger.",
+                ShowInHelp = true
+            });
+
+            TravelTriggers.Commands.AddHandler(OnLoginCmd, new CommandInfo(this.OnCommand)
+            {
+                HelpMessage = "toggles the Login trigger.",
                 ShowInHelp = true
             });
 
@@ -238,6 +245,33 @@ namespace TravelTriggers.Command
                         config.EnableOcmd = false;
                         TravelTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"TravelTriggers Override Module {(config.EnableOcmd ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case OnLoginCmd when args?.Length == 0:
+                    if (config != null)
+                    {
+                        config.EnableOnLogin = !config.EnableOnLogin;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case OnLoginCmd when args == "on":
+                    if (config != null)
+                    {
+                        config.EnableOnLogin = true;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                        TravelTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case OnLoginCmd when args == "off":
+                    if (config != null)
+                    {
+                        config.EnableOnLogin = false;
+                        TravelTriggers.PluginConfiguration.Save();
+                        PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
                         TravelTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;

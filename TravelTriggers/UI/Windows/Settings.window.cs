@@ -15,13 +15,14 @@ namespace TravelTriggers.UI.Windows
         /// </summary>
         public SettingsWindow() : base(TravelTriggers.PluginInterface.Manifest.Name)
         {
+            this.Flags = ImGuiWindowFlags.NoResize;
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(500, 375),
-                MaximumSize = new Vector2(500, 375)
+                MinimumSize = new Vector2(525, 430),
+                MaximumSize = new Vector2(525, 430),
             };
             this.AllowPinning = true;
-            this.Size = new Vector2(500, 375);
+            this.Size = new Vector2(525, 430);
             this.SizeCondition = ImGuiCond.FirstUseEver;
             this.TitleBarButtons = [
                  new() {
@@ -86,6 +87,12 @@ namespace TravelTriggers.UI.Windows
                 mgr.UpdateDtrEntry();
             }
             ImGui.SameLine();
+            if (ImGui.Checkbox("Login", ref config.OnLoginInDtr))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+                mgr.UpdateDtrEntry();
+            }
+            ImGui.SameLine();
             if (ImGui.Checkbox("Override", ref config.OcmdInDtr))
             {
                 TravelTriggers.PluginConfiguration.Save();
@@ -111,6 +118,7 @@ namespace TravelTriggers.UI.Windows
                 TravelTriggers.PluginConfiguration.Save();
                 mgr.UpdateDtrEntry();
             }
+
             ImGui.BeginDisabled(!config.EnableRNG);
             if (ImGui.BeginTable("##OddsTable", 2))
             {
@@ -179,6 +187,28 @@ namespace TravelTriggers.UI.Windows
 #pragma warning restore CS8601 // Possible null reference assignment.
             ImGui.EndDisabled();
 
+            if (ImGui.Checkbox("Enable Login feature", ref config.EnableOnLogin))
+            {
+                TravelTriggers.PluginConfiguration.Save();
+                PluginLog.Information($"TravelTriggers Login Module {(config.EnableOnLogin ? "Enabled" : "Disabled")}");
+                mgr.UpdateDtrEntry();
+            }
+            ImGui.BeginDisabled(!config.EnableOnLogin);
+            var onLoginCmd = config.OnLoginCommand;
+            var logincmdslot = config.OnLoginCommand.Content;
+#pragma warning disable CS8601 // Possible null reference assignment.
+            if (ImGui.InputTextWithHint("Login Command", "/command here...", ref logincmdslot, 100))
+            {
+                unsafe
+                {
+                    onLoginCmd.Content = logincmdslot;
+                    config.OnLoginCommand = onLoginCmd;
+                    TravelTriggers.PluginConfiguration.Save();
+                }
+            }
+#pragma warning restore CS8601 // Possible null reference assignment.
+            ImGui.EndDisabled();
+
             if (ImGui.Checkbox("Enable Command Override feature", ref config.EnableOcmd))
             {
                 TravelTriggers.PluginConfiguration.Save();
@@ -200,6 +230,7 @@ namespace TravelTriggers.UI.Windows
             }
 #pragma warning restore CS8601 // Possible null reference assignment.
             ImGui.EndDisabled();
+
         }
     }
 }

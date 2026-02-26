@@ -1,3 +1,6 @@
+v0.9 - Added Login trigger
+- Added an OnLogin event trigger.
+- Improvements to the Plugin UI.
 v0.8 - Renaming and refactoring of nearly everything
 - Revised the entire command management system
 - Adjusted the DTR entry system to have separate entries for each feature
