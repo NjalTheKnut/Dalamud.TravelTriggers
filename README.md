@@ -6,9 +6,9 @@
 ### TravelTriggers
 Automatically execute commands under certain conditions.
 
-[![Latest Stable](https://img.shields.io/github/v/release/NNekoPlugins/NNekoTriggers?color=blue&label=Stable)](https://github.com/NNekoPlugins/NNekoTriggers/releases/latest)
+[![Latest Stable](https://img.shields.io/github/v/release/NNekoPlugins/NNekoPlugins/NNekoTriggers?color=blue&label=Stable)](https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/latest)
 
-**[Issues](https://github.com/NNekoPlugins/NNekoTriggers/issues) · [Pull Requests](https://github.com/NNekoPlugins/NNekoTriggers/pulls) · [Releases](https://github.com/NNekoPlugins/NNekoTriggers/releases/latest)**
+**[Issues](https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/issues) · [Pull Requests](https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/pulls) · [Releases](https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/releases/latest)**
 
 </div>
 
@@ -26,12 +26,12 @@ Travelcase derivative that runs commands rather than changing gearset or appeara
 
 ## Installation
 > **Warning**  
-> No support will be provided on any Dalamud official support channel. Please use the [Issues](https://github.com/NNekoPlugins/NNekoTriggers/issues) page for any support requests. Do NOT ask for support anywhere else, as support for 3rd-party plugins is not provided by the Dalamud team. 
+> No support will be provided on any Dalamud official support channel. Please use the [Issues](https://github.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/issues) page for any support requests. Do NOT ask for support anywhere else, as support for 3rd-party plugins is not provided by the Dalamud team. 
 > 
 > Additionally, you should understand that this plugin could be detected by other players or a GM, use at your own risk.
 
 This plugin can be installed as a 3rd-party plugin via the Dalamud Plugin Installer. To do so, add the following URL to `Settings > Experimental > Custom Plugin Repositories`:
 
 ```
-https://raw.githubusercontent.com/NNekoPlugins/NNekoTriggers/main/repo.json
+https://raw.githubusercontent.com/NNekoPlugins/NNekoPlugins/NNekoTriggers/main/repo.json
 ```
