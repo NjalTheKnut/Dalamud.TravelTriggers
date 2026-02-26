@@ -14,8 +14,8 @@
         "IconUrl": "https://github.com/NNekoPlugins/NNekoTriggers/raw/main/NNekoTriggers/images/ttrig.png",
         "IsHide": "False",
         "IsTestingExclusive": "False",
-        "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
-        "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/tag/v1.0/latest.zip"
+        "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.0/latest.zip",
+        "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.0/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.0/latest.zip"
     }
 ]
