@@ -171,7 +171,7 @@ namespace NNekoTriggers
                         PluginLog.Warning($"Territory {Player.Territory} is not an allowed territoryID, skipping custom executions.");
                         return;
                     }
-                    HandleZoneTriggerENF(characterConfig);
+                    HandleZoneTriggerENF(characterConfig, characterConfig.ZoneCommand);
                 }
             }
         }
@@ -201,7 +201,7 @@ namespace NNekoTriggers
                         PluginLog.Warning($"Territory {Player.Territory} is not an allowed territoryID, skipping custom executions.");
                         return;
                     }
-                    HandleZoneTriggerENF(characterConfig);
+                    HandleZoneTriggerENF(characterConfig, characterConfig.ZoneCommand);
                 }
             }
         }
@@ -232,7 +232,7 @@ namespace NNekoTriggers
                         PluginLog.Warning($"Territory {territory} is not an allowed territoryID, skipping custom executions.");
                         return;
                     }
-                    HandleZoneTriggerENF(characterConfig);
+                    HandleZoneTriggerENF(characterConfig, characterConfig.ZoneCommand);
                 }
             }
         }
@@ -258,7 +258,7 @@ namespace NNekoTriggers
                         PluginLog.Warning($"Territory {Player.Territory} is not an allowed territoryID, skipping custom executions.");
                         return;
                     }
-                    HandleZoneTriggerENF(characterConfig);
+                    HandleZoneTriggerENF(characterConfig, characterConfig.OnLoginCommand);
                 }
             }
         }
@@ -267,7 +267,7 @@ namespace NNekoTriggers
         /// Processes the command used for any changes in zone, map, or territory.
         /// </summary>
         /// <param name="characterConfig"></param>
-        private static void HandleZoneTriggerENF(CharacterConfiguration characterConfig) => new Task(() =>
+        private static void HandleZoneTriggerENF(CharacterConfiguration characterConfig, CustomCommand command) => new Task(() =>
         {
             if (ShouldDoENF())
             {
@@ -289,7 +289,7 @@ namespace NNekoTriggers
                     {
                         cmd = characterConfig.OverrideCommand.Content;
                     }
-                    else if (!GenericHelpers.IsNullOrEmpty(characterConfig.ZoneCommand.Content))
+                    else if (!GenericHelpers.IsNullOrEmpty(command.Content))
                     {
                         cmd = characterConfig.ZoneCommand.Content;
                     }
