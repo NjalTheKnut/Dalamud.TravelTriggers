@@ -239,55 +239,26 @@ namespace NNekoTriggers
 
         private static void ClientState_OnLogin()
         {
-            var characterConfig = Utils.GetCharacterConfig();
             if (!ClientState.IsLoggedIn)
             {
                 return;
             }
             else
             {
-                if (ShouldDoENF())
+                var characterConfig = Utils.GetCharacterConfig();
+                if (characterConfig.PluginEnabled &&
+                characterConfig.EnableOnLogin &&
+                (!characterConfig.EnableRpOnly || Player.OnlineStatus.Equals(ROLEPLAY_ONLINE_STATUS_ID)) &&
+                (!GenericHelpers.IsNullOrEmpty(characterConfig.OnLoginCommand.Content)))
                 {
-                    try
-                    {
-                        while (!Utils.CanUseGlamourPlates())
-                        {
-                            PluginLog.Information("Unable to execute yet, waiting for conditions to clear.");
-                            var delay = TimeSpan.FromSeconds(1);
-                            Task.Delay(delay).Wait();
-                        }
-                        var cmd = "/echo NNekoTriggers: Login Command is Unset.";
-                        if (characterConfig.EnableOcmd)
-                        {
-                            cmd = characterConfig.OverrideCommand.Content;
-                        }
-                        else if (!GenericHelpers.IsNullOrEmpty(characterConfig.OnLoginCommand.Content))
-                        {
-                            cmd = characterConfig.OnLoginCommand.Content;
-                        }
-                        else
-                        {
-                            PluginLog.Information("Unable to execute, because no Override or Login commands were found.");
-                            return;
-                        }
-                        if (cmd == null)
-                        {
-                            PluginLog.Error("Unable to execute, because the command appears to be empty.");
-                            return;
-                        }
-                        else if (cmd != null)
-                        {
-                            PluginLog.Information("OnLogin: Trigger Successful. Processing Login Command.");
+                    PluginLog.Information("OnLogin: Login Command Triggered");
 
-                            if (!Player.Mounted)
-                            {
-                                var delay = TimeSpan.FromSeconds(1);
-                                Task.Delay(delay).Wait();
-                                Commands.ProcessCommand(cmd);
-                            }
-                        }
+                    if (!AllowedTerritories.Any(t => t.RowId == Player.Territory.RowId))
+                    {
+                        PluginLog.Warning($"Territory {Player.Territory} is not an allowed territoryID, skipping custom executions.");
+                        return;
                     }
-                    catch (Exception e) { PluginLog.Error(e, "An error occured whilst attempting to execute custom commands."); }
+                    HandleZoneTriggerENF(characterConfig);
                 }
             }
         }
@@ -313,7 +284,7 @@ namespace NNekoTriggers
                         var delay = TimeSpan.FromSeconds(1);
                         Task.Delay(delay).Wait();
                     }
-                    var cmd = "/echo NNekoTriggers: Territory Command is Unset.";
+                    var cmd = "/echo NNekoTriggers: Territory/Login Command is Unset.";
                     if (characterConfig.EnableOcmd)
                     {
                         cmd = characterConfig.OverrideCommand.Content;
@@ -324,7 +295,7 @@ namespace NNekoTriggers
                     }
                     else
                     {
-                        PluginLog.Information("Unable to execute, because no Override or Territory commands were found.");
+                        PluginLog.Information("Unable to execute, because no Override, Login, or Territory commands were found.");
                         return;
                     }
                     if (cmd == null)
@@ -334,7 +305,7 @@ namespace NNekoTriggers
                     }
                     else if (cmd != null)
                     {
-                        PluginLog.Information("OnTerritoryChanged: Trigger Successful. Processing Territory Command.");
+                        PluginLog.Information("Trigger Successful. Processing Territory Command.");
                         if (!Player.Mounted)
                         {
                             Commands.ProcessCommand(cmd);
