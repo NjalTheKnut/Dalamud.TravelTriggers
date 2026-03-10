@@ -1,3 +1,11 @@
+v1.3 - Command Handler Improvments
+- Added support for passing arguments
+- Made commands and arguments case insensitive
+- Expanded RNG command to allow range adjustments via arguments
+- Added dtr and toggle arguments to the main config command
+v1.2 - Project Organization
+- Rename and adjust folder tree
+- Fix broken paths in GitHub Actions
 v1.0 - Repository changes
 - Rename Repository
 - Rename Plugin

@@ -23,18 +23,16 @@ namespace NNekoTriggers.UI
         /// </summary>
         private readonly WindowSystem windowingSystem;
 
-        public IDtrBarEntry RpEntry { get; } = Svc.DtrBar.Get("TTrig-RP");
+        public IDtrBarEntry RpOnlyEntry { get; } = Svc.DtrBar.Get("TTrig-RpOnly");
 
         public IDtrBarEntry RngEntry { get; } = Svc.DtrBar.Get("TTrig-RNG");
 
-        public IDtrBarEntry TpEntry { get; } = Svc.DtrBar.Get("TTrig-TP");
+        public IDtrBarEntry ZoneEntry { get; } = Svc.DtrBar.Get("TTrig-Zone");
 
-        public IDtrBarEntry GsEntry { get; } = Svc.DtrBar.Get("TTrig-GS");
+        public IDtrBarEntry GearsetEntry { get; } = Svc.DtrBar.Get("TTrig-Gearset");
 
-        public IDtrBarEntry OcmdEntry { get; } = Svc.DtrBar.Get("TTrig-OCMD");
+        public IDtrBarEntry OverrideEntry { get; } = Svc.DtrBar.Get("TTrig-Override");
         public IDtrBarEntry OnLoginEntry { get; } = Svc.DtrBar.Get("TTrig-OnLogin");
-
-        //private readonly IDtrBarEntry _Entry = Svc.DtrBar.Get("TTrig-");
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="WindowManager" /> class.
@@ -55,7 +53,7 @@ namespace NNekoTriggers.UI
             if (config.PluginEnabled && config.ShowInDtr)
             {
                 this.UpdateDtrEntry();
-                this.RpEntry.OnClick = ev =>
+                this.RpOnlyEntry.OnClick = ev =>
                 {
                     if (ev.ClickType == MouseClickType.Right)
                     {
@@ -83,7 +81,7 @@ namespace NNekoTriggers.UI
                         this.UpdateDtrEntry();
                     }
                 };
-                this.TpEntry.OnClick = ev =>
+                this.ZoneEntry.OnClick = ev =>
                 {
                     if (ev.ClickType == MouseClickType.Right)
                     {
@@ -97,7 +95,7 @@ namespace NNekoTriggers.UI
                         this.UpdateDtrEntry();
                     }
                 };
-                this.GsEntry.OnClick = ev =>
+                this.GearsetEntry.OnClick = ev =>
                 {
                     if (ev.ClickType == MouseClickType.Right)
                     {
@@ -111,7 +109,7 @@ namespace NNekoTriggers.UI
                         this.UpdateDtrEntry();
                     }
                 };
-                this.OcmdEntry.OnClick = ev =>
+                this.OverrideEntry.OnClick = ev =>
                 {
                     if (ev.ClickType == MouseClickType.Right)
                     {
@@ -154,11 +152,11 @@ namespace NNekoTriggers.UI
                 return;
             }
             //var mgr = NNekoTriggers.WindowManager;
-            this.RpEntry.Remove();
+            this.RpOnlyEntry.Remove();
             this.RngEntry.Remove();
-            this.TpEntry.Remove();
-            this.GsEntry.Remove();
-            this.OcmdEntry.Remove();
+            this.ZoneEntry.Remove();
+            this.GearsetEntry.Remove();
+            this.OverrideEntry.Remove();
             this.OnLoginEntry.Remove();
             NNekoTriggers.ClientState.Login -= this.OnLogin;
             NNekoTriggers.ClientState.Logout -= this.OnLogout;
@@ -230,22 +228,22 @@ namespace NNekoTriggers.UI
             {
                 return;
             }
-            /*this.RpEntry.Shown = false;
+            /*this.RpOnlyEntry.Shown = false;
             this.RngEntry.Shown = false;
-            this.TpEntry.Shown = false;
-            this.GsEntry.Shown = false;
-            this.OcmdEntry.Shown = false;*/
+            this.ZoneEntry.Shown = false;
+            this.GearsetEntry.Shown = false;
+            this.OverrideEntry.Shown = false;*/
             if (config.PluginEnabled && config.ShowInDtr)
             {
                 if (config.RpOnlyInDtr)
                 {
-                    this.RpEntry.Text = new SeString(new IconPayload(BitmapFontIcon.RolePlaying), config.EnableRpOnly ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
-                    this.RpEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Roleplay Only Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
-                    this.RpEntry.Shown = true;
+                    this.RpOnlyEntry.Text = new SeString(new IconPayload(BitmapFontIcon.RolePlaying), config.EnableRpOnly ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
+                    this.RpOnlyEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Roleplay Only Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
+                    this.RpOnlyEntry.Shown = true;
                 }
                 else
                 {
-                    this.RpEntry.Shown = false;
+                    this.RpOnlyEntry.Shown = false;
                 }
                 if (config.RngInDtr)
                 {
@@ -259,33 +257,23 @@ namespace NNekoTriggers.UI
                 }
                 if (config.ZoneInDtr)
                 {
-                    this.TpEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Aetheryte), config.EnableZones ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
-                    this.TpEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Zone Change Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
-                    this.TpEntry.Shown = true;
+                    this.ZoneEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Aetheryte), config.EnableZones ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
+                    this.ZoneEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Zone Change Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
+                    this.ZoneEntry.Shown = true;
                 }
                 else
                 {
-                    this.TpEntry.Shown = false;
+                    this.ZoneEntry.Shown = false;
                 }
                 if (config.GsetInDtr)
                 {
-                    this.GsEntry.Text = new SeString(new IconPayload(BitmapFontIcon.SwordSheathed), config.EnableGset ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
-                    this.GsEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Job Swap Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
-                    this.GsEntry.Shown = true;
+                    this.GearsetEntry.Text = new SeString(new IconPayload(BitmapFontIcon.SwordSheathed), config.EnableGset ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
+                    this.GearsetEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Job Swap Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
+                    this.GearsetEntry.Shown = true;
                 }
                 else
                 {
-                    this.GsEntry.Shown = false;
-                }
-                if (config.OcmdInDtr)
-                {
-                    this.OcmdEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Mentor), config.EnableOcmd ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
-                    this.OcmdEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Command Override Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
-                    this.OcmdEntry.Shown = true;
-                }
-                else
-                {
-                    this.OcmdEntry.Shown = false;
+                    this.GearsetEntry.Shown = false;
                 }
                 if (config.OnLoginInDtr)
                 {
@@ -297,43 +285,26 @@ namespace NNekoTriggers.UI
                 {
                     this.OnLoginEntry.Shown = false;
                 }
-                //NNekoTriggers.WindowManager._ocmdEntry.Text = new SeString(new SeHyphenPayload(), );
-                /*NNekoTriggers.DtrEntry.Text = new SeString(
-                        new SeHyphenPayload(),
-                        config.RpOnlyInDtr ? config.EnableRpOnly ? new IconPayload(BitmapFontIcon.RolePlaying) : new IconPayload(BitmapFontIcon.NoCircle) : new SeHyphenPayload(),
-                        new SeHyphenPayload(),
-                        config.RngInDtr ? config.EnableRNG ? new IconPayload(BitmapFontIcon.Dice) : new IconPayload(BitmapFontIcon.NoCircle) : new SeHyphenPayload(),
-                        new SeHyphenPayload(),
-                        config.ZoneInDtr ? config.EnableZones ? new IconPayload(BitmapFontIcon.Aetheryte) : new IconPayload(BitmapFontIcon.NoCircle) : new SeHyphenPayload(),
-                        new SeHyphenPayload(),
-                        config.GsetInDtr ? config.EnableGset ? new IconPayload(BitmapFontIcon.SwordSheathed) : new IconPayload(BitmapFontIcon.NoCircle) : new SeHyphenPayload(),
-                        new SeHyphenPayload(),
-                        config.OcmdInDtr ? config.EnableOcmd ? new IconPayload(BitmapFontIcon.Mentor) : new IconPayload(BitmapFontIcon.NoCircle) : new SeHyphenPayload(),
-                        new SeHyphenPayload()
-                        );
-                NNekoTriggers.DtrEntry.Shown = true;*/
-                //NNekoTriggers.DtrEntry.OnClick += NNekoTriggers.WindowManager.OnDtrInteractionEvent;
+                if (config.OcmdInDtr)
+                {
+                    this.OverrideEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Mentor), config.EnableOcmd ? new IconPayload(BitmapFontIcon.GreenDot) : new IconPayload(BitmapFontIcon.NoCircle));
+                    this.OverrideEntry.Tooltip = new SeString(new TextPayload("Left Click to toggle Command Override Mode."), new NewLinePayload(), new TextPayload("(Right Click opens main config)"));
+                    this.OverrideEntry.Shown = true;
+                }
+                else
+                {
+                    this.OverrideEntry.Shown = false;
+                }
             }
-            //else
-            //{
-            /*this.RpEntry.Shown = false;
-            this.RngEntry.Shown = false;
-            this.TpEntry.Shown = false;
-            this.GsEntry.Shown = false;
-            this.OcmdEntry.Shown = false;*/
-            /*this.RpEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));
-            this.RngEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));
-            this.TpEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));
-            this.GsEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));
-            this.OcmdEntry.Text = new SeString(new IconPayload(BitmapFontIcon.Disconnecting));*/
-            //NNekoTriggers.DtrEntry.Text = new SeString(
-            //        new SeHyphenPayload(),
-            //        new IconPayload(BitmapFontIcon.Disconnecting),
-            //        new SeHyphenPayload()
-            //        );
-            //NNekoTriggers.DtrEntry.Shown = false;
-
-            //}
+            else
+            {
+                this.RpOnlyEntry.Shown = false;
+                this.RngEntry.Shown = false;
+                this.ZoneEntry.Shown = false;
+                this.GearsetEntry.Shown = false;
+                this.OnLoginEntry.Shown = false;
+                this.OverrideEntry.Shown = false;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using Dalamud.Game.Command;
+using ECommons;
 using ECommons.Logging;
 
 namespace NNekoTriggers.Command
@@ -11,13 +12,13 @@ namespace NNekoTriggers.Command
         /// <summary>
         ///     Defines the command prefix for all other plugin commands.
         /// </summary>
-        private const string SettingsCommand = "/tConfig";
-        private const string RpOnlyCmd = "/tRpOnly";
-        private const string RngCmd = "/tRng";
-        private const string GsetCmd = "/tGset";
-        private const string ZoneCmd = "/tZone";
-        private const string OverrideCmd = "/tOverride";
-        private const string OnLoginCmd = "/tOnLogin";
+        private const string SettingsCommand = "/tconfig";
+        private const string RpOnlyCmd = "/trponly";
+        private const string RngCmd = "/trng";
+        private const string GsetCmd = "/tgset";
+        private const string ZoneCmd = "/tzone";
+        private const string OverrideCmd = "/toverride";
+        private const string OnLoginCmd = "/tonlogin";
 
         /// <summary>
         ///     Initializes the CommandManager and its resources.
@@ -26,57 +27,77 @@ namespace NNekoTriggers.Command
         {
             NNekoTriggers.Commands.AddHandler(SettingsCommand, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "Opens the NNekoTriggers configuration window. ",
+                HelpMessage = "Opens the NNekoTriggers configuration window. " +
+                $"\n\t '{SettingsCommand} toggle' disables or enables the entire plugin." +
+                $"\n\t '{SettingsCommand} dtr' toggles the Server Info Bar entries.",
                 ShowInHelp = true
             });
 
             NNekoTriggers.Commands.AddHandler(RpOnlyCmd, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "toggles the Roleplay Only trigger behavior.",
+                HelpMessage = "toggles the Roleplay Only trigger behavior." +
+                $"\n\t '{RpOnlyCmd} on' enables the Roleplay Only trigger behavior." +
+                $"\n\t '{RpOnlyCmd} off' disables the Roleplay Only trigger behavior.",
                 ShowInHelp = true
             });
 
             NNekoTriggers.Commands.AddHandler(OverrideCmd, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "toggles the Command Override feature.",
+                HelpMessage = "toggles the Command Override feature." +
+                $"\n\t '{OverrideCmd} on' enables the Command Override feature." +
+                $"\n\t '{OverrideCmd} off' disables the Command Override feature.",
                 ShowInHelp = true
             });
 
             NNekoTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "toggles the RNG trigger behavior.",
+                HelpMessage = "toggles the RNG trigger behavior." +
+                $"\n\t '{RngCmd} min <number>' sets Min to a fixed value. (default is 25)" +
+                $"\n\t '{RngCmd} max <number>' sets Max to a fixed value. (default is 100)" +
+                $"\n\t '{RngCmd} minAdd <number>' Adds <number> to the existing Min value." +
+                $"\n\t '{RngCmd} minSub <number>' Subtracts <number> from the existing Min value." +
+                $"\n\t '{RngCmd} maxAdd <number>' Adds <number> to the existing Max value." +
+                $"\n\t '{RngCmd} maxSub <number>' Subtracts <number> from the existing Max value." +
+                $"\n\t '{RngCmd} on' enables the RNG trigger behavior." +
+                $"\n\t '{RngCmd} off' disables the RNG trigger behavior.",
                 ShowInHelp = true
             });
 
             NNekoTriggers.Commands.AddHandler(GsetCmd, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "toggles the trigger.",
+                HelpMessage = "toggles the trigger." +
+                $"\n\t '{GsetCmd} on' enables the trigger." +
+                $"\n\t '{GsetCmd} off' disables the trigger.",
                 ShowInHelp = true
             });
 
             NNekoTriggers.Commands.AddHandler(ZoneCmd, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "toggles the Zone change trigger.",
+                HelpMessage = "toggles the Zone change trigger." +
+                $"\n\t '{ZoneCmd} on' enables the Zone change trigger." +
+                $"\n\t '{ZoneCmd} off' disables the Zone change trigger.",
                 ShowInHelp = true
             });
 
             NNekoTriggers.Commands.AddHandler(OnLoginCmd, new CommandInfo(this.OnCommand)
             {
-                HelpMessage = "toggles the Login trigger.",
+                HelpMessage = "toggles the Login trigger." +
+                $"\n\t '{OnLoginCmd} on' enables the Login trigger." +
+                $"\n\t '{OnLoginCmd} off' disables the Login trigger.",
                 ShowInHelp = true
             });
 
             /*NNekoTriggers.Commands.AddHandler(RngCmd, new CommandInfo(this.OnCommand)
             {
                 HelpMessage = "Toggles the feature, and sets, increments, or reduces the bounds of your custom RNG range." +
-                "\n'/rng t' toggles the RNG feature on and off" +
-                "\n'/rng min <number>' sets Min to a fixed value. (default is 25)" +
-                "\n'/rng max <number' sets Max to a fixed value. (default is 100)" +
-                "\n'/rng minAdd <number>' Adds <number> to the existing Min value. " +
-                "\n'/rng minSub <number>' Subtracts <number> from the existing Min value. " +
-                "\n'/rng maxAdd <number>' Adds <number> to the existing Max value. " +
-                "\n'/rng maxSub <number>' Subtracts <number> from the existing Max value. " +
-                "\n'/rng ' ",
+                "\n\t Use '/rng t' toggles the RNG feature on and off" +
+                "\n\t Use '/rng min <number>' sets Min to a fixed value. (default is 25)" +
+                "\n\t Use '/rng max <number>' sets Max to a fixed value. (default is 100)" +
+                "\n\t Use '/rng minAdd <number>' Adds <number> to the existing Min value. " +
+                "\n\t Use '/rng minSub <number>' Subtracts <number> from the existing Min value. " +
+                "\n\t Use '/rng maxAdd <number>' Adds <number> to the existing Max value. " +
+                "\n\t Use '/rng maxSub <number>' Subtracts <number> from the existing Max value. " +
+                "\n\t Use '/rng ' ",
                 ShowInHelp = true
 
             });*/
@@ -108,10 +129,22 @@ namespace NNekoTriggers.Command
             {
                 return;
             }
-            switch (command)
+            switch (command.ToLowerInvariant())
             {
                 case SettingsCommand when args?.Length == 0:
                     NNekoTriggers.WindowManager.ToggleConfigWindow();
+                    break;
+                case SettingsCommand when args?.Length > 0 && args.Split(" ")[0] == "toggle":
+                    config.PluginEnabled = !config.PluginEnabled;
+                    NNekoTriggers.PluginConfiguration.Save();
+                    PluginLog.Information($"NNekoTriggers {(config.PluginEnabled ? "Enabled" : "Disabled")}");
+                    NNekoTriggers.WindowManager.UpdateDtrEntry();
+                    break;
+                case SettingsCommand when args?.Length > 0 && args.Split(" ")[0] == "dtr":
+                    config.ShowInDtr = !config.ShowInDtr;
+                    NNekoTriggers.PluginConfiguration.Save();
+                    PluginLog.Information($"NNekoTriggers DTR Features {(config.ShowInDtr ? "Enabled" : "Disabled")}");
+                    NNekoTriggers.WindowManager.UpdateDtrEntry();
                     break;
                 case RpOnlyCmd when args?.Length == 0:
                     if (config != null)
@@ -122,7 +155,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case RpOnlyCmd when args == "on":
+                case RpOnlyCmd when args?.Length > 0 && args.Split(" ")[0] == "on":
                     if (config != null)
                     {
                         config.EnableRpOnly = true;
@@ -131,7 +164,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case RpOnlyCmd when args == "off":
+                case RpOnlyCmd when args?.Length > 0 && args.Split(" ")[0] == "off":
                     if (config != null)
                     {
                         config.EnableRpOnly = false;
@@ -149,7 +182,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case RngCmd when args == "on":
+                case RngCmd when args?.Length > 0 && args.Split(" ")[0] == "on":
                     if (config != null)
                     {
                         config.EnableRNG = true;
@@ -158,13 +191,60 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case RngCmd when args == "off":
+                case RngCmd when args?.Length > 0 && args.Split(" ")[0] == "off":
                     if (config != null)
                     {
                         config.EnableRNG = false;
                         NNekoTriggers.PluginConfiguration.Save();
                         PluginLog.Information($"NNekoTriggers  Module {(config.EnableRNG ? "Enabled" : "Disabled")}");
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
+                    }
+                    break;
+                case RngCmd when args?.Length > 0:
+                    if (config != null)
+                    {
+                        if (args.Split(' ')[0].Equals("min", StringComparison.OrdinalIgnoreCase))
+                        {
+                            config.OddsMin = int.Parse(args.Split(' ')[1]);
+                            NNekoTriggers.PluginConfiguration.Save();
+                            PluginLog.Information($"NNekoTriggers OddsMin set to {config.OddsMin}");
+                            NNekoTriggers.WindowManager.UpdateDtrEntry();
+                        }
+                        if (args.Split(' ')[0].Equals("max", StringComparison.OrdinalIgnoreCase))
+                        {
+                            config.OddsMax = int.Parse(args.Split(' ')[1]);
+                            NNekoTriggers.PluginConfiguration.Save();
+                            PluginLog.Information($"NNekoTriggers OddsMax set to {config.OddsMax}");
+                            NNekoTriggers.WindowManager.UpdateDtrEntry();
+                        }
+                        if (args.Split(' ')[0].Equals("minAdd", StringComparison.OrdinalIgnoreCase))
+                        {
+                            config.OddsMin += int.Parse(args.Split(' ')[1]);
+                            NNekoTriggers.PluginConfiguration.Save();
+                            PluginLog.Information($"NNekoTriggers OddsMin set to {config.OddsMin}");
+                            NNekoTriggers.WindowManager.UpdateDtrEntry();
+                        }
+                        if (args.Split(' ')[0].Equals("minSub", StringComparison.OrdinalIgnoreCase))
+                        {
+                            config.OddsMin -= int.Parse(args.Split(' ')[1]);
+                            NNekoTriggers.PluginConfiguration.Save();
+                            PluginLog.Information($"NNekoTriggers OddsMin set to {config.OddsMin}");
+                            NNekoTriggers.WindowManager.UpdateDtrEntry();
+                        }
+                        if (args.Split(' ')[0].Equals("maxAdd", StringComparison.OrdinalIgnoreCase))
+                        {
+                            config.OddsMax += int.Parse(args.Split(' ')[1]);
+                            NNekoTriggers.PluginConfiguration.Save();
+                            PluginLog.Information($"NNekoTriggers OddsMax set to {config.OddsMax}");
+                            NNekoTriggers.WindowManager.UpdateDtrEntry();
+                        }
+                        if (args.Split(' ')[0].Equals("maxSub", StringComparison.OrdinalIgnoreCase))
+                        {
+                            config.OddsMax -= int.Parse(args.Split(' ')[1]);
+                            NNekoTriggers.PluginConfiguration.Save();
+                            PluginLog.Information($"NNekoTriggers OddsMax set to {config.OddsMax}");
+                            NNekoTriggers.WindowManager.UpdateDtrEntry();
+                        }
                     }
                     break;
                 case GsetCmd when args?.Length == 0:
@@ -176,7 +256,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case GsetCmd when args == "on":
+                case GsetCmd when args?.Length > 0 && args.Split(" ")[0] == "on":
                     if (config != null)
                     {
                         config.EnableGset = true;
@@ -185,7 +265,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case GsetCmd when args == "off":
+                case GsetCmd when args?.Length > 0 && args.Split(" ")[0] == "off":
                     if (config != null)
                     {
                         config.EnableGset = false;
@@ -203,7 +283,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case ZoneCmd when args == "on":
+                case ZoneCmd when args?.Length > 0 && args.Split(" ")[0] == "on":
                     if (config != null)
                     {
                         config.EnableZones = true;
@@ -212,7 +292,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case ZoneCmd when args == "off":
+                case ZoneCmd when args?.Length > 0 && args.Split(" ")[0] == "off":
                     if (config != null)
                     {
                         config.EnableZones = false;
@@ -230,7 +310,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case OverrideCmd when args == "on":
+                case OverrideCmd when args?.Length > 0 && args.Split(" ")[0] == "on":
                     if (config != null)
                     {
                         config.EnableOcmd = true;
@@ -239,7 +319,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case OverrideCmd when args == "off":
+                case OverrideCmd when args?.Length > 0 && args.Split(" ")[0] == "off":
                     if (config != null)
                     {
                         config.EnableOcmd = false;
@@ -257,7 +337,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case OnLoginCmd when args == "on":
+                case OnLoginCmd when args?.Length > 0 && args.Split(" ")[0] == "on":
                     if (config != null)
                     {
                         config.EnableOnLogin = true;
@@ -266,7 +346,7 @@ namespace NNekoTriggers.Command
                         NNekoTriggers.WindowManager.UpdateDtrEntry();
                     }
                     break;
-                case OnLoginCmd when args == "off":
+                case OnLoginCmd when args?.Length > 0 && args.Split(" ")[0] == "off":
                     if (config != null)
                     {
                         config.EnableOnLogin = false;

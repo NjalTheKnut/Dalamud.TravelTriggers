@@ -16,23 +16,18 @@ namespace NNekoTriggers.UI.Windows
         public SettingsWindow() : base(NNekoTriggers.PluginInterface.Manifest.Name)
         {
             this.Flags = ImGuiWindowFlags.NoResize;
-            this.SizeConstraints = new WindowSizeConstraints
-            {
-                MinimumSize = new Vector2(525, 430),
-                MaximumSize = new Vector2(525, 430),
-            };
-            this.AllowPinning = true;
             this.Size = new Vector2(525, 430);
             this.SizeCondition = ImGuiCond.FirstUseEver;
+            this.AllowPinning = true;
             this.TitleBarButtons = [
-                 new() {
+                new() {
                     Icon = FontAwesomeIcon.Code,
-                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.NNekoTriggers"),
+                    Click = (mouseButton) => Util.OpenLink("https://github.com/NNekoPlugins/NNekoTriggers"),
                     ShowTooltip = () => ImGui.SetTooltip("Repository"),
                 },
                 new() {
                     Icon = FontAwesomeIcon.Comment,
-                    Click = (mouseButton) => Util.OpenLink("https://github.com/NjalTheKnut/Dalamud.NNekoTriggers/issues"),
+                    Click = (mouseButton) => Util.OpenLink("https://github.com/NNekoPlugins/NNekoTriggers/issues"),
                     ShowTooltip = () => ImGui.SetTooltip("Feedback"),
                 },
             ];
@@ -54,8 +49,9 @@ namespace NNekoTriggers.UI.Windows
             if (ImGui.Checkbox($"Enable {NNekoTriggers.PluginInterface.Manifest.Name}", ref config.PluginEnabled))
             {
                 NNekoTriggers.PluginConfiguration.Save();
+                mgr.UpdateDtrEntry();
             }
-            //ImGui.SameLine();
+            ImGui.SameLine();
             ImGui.BeginDisabled(!config.PluginEnabled);
             if (ImGui.Checkbox("Show in Server Info Bar", ref config.ShowInDtr))
             {
@@ -98,18 +94,12 @@ namespace NNekoTriggers.UI.Windows
                 NNekoTriggers.PluginConfiguration.Save();
                 mgr.UpdateDtrEntry();
             }
-            /*if (ImGui.Checkbox("", ref config.))
-            {
-                NNekoTriggers.PluginConfiguration.Save();
-                WindowManager.UpdateDtrEntry(config);
-            }*/
             ImGui.EndDisabled();
 
             if (ImGui.Checkbox("Only enable when roleplaying", ref config.EnableRpOnly))
             {
                 NNekoTriggers.PluginConfiguration.Save();
                 PluginLog.Information($"NNekoTriggers RP Only Module {(config.EnableRpOnly ? "Enabled" : "Disabled")}");
-                //PluginLog.Information($"NNekoTriggers  Module {(config. ? "Enabled" : "Disabled")}");
                 mgr.UpdateDtrEntry();
             }
 
