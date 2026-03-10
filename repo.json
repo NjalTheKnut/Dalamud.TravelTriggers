@@ -3,7 +3,7 @@
         "Author": "NaughtyNeko",
         "Name": "NNekoTriggers",
         "InternalName": "NNekoTriggers",
-        "AssemblyVersion": "1.0",
+        "AssemblyVersion": "1.2",
         "Punchline": "Automatically execute commands under certain conditions.",
         "Description": "Sets per-character chat command triggered on:\n- Zone changes\n - Class/Job Swaps\n- Login\n Other Options:\n - Roleplay Only Toggle (Blocks unless \"RP\" Online Status is set)\n - RNG Toggle (Triggers fire randomly, given a custom min/max range)\n - Override Toggle (Overrides commands set for all triggers with a master command)",
         "ApplicableVersion": "any",
@@ -14,8 +14,9 @@
         "IconUrl": "https://raw.githubusercontent.com/NNekoPlugins/NNekoTriggers/master/NNekoTriggers/images/ttrig.png",
         "IsHide": "False",
         "IsTestingExclusive": "False",
-        "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.1/latest.zip",
-        "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.1/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.1/latest.zip"
+        "Changelog": "v1.3 - Command Handler Improvments\n- Added support for passing arguments\n- Made commands and arguments case insensitive\n- Expanded RNG command to allow range adjustments via arguments\n- Added dtr and toggle arguments to the main config command",
+        "DownloadLinkInstall": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.2/latest.zip",
+        "DownloadLinkTesting": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.2/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/NNekoPlugins/NNekoTriggers/releases/download/v1.2/latest.zip"
     }
 ]

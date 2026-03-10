@@ -1,6 +1,6 @@
 <div align="center">
 
-<span><img src=".assets/ttrig.png" alt="Rendering of a Fantasy stone arch, bedecked with crystals, and filled with a swirling, arcane portal." width="15%"></span>
+<span><img src="./Data/NNeko.png" alt="Rendering of a Fantasy stone arch, bedecked with crystals, and filled with a swirling, arcane portal." width="15%"></span>
 
   
 ### NNekoTriggers
@@ -19,10 +19,12 @@ Travelcase derivative that runs commands rather than changing gearset or appeara
 
 ## Features
 - Set a per-character command for:
-	- After changing territories (Teleport, Return, walking outside, et cetera)
+	- After changing Zones (Teleport, Return, walking outside, et cetera)
 	- Changing Classes/Jobs
+ 	- Character Login
 - Roleplay Only Mode (Prevents the command from executing if you are not in the "RP" Online Status)
 - RNG Mode (Executes the command randomly based on a given range)
+- Override Command (Forces the commands for all other triggers to use a master command)
 
 ## Installation
 > **Warning**  
