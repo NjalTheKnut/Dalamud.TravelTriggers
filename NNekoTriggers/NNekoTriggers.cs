@@ -66,7 +66,7 @@ namespace NNekoTriggers
             PluginConfiguration = PluginConfiguration.Load();
             AllowedTerritories = DataManager.Excel.GetSheet<TerritoryType>().Where(x => AllowedTerritoryUse.Contains(x.TerritoryIntendedUse.RowId) && !x.IsPvpZone);
 
-            WindowManager = new(Framework, DtrBar);
+            WindowManager = new(Framework);
             if (WindowManager.dtrHooked)
             {
                 WindowManager.UpdateDtrEntry();
