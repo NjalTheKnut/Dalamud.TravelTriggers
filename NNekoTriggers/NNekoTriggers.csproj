@@ -62,7 +62,7 @@
   <ItemGroup>
     <None Include="NNekoTriggers.json" CopyToOutputDirectory="Always" />
     <Content Include="Data\NNeko.png" CopyToOutputDirectory="Always" />
-    <PackageReference Include="ECommons" Version="3.2.0.19" />
+    <PackageReference Include="ECommons" Version="3.2.1.6" />
     <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
   </ItemGroup>
 </Project>
