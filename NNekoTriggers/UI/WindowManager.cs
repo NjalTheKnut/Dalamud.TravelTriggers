@@ -19,6 +19,10 @@ namespace NNekoTriggers.UI
         private int ticksWaited;
         private const int MaxTicks = 600; // ~10 seconds
 
+        private int lastCount = -1;
+        private int stableFrames;
+        //private readonly IReadOnlyList<string>? lastSnapshot;
+
         /// <summary>
         ///     All windows to add to the windowing system, holds all references.
         /// </summary>
@@ -88,19 +92,50 @@ namespace NNekoTriggers.UI
 
         private void OnFrameworkUpdate(IFramework _)
         {
+            if (!NNekoTriggers.ClientState.IsLoggedIn)
+            {
+                return;
+            }
+
             if (this.dtrHooked || this.ticksWaited++ > MaxTicks)
             {
                 this.Framework.Update -= this.OnFrameworkUpdate;
                 return;
             }
 
-            // Wait until the UI is fully built (UmbraXIV included)
             if (!NNekoTriggers.PluginInterface.UiBuilder.UiPrepared)
             {
                 return;
             }
 
-            // Create entries *here*, not in the constructor
+            var entries = Svc.DtrBar.Entries;
+            var count = entries.Count;
+
+            // Still empty → UmbraXIV not ready
+            if (count == 0)
+            {
+                this.stableFrames = 0;
+                this.lastCount = -1;
+                return;
+            }
+
+            // Count changed → still rebuilding
+            if (count != this.lastCount)
+            {
+                this.lastCount = count;
+                this.stableFrames = 0;
+                return;
+            }
+
+            // Count stable → increment stability
+            if (++this.stableFrames < 30)
+            {
+                return;
+            }
+
+            // SAFE POINT
+            PluginLog.Information($"DTR stabilized after {this.ticksWaited} ticks with {count} entries.");
+
             this.RpOnlyEntry ??= Svc.DtrBar.Get("TTrig-RpOnly");
             this.RngEntry ??= Svc.DtrBar.Get("TTrig-RNG");
             this.ZoneEntry ??= Svc.DtrBar.Get("TTrig-Zone");
@@ -108,19 +143,52 @@ namespace NNekoTriggers.UI
             this.OverrideEntry ??= Svc.DtrBar.Get("TTrig-Override");
             this.OnLoginEntry ??= Svc.DtrBar.Get("TTrig-OnLogin");
 
-            // Ensure the bar actually has entries (UmbraXIV finished injecting)
-            if (Svc.DtrBar.Entries.Count == 0)
-            {
-                return;
-            }
-
             this.InitializeDtrEntries();
             this.dtrHooked = true;
 
             this.Framework.Update -= this.OnFrameworkUpdate;
-
             this.UpdateDtrEntry();
         }
+
+        //private void OnFrameworkUpdate(IFramework _)
+        //{
+        //    if (!NNekoTriggers.ClientState.IsLoggedIn)
+        //    {
+        //        return;
+        //    }
+        //    if (this.dtrHooked || this.ticksWaited++ > MaxTicks)
+        //    {
+        //        this.Framework.Update -= this.OnFrameworkUpdate;
+        //        return;
+        //    }
+
+        //    // Wait until the UI is fully built (UmbraXIV included)
+        //    if (!NNekoTriggers.PluginInterface.UiBuilder.UiPrepared)
+        //    {
+        //        return;
+        //    }
+
+        //    // Create entries *here*, not in the constructor
+        //    this.RpOnlyEntry ??= Svc.DtrBar.Get("TTrig-RpOnly");
+        //    this.RngEntry ??= Svc.DtrBar.Get("TTrig-RNG");
+        //    this.ZoneEntry ??= Svc.DtrBar.Get("TTrig-Zone");
+        //    this.GearsetEntry ??= Svc.DtrBar.Get("TTrig-Gearset");
+        //    this.OverrideEntry ??= Svc.DtrBar.Get("TTrig-Override");
+        //    this.OnLoginEntry ??= Svc.DtrBar.Get("TTrig-OnLogin");
+
+        //    // Ensure the bar actually has entries (UmbraXIV finished injecting)
+        //    if (Svc.DtrBar.Entries.Count == 0)
+        //    {
+        //        return;
+        //    }
+
+        //    this.InitializeDtrEntries();
+        //    this.dtrHooked = true;
+
+        //    this.Framework.Update -= this.OnFrameworkUpdate;
+
+        //    this.UpdateDtrEntry();
+        //}
 
 
         private void InitializeDtrEntries()
