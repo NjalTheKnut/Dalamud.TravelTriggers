@@ -75,11 +75,11 @@ jobs:
 
           git add repo.json
 
-          export PROJECT_LOCATION=$(echo ${{ github.server_url }}/${{ github.repository }}/NNekoTriggers | sed  's/\//\\\//g')
-          sed -i "s/\"AssemblyVersion\": \"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\"/\"AssemblyVersion\": \"${TAG_NAME}\"/g" NNekoTriggers.json
-          sed -i "s/\"Version\": \"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\"/\"Version\": \"${TAG_NAME}\"/g" NNekoTriggers.json
+          export PROJECT_LOCATION=$(echo ${{ github.server_url }}/${{ github.repository }} | sed  's/\//\\\//g')
+          sed -i "s/\"AssemblyVersion\": \"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\"/\"AssemblyVersion\": \"${TAG_NAME}\"/g" NNekoTriggers/NNekoTriggers.json
+          sed -i "s/\"Version\": \"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\"/\"Version\": \"${TAG_NAME}\"/g" NNekoTriggers/NNekoTriggers.json
 
-          git add NNekoTriggers.json
+          git add NNekoTriggers/NNekoTriggers.json
           
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
